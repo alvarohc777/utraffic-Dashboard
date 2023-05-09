@@ -1,0 +1,75 @@
+{
+  "clientes": [
+    {
+      "nombre": "Luis Jimenez",
+      "nSolicitud": "12344",
+      "monto": "5000000",
+      "plazo": "3 meses",
+      "pago": "1800000",
+      "fechaCorte": "15/02/2023",
+      "documento": "",
+      "calificacion": "5"
+    },
+    {
+      "nombre": "Maria Aleja",
+      "nSolicitud": "12345",
+      "monto": "20000000",
+      "plazo": "1 año",
+      "pago": "3000000",
+      "fechaCorte": "30/04/2023",
+      "documento": "",
+      "calificacion": "4"
+    },
+    {
+      "nombre": "Luis Jimenez",
+      "nSolicitud": "12346",
+      "monto": "100000000",
+      "plazo": "1 año",
+      "pago": "2000000",
+      "fechaCorte": "30/03/2023",
+      "documento": "",
+      "calificacion": "3"
+    },
+    {
+      "nombre": "Luz Padilla",
+      "nSolicitud": "12347",
+      "monto": "10000000",
+      "plazo": "6 meses",
+      "pago": "900000",
+      "fechaCorte": "15/04/2023",
+      "documento": "",
+      "calificacion": "1"
+    },
+    {
+      "nombre": "Alvaro Herrada",
+      "nSolicitud": "12348",
+      "monto": "8000000",
+      "plazo": "10 meses",
+      "pago": "800000",
+      "fechaCorte": "15/04/2022",
+      "documento": "",
+      "calificacion": "5"
+    },
+
+    {
+      "nombre": "Alvaro Herrada",
+      "nSolicitud": "12349",
+      "monto": "1000000",
+      "plazo": "10 meses",
+      "pago": "100000",
+      "fechaCorte": "27/04/2022",
+      "documento": "",
+      "calificacion": "5"
+    },
+    {
+      "nombre": "Alvaro Herrada",
+      "nSolicitud": "12350",
+      "monto": "900000",
+      "plazo": "9 meses",
+      "pago": "100000",
+      "fechaCorte": "1/05/2022",
+      "documento": "",
+      "calificacion": "5"
+    }
+  ]
+}
