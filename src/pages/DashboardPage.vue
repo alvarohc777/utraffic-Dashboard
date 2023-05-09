@@ -3,39 +3,22 @@
     <div
       class="col-md-6 col-xs-12 window-width row justify-evenly items-center"
     >
-      <div class="q-pa-md">
-        <q-table
-          flat
-          bordered
-          title="Clientes"
-          :rows="clientesFiltrado"
-          :columns="columns"
-          row-key="name"
-        >
-          <template v-slot:top>
-            <img
-              style="height: 50px; width: 50px"
-              src="../../public/icons/android-chrome-192x192.png"
-            />
+      <filter-table :data="clientesFiltrado" :columns="columns">
+        <q-select
+          v-model="nombre"
+          outlined
+          dense
+          options-dense
+          label="vendedor"
+          emit-value
+          map-options
+          :options="nombres"
+          option-value="name"
+          options-cover
+          style="min-width: 150px"
+        ></q-select>
+      </filter-table>
 
-            <q-space></q-space>
-
-            <q-select
-              v-model="nombre"
-              outlined
-              dense
-              options-dense
-              label="vendedor"
-              emit-value
-              map-options
-              :options="nombres"
-              option-value="name"
-              options-cover
-              style="min-width: 150px"
-            ></q-select>
-          </template>
-        </q-table>
-      </div>
       <q-card>
         <apex-donut :clientes="clientesFiltrado" />
       </q-card>
@@ -46,6 +29,7 @@
 <script setup>
 import { onMounted, ref, reactive, watchEffect } from "vue";
 import ApexDonut from "src/components/ApexDonut.vue";
+import FilterTable from "src/components/FilterTable.vue";
 import { api } from "../../src/boot/axios";
 const clientes = ref([]);
 const nombres = ref([]);
