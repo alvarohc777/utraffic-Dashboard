@@ -3,7 +3,7 @@
     <q-header>
       <q-toolbar
         class="bg-white text-grey-8 window-width row justify-center items-center"
-        height-hint="64"
+        height-hint="70"
       >
         <q-btn flat rounded color="dark" label="¿Cómo funciona?"></q-btn>
         <q-btn flat rounded color="dark" label="Preguntas Frecuentes"></q-btn>

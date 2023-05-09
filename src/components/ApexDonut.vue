@@ -1,13 +1,13 @@
 <template>
   <div>
     <div class="chart-wrap">
-      <div id="chart">
+      <div id="chart" v-if="seriesCalc && seriesCalc.length">
         <apexchart
           type="donut"
           width="380"
           :options="optionsCalc"
           :series="seriesCalc"
-          :key="controlKey"
+          :key="seriesCalc"
         ></apexchart>
       </div>
     </div>
@@ -16,6 +16,8 @@
 
 <script setup>
 import { computed, toRefs } from "vue";
+import Vue from "vue";
+
 // Convertir props a variable
 const props = defineProps({ clientes: Object });
 let { clientes } = toRefs(props);
@@ -30,6 +32,7 @@ const seriesCalc = computed(() => {
   clientes.value.forEach((cliente) => {
     series.push(parseFloat(cliente.monto));
   });
+
   return series;
 });
 
@@ -79,3 +82,4 @@ const optionsCalc = computed(() => {
   return options;
 });
 </script>
+

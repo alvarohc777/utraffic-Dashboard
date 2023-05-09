@@ -3,6 +3,9 @@
     <div
       class="col-md-6 col-xs-12 window-width row justify-evenly items-center"
     >
+      <q-card>
+        <apex-donut :clientes="clientesFiltrado" />
+      </q-card>
       <filter-table :data="clientesFiltrado" :columns="columns">
         <q-select
           v-model="nombre"
@@ -18,11 +21,8 @@
           style="min-width: 150px"
         ></q-select>
       </filter-table>
-
-      <q-card>
-        <apex-donut :clientes="clientesFiltrado" />
-      </q-card>
     </div>
+    <filter-table :data="tesoreria" :columns="columnsTesoreria"></filter-table>
   </q-page>
 </template>
 
@@ -32,9 +32,11 @@ import ApexDonut from "src/components/ApexDonut.vue";
 import FilterTable from "src/components/FilterTable.vue";
 import { api } from "../../src/boot/axios";
 const clientes = ref([]);
+const clientesFiltrado = ref([]);
 const nombres = ref([]);
 const nombre = ref(null);
-const clientesFiltrado = ref([]);
+const tesoreria = ref([]);
+const tesoreriaFiltrado = ref([]);
 onMounted(() => {
   api
     .get("clientes")
@@ -45,6 +47,12 @@ onMounted(() => {
           nombres.value.push(cliente.nombre);
         }
       });
+    })
+    .catch((err) => console.log(err.message));
+  api
+    .get("tesoreria")
+    .then((res) => {
+      tesoreria.value = res.data;
     })
     .catch((err) => console.log(err.message));
 });
@@ -58,6 +66,49 @@ watchEffect(() => {
     clientesFiltrado.value = clientes.value;
   }
 });
+
+const columnsTesoreria = reactive([
+  {
+    name: "categoria",
+    required: true,
+    label: "Categoría",
+    align: "left",
+    field: (row) => row.categoria,
+    sortable: true,
+  },
+  {
+    name: "nSolicitud",
+    required: true,
+    label: "N° Solicitud",
+    align: "left",
+    field: (row) => row.nSolicitud,
+    sortable: true,
+  },
+  {
+    name: "monto",
+    required: true,
+    label: "Monto",
+    align: "left",
+    field: (row) => row.monto,
+    sortable: true,
+  },
+  {
+    name: "plazo",
+    required: true,
+    label: "Plazo",
+    align: "left",
+    field: (row) => row.plazo,
+    sortable: true,
+  },
+  {
+    name: "pago",
+    required: true,
+    label: "Pago",
+    align: "left",
+    field: (row) => row.pago,
+    sortable: true,
+  },
+]);
 
 const columns = reactive([
   {
