@@ -4,7 +4,7 @@
       <div id="chart" v-if="seriesCalc && seriesCalc.length">
         <apexchart
           type="donut"
-          width="380"
+          width="350"
           :options="optionsCalc"
           :series="seriesCalc"
           :key="seriesCalc"

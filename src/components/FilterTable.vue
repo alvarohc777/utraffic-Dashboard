@@ -1,8 +1,9 @@
 <template>
-  <div class="q-pa-md">
+  <div class="q-pa-md" style="max-width: 800px">
     <q-table
       flat
       bordered
+      dense
       title="Clientes"
       :rows="dataFiltered"
       :columns="columns"
