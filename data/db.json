@@ -71,5 +71,35 @@
       "documento": "",
       "calificacion": "5"
     }
+  ],
+  "tesoreria": [
+    {
+      "categoria": "Dinero para prestar",
+      "nSolicitud": "12322",
+      "monto": "90000000",
+      "plazo": "3 meses",
+      "pago": "1800000"
+    },
+    {
+      "categoria": "Deudas",
+      "nSolicitud": "12345",
+      "monto": "10000000",
+      "plazo": "1 año",
+      "pago": "3000000"
+    },
+    {
+      "categoria": "Nómina",
+      "nSolicitud": "12346",
+      "monto": "8000000",
+      "plazo": "1 año",
+      "pago": "2000000"
+    },
+    {
+      "categoria": "Recaudo",
+      "nSolicitud": "12347",
+      "monto": "10000000",
+      "plazo": "6 meses",
+      "pago": "900000"
+    }
   ]
 }
