@@ -2,6 +2,7 @@ import IndexLayout from "layouts/MainLayout";
 import IndexPage from "pages/IndexPage";
 import ErrorPage from "pages/ErrorNotFound.vue";
 import DashboardPage from "pages/DashboardPage";
+import DashboardLocal from "pages/DashboardLocal";
 const routes = [
   {
     path: "/",
@@ -9,6 +10,7 @@ const routes = [
     children: [
       { path: "", component: IndexPage },
       { path: "dashboard", component: DashboardPage },
+      { path: "dashboardLocal", component: DashboardLocal },
     ],
   },
 
