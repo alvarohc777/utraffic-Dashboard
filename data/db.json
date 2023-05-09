@@ -100,6 +100,20 @@
       "monto": "10000000",
       "plazo": "6 meses",
       "pago": "900000"
+    },
+    {
+      "categoria": "Nómina",
+      "nSolicitud": "12348",
+      "monto": "6000000",
+      "plazo": "2 años",
+      "pago": "4000000"
+    },
+    {
+      "categoria": "Recaudo",
+      "nSolicitud": "12349",
+      "monto": "15000000",
+      "plazo": "9 meses",
+      "pago": "1000000"
     }
   ]
 }
