@@ -61,4 +61,16 @@ let nombreChange = () => {
 </script>
 
 <style>
+::-webkit-scrollbar {
+  border-radius: 2px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: white;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: seashell;
+}
 </style>

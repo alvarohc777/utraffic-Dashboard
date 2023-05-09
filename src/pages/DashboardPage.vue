@@ -52,65 +52,87 @@
 
 <script setup>
 import { onMounted, ref, reactive, watchEffect } from "vue";
+import { api } from "../../src/boot/axios";
 import ApexDonut from "src/components/ApexDonut.vue";
 import FilterTable from "src/components/FilterTable.vue";
-import { api } from "../../src/boot/axios";
+
 const clientes = ref([]);
 const clientesFiltrado = ref([]);
 const nombres = ref([]);
 const nombre = ref(null);
 
-const formattedTotal = new Intl.NumberFormat("en-US", {
-  style: "currency",
-  currency: "USD",
-});
-
 const tesoreria = ref([]);
 const tesoreriaFiltrado = ref([]);
 const tesoreriaKeys = ref([]);
 const tesoreriaKey = ref(null);
+
+const formattedTotal = new Intl.NumberFormat("en-US", {
+  style: "currency",
+  currency: "USD",
+});
+// Function to create
+const createFilterData = (data, target, attr) => {
+  // target.value.push("-");
+  data.value.forEach((row) => {
+    if (target.value.indexOf(row[`${attr}`]) == -1) {
+      target.value.push(row[`${attr}`]);
+    }
+  });
+};
+
+// get requests
 onMounted(() => {
   api
     .get("clientes")
     .then((res) => {
       clientes.value = res.data;
-      clientes.value.forEach((cliente) => {
-        if (nombres.value.indexOf(cliente.nombre) == -1) {
-          nombres.value.push(cliente.nombre);
-        }
-      });
+      // nombres.value.push("-");
+      createFilterData(clientes, nombres, "nombre");
     })
     .catch((err) => console.log(err.message));
   api
     .get("tesoreria")
     .then((res) => {
       tesoreria.value = res.data;
-      tesoreria.value.forEach((row) => {
-        if (tesoreriaKeys.value.indexOf(row.categoria) == -1) {
-          tesoreriaKeys.value.push(row.categoria);
-        }
-      });
+      // tesoreriaKeys.value.push("-");
+      createFilterData(tesoreria, tesoreriaKeys, "categoria");
     })
     .catch((err) => console.log(err.message));
 });
 
+// watch changes on dropdown menu selection
 watchEffect(() => {
-  if (nombre.value) {
+  if (nombre.value && nombre.value !== "-") {
     clientesFiltrado.value = clientes.value.filter(
       (cliente) => cliente.nombre === nombre.value
     );
-  } else {
-    clientesFiltrado.value = clientes.value;
+    if (nombres.value.indexOf("-") == -1) {
+      nombres.value.unshift("-");
+    }
+    return;
   }
+  if (nombre.value === "-") {
+    nombres.value.shift();
+    nombre.value = null;
+  }
+  clientesFiltrado.value = clientes.value;
 });
+
 watchEffect(() => {
-  if (tesoreriaKey.value) {
+  if (tesoreriaKey.value && tesoreriaKey.value !== "-") {
     tesoreriaFiltrado.value = tesoreria.value.filter(
       (row) => row.categoria === tesoreriaKey.value
     );
-  } else {
-    tesoreriaFiltrado.value = tesoreria.value;
+    if (tesoreriaKeys.value.indexOf("-") == -1) {
+      tesoreriaKeys.value.unshift("-");
+    }
+    return;
   }
+  if (tesoreriaKey.value === "-") {
+    tesoreriaKeys.value.shift();
+    tesoreriaKey.value = null;
+  }
+  tesoreriaFiltrado.value = tesoreria.value;
 });
 
 const columnsTesoreria = reactive([
