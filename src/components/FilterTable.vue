@@ -1,5 +1,5 @@
 <template>
-  <div class="q-pa-md" style="max-width: 800px">
+  <div class="q-pa-md" style="max-width: 785px">
     <q-table
       flat
       bordered
@@ -61,6 +61,8 @@ const nombres = computed(() => {
 
   return _;
 });
+
+// data filter functions
 watchEffect(() => {
   if (nombre.value) {
     dataFiltered.value;

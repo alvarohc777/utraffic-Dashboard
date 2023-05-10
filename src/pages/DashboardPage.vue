@@ -180,8 +180,8 @@ const columnsTesoreria = reactive([
   {
     name: "plazo",
     required: true,
-    label: "Plazo",
-    align: "left",
+    label: "Plazo (m)",
+    align: "right",
     field: (row) => row.plazo,
     sortable: true,
   },
@@ -224,8 +224,8 @@ const columns = reactive([
   {
     name: "plazo",
     // required: true,
-    label: "Plazo",
-    align: "left",
+    label: "Plazo (m)",
+    align: "right",
     field: (row) => row.plazo,
     sortable: true,
   },
@@ -263,6 +263,7 @@ const columns = reactive([
     align: "left",
     field: (row) => row.calificacion,
     sortable: true,
+    format: (val, row) => `${"\u2B50".repeat(row.calificacion)}`,
   },
 ]);
 </script>
