@@ -15,12 +15,12 @@
 </template>
 
 <script setup>
-import { computed, toRefs } from "vue";
+import { computed, toRefs, ref } from "vue";
 import Vue from "vue";
 
 // Convertir props a variable
-const props = defineProps({ clientes: Object });
-let { clientes } = toRefs(props);
+const props = defineProps({ clientes: Object, title: String });
+let { clientes, title } = toRefs(props);
 
 let USDollar = new Intl.NumberFormat("es-US", {
   style: "currency",
@@ -44,6 +44,9 @@ const optionsCalc = computed(() => {
           return `${USDollar.format(value)}`;
         },
       },
+    },
+    title: {
+      text: `${title.value}`,
     },
 
     labels: [],

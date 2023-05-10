@@ -10,8 +10,8 @@
         </q-img>
       </q-card>
       <q-card class="row justify-evenly">
-        <apex-donut :clientes="clientesFiltrado" />
-        <apex-donut :clientes="tesoreriaFiltrado" />
+        <apex-donut :clientes="clientesFiltrado" :title="clientesTitle" />
+        <apex-donut :clientes="tesoreriaFiltrado" :title="tesoreriaTitle" />
       </q-card>
     </div>
 
@@ -51,7 +51,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref, reactive, watchEffect } from "vue";
+import { onMounted, ref, reactive, watchEffect, computed } from "vue";
 import { api } from "../../src/boot/axios";
 import ApexDonut from "src/components/ApexDonut.vue";
 import FilterTable from "src/components/FilterTable.vue";
