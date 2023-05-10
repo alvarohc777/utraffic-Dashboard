@@ -60,16 +60,32 @@ const clientes = ref([]);
 const clientesFiltrado = ref([]);
 const nombres = ref([]);
 const nombre = ref(null);
+const clientesTitle = computed(() => {
+  if (nombre.value) {
+    return nombre.value;
+  }
+  return "Solicitudes";
+});
 
 const tesoreria = ref([]);
 const tesoreriaFiltrado = ref([]);
 const tesoreriaKeys = ref([]);
 const tesoreriaKey = ref(null);
+const tesoreriaTitle = computed(() => {
+  if (tesoreriaKey.value) {
+    return tesoreriaKey.value;
+  }
+  return "Solicitudes";
+});
 
 const formattedTotal = new Intl.NumberFormat("en-US", {
   style: "currency",
   currency: "USD",
 });
+
+const onClick = () => {
+  alert("hola");
+};
 // Function to create
 const createFilterData = (data, target, attr) => {
   // target.value.push("-");
@@ -218,24 +234,27 @@ const columns = reactive([
     // required: true,
     label: "Pago",
     field: (row) => row.pago,
-
     format: (val, row) => `${formattedTotal.format(row.pago)}`,
     sortable: true,
   },
   {
     name: "fechaCorte",
     // required: true,
-    label: "Fecha de Corte",
+    label: "Fecha Corte",
     align: "left",
-
     field: (row) => row.fechaCorte,
     sortable: true,
+    format: (val, row) => {
+      let fecha = row.fechaCorte.split("/");
+      return `${fecha[0]}/${fecha[1]}/${fecha[2].slice(2, 4)}`;
+    },
   },
   {
     name: "documento",
-    label: "Documento",
+    label: "Doc",
     align: "left",
     field: (row) => row.documento,
+    format: () => "",
   },
   {
     name: "calificacion",

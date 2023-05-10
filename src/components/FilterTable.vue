@@ -9,6 +9,22 @@
       :columns="columns"
       row-key="name"
     >
+      <template v-slot:body-cell-documento="props">
+        <q-td :props="props">
+          <div>
+            <q-chip
+              :label="props.value"
+              size="sm"
+              dense
+              clickable
+              square
+              class="transparent"
+              @click="showDocuments"
+              icon="description"
+            />
+          </div>
+        </q-td>
+      </template>
       <template v-slot:top>
         <img
           style="height: 50px; width: 50px"
@@ -30,6 +46,10 @@ let { data, columns } = toRefs(props);
 let nombre = ref(null);
 let dataTemp = ref(data);
 let dataFiltered = ref([]);
+
+const showDocuments = () => {
+  alert("Show Documents Functionality");
+};
 
 const nombres = computed(() => {
   let _ = [];
