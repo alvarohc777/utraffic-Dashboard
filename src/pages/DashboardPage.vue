@@ -4,11 +4,14 @@
       class="col-md-6 col-xs-12 window-width row justify-around items-center"
       style="padding-top: 20px"
     >
-      <q-card class="my-card">
+      <q-card>
+        <date-time-x :title="tesoreriaTitle" :data="fechaPagoSeries" />
+      </q-card>
+      <!-- <q-card class="my-card">
         <q-img src="https://cdn.quasar.dev/img/parallax2.jpg">
           <div class="text-h5 absolute-bottom text-right">Title</div>
         </q-img>
-      </q-card>
+      </q-card> -->
       <q-card class="row justify-evenly">
         <apex-donut :clientes="clientesFiltrado" :title="clientesTitle" />
         <apex-donut :clientes="tesoreriaFiltrado" :title="tesoreriaTitle" />
@@ -47,13 +50,18 @@
         ></q-select>
       </filter-table>
     </div>
+    <q-card>
+      <!-- {{ fechaCorte }} -->
+      {{ fechaPagoSeries }}
+    </q-card>
   </q-page>
 </template>
 
 <script setup>
 import { onMounted, ref, reactive, watchEffect, computed } from "vue";
 import { api } from "../../src/boot/axios";
-import ApexDonut from "src/components/ApexDonut.vue";
+import ApexDonut from "src/components/Charts/ApexDonut.vue";
+import DateTimeX from "src/components/Charts/DateTimeX.vue";
 import FilterTable from "src/components/FilterTable.vue";
 
 const clientes = ref([]);
@@ -95,6 +103,41 @@ const createFilterData = (data, target, attr) => {
     }
   });
 };
+const fechaCorte = computed(() => {
+  let fechas = [];
+  clientes.value.forEach((cliente) => {
+    let date = cliente.fechaCorte.split("/");
+    date = new Date(date[2], date[1], date[0]);
+    date = Date.parse(date);
+    fechas.push(date);
+  });
+
+  return fechas;
+});
+
+const fechaPagoSeries = computed(() => {
+  let fechaDict = {};
+  let pagos = [];
+  clientes.value.forEach((cliente) => {
+    if (cliente.fechaCorte in fechaDict) {
+      fechaDict[cliente.fechaCorte] += parseInt(cliente.pago);
+    } else {
+      fechaDict[cliente.fechaCorte] = parseInt(cliente.pago);
+    }
+  });
+  for (var fecha in fechaDict) {
+    let pago = fechaDict[fecha];
+    fecha = fecha.split("/");
+    fecha = new Date(fecha[2], fecha[1], fecha[0]);
+    fecha = Date.parse(fecha);
+    pagos.push([fecha, pago]);
+  }
+  pagos = pagos.sort(function (a, b) {
+    return a[0] - b[0];
+  });
+
+  return pagos;
+});
 
 // get requests
 onMounted(() => {
