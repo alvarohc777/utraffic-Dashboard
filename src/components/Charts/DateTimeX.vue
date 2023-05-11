@@ -6,7 +6,7 @@
       ref="chart"
       :options="options"
       :series="series"
-      :key="options"
+      :key="series"
     ></apexchart>
   </div>
   <p>{{ fechaMin }}</p>
@@ -27,6 +27,9 @@ const options = computed(() => {
     title: {
       text: `${title.value}`,
     },
+    // noData: {
+    //   text: "Loading...",
+    // },
     chart: {
       id: "area-datetime",
       type: "area",

@@ -1,15 +1,13 @@
 <template>
   <div>
     <div class="chart-wrap">
-      <div id="chart" v-if="seriesCalc && seriesCalc.length">
-        <apexchart
-          type="donut"
-          width="350"
-          :options="optionsCalc"
-          :series="seriesCalc"
-          :key="seriesCalc"
-        ></apexchart>
-      </div>
+      <apexchart
+        type="donut"
+        width="350"
+        :options="optionsCalc"
+        :series="seriesCalc"
+        :key="seriesCalc"
+      ></apexchart>
     </div>
   </div>
 </template>
@@ -51,6 +49,7 @@ const optionsCalc = computed(() => {
         },
       },
     },
+
     title: {
       text: `${title.value}`,
     },
