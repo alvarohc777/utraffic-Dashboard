@@ -91,11 +91,18 @@ const options = computed(() => {
       },
     },
   };
+  // let labels = [];
+  // clientes.value.forEach((cliente) => {
+  //   labels.push(`${cliente.nSolicitud}`);
+  // });
+  // optionsPrueba.value.labels = labels;
+
   return optionsPrueba;
 });
 const series = computed(() => {
   return [
     {
+      name: "Total recaudado",
       data: data.value,
     },
   ];
