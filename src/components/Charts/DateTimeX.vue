@@ -9,7 +9,6 @@
       :key="series"
     ></apexchart>
   </div>
-  <p>{{ fechaMin }}</p>
 </template>
 
 <script setup>
@@ -27,9 +26,9 @@ const options = computed(() => {
     title: {
       text: `${title.value}`,
     },
-    // noData: {
-    //   text: "Loading...",
-    // },
+    noData: {
+      text: "Loading...",
+    },
     chart: {
       id: "area-datetime",
       type: "area",

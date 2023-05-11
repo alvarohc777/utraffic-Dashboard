@@ -49,6 +49,9 @@ const optionsCalc = computed(() => {
         },
       },
     },
+    noData: {
+      text: "Loading...",
+    },
 
     title: {
       text: `${title.value}`,
