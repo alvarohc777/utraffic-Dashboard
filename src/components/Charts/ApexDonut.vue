@@ -1,12 +1,19 @@
 <template>
   <div class="chart-wrap relative-position">
-    <apexchart
-      type="donut"
-      width="350"
-      :options="optionsCalc"
-      :series="seriesCalc"
-      :key="seriesCalc"
-    ></apexchart>
+    <div>
+      <apexchart
+        type="donut"
+        width="350"
+        :options="optionsCalc"
+        :series="seriesCalc"
+        :key="seriesCalc"
+      ></apexchart>
+    </div>
+    <div style="position: relative; left: 160px; bottom: 12px">
+      <p style="font-weight: bold; font-family: arial">
+        Total: {{ USDollar.format(parseInt(total)) }}
+      </p>
+    </div>
     <q-inner-loading
       :showing="visible"
       label="Please wait..."
@@ -49,12 +56,22 @@ let USDollar = new Intl.NumberFormat("es-US", {
 
 const seriesCalc = computed(() => {
   let series = [];
+  let total = 0;
 
   clientes.value.forEach((cliente) => {
     series.push(parseFloat(cliente.monto));
   });
 
   return series;
+});
+const total = computed(() => {
+  let total = 0;
+
+  clientes.value.forEach((cliente) => {
+    total += parseFloat(cliente.monto);
+  });
+
+  return total;
 });
 
 const optionsCalc = computed(() => {
