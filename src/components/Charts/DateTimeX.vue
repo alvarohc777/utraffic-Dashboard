@@ -17,8 +17,36 @@ import { ref, toRefs, toRef, watchEffect, onMounted, computed } from "vue";
 const props = defineProps({ title: String, data: Array });
 const { title, data } = toRefs(props);
 
+const fechaPagoSeries = computed(() => {
+  let fechaDict = {};
+  let pagos = [];
+  data.value.forEach((cliente) => {
+    if (cliente.fechaCorte in fechaDict) {
+      fechaDict[cliente.fechaCorte] += parseInt(cliente.pago);
+    } else {
+      fechaDict[cliente.fechaCorte] = parseInt(cliente.pago);
+    }
+  });
+  for (var fecha in fechaDict) {
+    let pago = fechaDict[fecha];
+    fecha = fecha.split("/");
+    fecha = new Date(fecha[2], fecha[1], fecha[0]);
+    fecha = Date.parse(fecha);
+    pagos.push([fecha, pago]);
+  }
+  pagos = pagos.sort(function (a, b) {
+    return a[0] - b[0];
+  });
+
+  return pagos;
+});
+
 // const fechaMin = ref(data.value[0][0]);
-const fechaMin = ref(data.value && data.value[0] && data.value[0][0]);
+const fechaMin = ref(
+  fechaPagoSeries.value &&
+    fechaPagoSeries.value[0] &&
+    fechaPagoSeries.value[0][0]
+);
 
 const selection = ref("one_year");
 
@@ -99,7 +127,7 @@ const options = computed(() => {
 const series = computed(() => {
   return [
     {
-      data: data.value,
+      data: fechaPagoSeries.value,
     },
   ];
 });

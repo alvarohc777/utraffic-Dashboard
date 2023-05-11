@@ -4,8 +4,8 @@
       class="col-md-6 col-xs-12 window-width row justify-around items-center"
       style="padding-top: 20px"
     >
-      <q-card>
-        <date-time-x :title="nombre" :data="fechaPagoSeries" />
+      <q-card v-if="clientesFiltrado">
+        <date-time-x :title="nombre" :data="clientesFiltrado" />
       </q-card>
 
       <q-card class="row justify-evenly">
@@ -99,41 +99,6 @@ const createFilterData = (data, target, attr) => {
     }
   });
 };
-const fechaCorte = computed(() => {
-  let fechas = [];
-  clientes.value.forEach((cliente) => {
-    let date = cliente.fechaCorte.split("/");
-    date = new Date(date[2], date[1], date[0]);
-    date = Date.parse(date);
-    fechas.push(date);
-  });
-
-  return fechas;
-});
-
-const fechaPagoSeries = computed(() => {
-  let fechaDict = {};
-  let pagos = [];
-  clientesFiltrado.value.forEach((cliente) => {
-    if (cliente.fechaCorte in fechaDict) {
-      fechaDict[cliente.fechaCorte] += parseInt(cliente.pago);
-    } else {
-      fechaDict[cliente.fechaCorte] = parseInt(cliente.pago);
-    }
-  });
-  for (var fecha in fechaDict) {
-    let pago = fechaDict[fecha];
-    fecha = fecha.split("/");
-    fecha = new Date(fecha[2], fecha[1], fecha[0]);
-    fecha = Date.parse(fecha);
-    pagos.push([fecha, pago]);
-  }
-  pagos = pagos.sort(function (a, b) {
-    return a[0] - b[0];
-  });
-
-  return pagos;
-});
 
 // get requests
 onMounted(() => {
