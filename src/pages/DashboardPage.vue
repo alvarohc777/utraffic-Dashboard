@@ -46,10 +46,6 @@
         ></q-select>
       </filter-table>
     </div>
-    <q-card>
-      <!-- {{ fechaCorte }} -->
-      {{ fechaPagoSeries }}
-    </q-card>
   </q-page>
 </template>
 
