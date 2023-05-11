@@ -9,7 +9,6 @@
       :key="series"
     ></apexchart>
     <q-inner-loading :showing="visible">
-      <!-- <q-spinner-gears size="50px" color="primary"></q-spinner-gears> -->
       <q-spinner color="primary" size="3em"></q-spinner>
     </q-inner-loading>
   </div>
@@ -20,7 +19,6 @@ import { ref, toRefs, computed, watchEffect } from "vue";
 const props = defineProps({ title: String, data: Array });
 const { title, data } = toRefs(props);
 
-// const fechaMin = ref(data.value[0][0]);
 const fechaMin = ref(data.value && data.value[0] && data.value[0][0]);
 const visible = ref(true);
 watchEffect(() => {
@@ -32,8 +30,6 @@ watchEffect(() => {
   }
 });
 
-const selection = ref("one_year");
-
 const options = computed(() => {
   let optionsPrueba = {
     title: {
@@ -43,7 +39,7 @@ const options = computed(() => {
     chart: {
       id: "area-datetime",
       type: "area",
-      // height: 350,
+      height: 350,
       zoom: {
         autoScaleYaxis: true,
       },

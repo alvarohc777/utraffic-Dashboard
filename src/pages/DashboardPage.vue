@@ -95,17 +95,6 @@ const createFilterData = (data, target, attr) => {
     }
   });
 };
-const fechaCorte = computed(() => {
-  let fechas = [];
-  clientes.value.forEach((cliente) => {
-    let date = cliente.fechaCorte.split("/");
-    date = new Date(date[2], date[1], date[0]);
-    date = Date.parse(date);
-    fechas.push(date);
-  });
-
-  return fechas;
-});
 
 const fechaPagoSeries = computed(() => {
   let fechaDict = {};
@@ -137,7 +126,6 @@ onMounted(() => {
     .get("clientes")
     .then((res) => {
       clientes.value = res.data;
-      // nombres.value.push("-");
       createFilterData(clientes, nombres, "nombre");
     })
     .catch((err) => console.log(err.message));
@@ -145,7 +133,6 @@ onMounted(() => {
     .get("tesoreria")
     .then((res) => {
       tesoreria.value = res.data;
-      // tesoreriaKeys.value.push("-");
       createFilterData(tesoreria, tesoreriaKeys, "categoria");
     })
     .catch((err) => console.log(err.message));
@@ -250,7 +237,6 @@ const columns = reactive([
   },
   {
     name: "monto",
-    // required: true,
     label: "Monto",
     field: (row) => row.monto,
     format: (val, row) => `${formattedTotal.format(row.monto)}`,
@@ -258,7 +244,6 @@ const columns = reactive([
   },
   {
     name: "plazo",
-    // required: true,
     label: "Plazo (m)",
     align: "right",
     field: (row) => row.plazo,
@@ -266,7 +251,6 @@ const columns = reactive([
   },
   {
     name: "pago",
-    // required: true,
     label: "Pago",
     field: (row) => row.pago,
     format: (val, row) => `${formattedTotal.format(row.pago)}`,
@@ -274,7 +258,6 @@ const columns = reactive([
   },
   {
     name: "fechaCorte",
-    // required: true,
     label: "Fecha Corte",
     align: "left",
     field: (row) => row.fechaCorte,
@@ -305,7 +288,6 @@ const columns = reactive([
 
 <style>
 .my-card {
-  /* width: 100%; */
   max-width: 200px;
 }
 </style>

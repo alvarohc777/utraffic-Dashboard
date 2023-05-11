@@ -29,8 +29,7 @@
 </style>
 
 <script setup>
-import { computed, toRefs, ref, watchEffect, onMounted } from "vue";
-import Vue from "vue";
+import { computed, toRefs, ref, watchEffect } from "vue";
 
 // Convertir props a variable
 const props = defineProps({ clientes: Object, title: String });
@@ -52,22 +51,12 @@ let USDollar = new Intl.NumberFormat("es-US", {
 
 const seriesCalc = computed(() => {
   let series = [];
-  let total = 0;
 
   clientes.value.forEach((cliente) => {
     series.push(parseFloat(cliente.monto));
   });
 
   return series;
-});
-const total = computed(() => {
-  let total = 0;
-
-  clientes.value.forEach((cliente) => {
-    total += parseFloat(cliente.monto);
-  });
-
-  return total;
 });
 
 const optionsCalc = computed(() => {
