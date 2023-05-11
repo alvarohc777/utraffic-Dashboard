@@ -5,13 +5,9 @@
       style="padding-top: 20px"
     >
       <q-card>
-        <date-time-x :title="tesoreriaTitle" :data="fechaPagoSeries" />
+        <date-time-x :title="nombre" :data="fechaPagoSeries" />
       </q-card>
-      <!-- <q-card class="my-card">
-        <q-img src="https://cdn.quasar.dev/img/parallax2.jpg">
-          <div class="text-h5 absolute-bottom text-right">Title</div>
-        </q-img>
-      </q-card> -->
+
       <q-card class="row justify-evenly">
         <apex-donut :clientes="clientesFiltrado" :title="clientesTitle" />
         <apex-donut :clientes="tesoreriaFiltrado" :title="tesoreriaTitle" />
