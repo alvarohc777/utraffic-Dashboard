@@ -8,16 +8,29 @@
       :series="series"
       :key="series"
     ></apexchart>
+    <q-inner-loading :showing="visible">
+      <!-- <q-spinner-gears size="50px" color="primary"></q-spinner-gears> -->
+      <q-spinner color="primary" size="3em"></q-spinner>
+    </q-inner-loading>
   </div>
 </template>
 
 <script setup>
-import { ref, toRefs, toRef, watchEffect, onMounted, computed } from "vue";
+import { ref, toRefs, computed, watchEffect } from "vue";
 const props = defineProps({ title: String, data: Array });
 const { title, data } = toRefs(props);
 
 // const fechaMin = ref(data.value[0][0]);
 const fechaMin = ref(data.value && data.value[0] && data.value[0][0]);
+const visible = ref(true);
+watchEffect(() => {
+  if (data.value[0]) {
+    visible.value = false;
+  }
+  if (!data.value[0]) {
+    visible.value = true;
+  }
+});
 
 const selection = ref("one_year");
 
@@ -26,9 +39,7 @@ const options = computed(() => {
     title: {
       text: `${title.value}`,
     },
-    noData: {
-      text: "Loading...",
-    },
+
     chart: {
       id: "area-datetime",
       type: "area",

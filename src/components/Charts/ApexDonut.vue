@@ -1,14 +1,21 @@
 <template>
-  <div>
-    <div class="chart-wrap">
-      <apexchart
-        type="donut"
-        width="350"
-        :options="optionsCalc"
-        :series="seriesCalc"
-        :key="seriesCalc"
-      ></apexchart>
-    </div>
+  <div class="chart-wrap relative-position">
+    <apexchart
+      type="donut"
+      width="350"
+      :options="optionsCalc"
+      :series="seriesCalc"
+      :key="seriesCalc"
+    ></apexchart>
+    <q-inner-loading
+      :showing="visible"
+      label="Please wait..."
+      label-class="text-teal"
+      label-style="font-size: 1.1em"
+    >
+      <q-spinner color="primary" size="3em"></q-spinner>
+      <!-- <q-spinner-gears size="50px" color="primary"></q-spinner-gears> -->
+    </q-inner-loading>
   </div>
 </template>
 
@@ -19,13 +26,22 @@
 </style>
 
 <script setup>
-import { computed, toRefs, ref } from "vue";
+import { computed, toRefs, ref, watchEffect, onMounted } from "vue";
 import Vue from "vue";
 
 // Convertir props a variable
 const props = defineProps({ clientes: Object, title: String });
 let { clientes, title } = toRefs(props);
+const visible = ref(true);
 
+watchEffect(() => {
+  if (clientes.value[0]) {
+    visible.value = false;
+  }
+  if (!clientes.value[0]) {
+    visible.value = true;
+  }
+});
 let USDollar = new Intl.NumberFormat("es-US", {
   style: "currency",
   currency: "COP",
@@ -33,6 +49,7 @@ let USDollar = new Intl.NumberFormat("es-US", {
 
 const seriesCalc = computed(() => {
   let series = [];
+
   clientes.value.forEach((cliente) => {
     series.push(parseFloat(cliente.monto));
   });
@@ -48,9 +65,6 @@ const optionsCalc = computed(() => {
           return `${USDollar.format(value)}`;
         },
       },
-    },
-    noData: {
-      text: "Loading...",
     },
 
     title: {
