@@ -9,6 +9,8 @@
       :key="title"
     ></apexchart>
   </div>
+  <p>{{ data[0][0] }}</p>
+  <p>{{ new Date("15 May 2023").getTime() }}</p>
 </template>
 
 <script setup>
@@ -70,7 +72,8 @@ const options = computed(() => {
     },
     xaxis: {
       type: "datetime",
-      min: new Date("15 May 2023").getTime(),
+      // min: new Date("15 May 2023").getTime(),
+      min: parseInt(data.value[0][0]),
       tickAmount: 6,
     },
     tooltip: {

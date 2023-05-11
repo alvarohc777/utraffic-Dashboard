@@ -46,7 +46,7 @@
 
 <script setup>
 import { computed, defineComponent, onMounted, reactive, ref } from "vue";
-import apexDonut from "../components/ApexDonut.vue";
+import apexDonut from "../components/Charts/ApexDonut.vue";
 let nombres = reactive([]);
 let nombre = ref(null);
 // let clientes = ref([]);

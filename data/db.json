@@ -12,6 +12,16 @@
     },
     {
       "nombre": "Maria Aleja",
+      "nSolicitud": "12351",
+      "monto": "5000000",
+      "plazo": "3",
+      "pago": "1800000",
+      "fechaCorte": "15/02/2023",
+      "documento": "",
+      "calificacion": "4"
+    },
+    {
+      "nombre": "Maria Aleja",
       "nSolicitud": "12345",
       "monto": "20000000",
       "plazo": "12",
