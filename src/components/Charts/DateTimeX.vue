@@ -52,21 +52,6 @@ const options = computed(() => {
           },
         },
       ],
-      xaxis: [
-        {
-          x: new Date("30 dec 2023").getTime(),
-          borderColor: "#999",
-          yAxisIndex: 0,
-          label: {
-            show: true,
-            text: "Corte",
-            style: {
-              color: "#fff",
-              background: "#873e23",
-            },
-          },
-        },
-      ],
     },
     dataLabels: {
       enabled: false,
@@ -77,7 +62,6 @@ const options = computed(() => {
     },
     xaxis: {
       type: "datetime",
-      // min: new Date("15 May 2023").getTime(),
       min: fechaMin.value,
       tickAmount: 6,
     },
