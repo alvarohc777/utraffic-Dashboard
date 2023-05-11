@@ -9,11 +9,7 @@
         :key="seriesCalc"
       ></apexchart>
     </div>
-    <div style="position: relative; left: 160px; bottom: 12px">
-      <p style="font-weight: bold; font-family: arial">
-        Total: {{ USDollar.format(parseInt(total)) }}
-      </p>
-    </div>
+
     <q-inner-loading
       :showing="visible"
       label="Please wait..."
@@ -51,7 +47,7 @@ watchEffect(() => {
 });
 let USDollar = new Intl.NumberFormat("es-US", {
   style: "currency",
-  currency: "COP",
+  currency: "USD",
 });
 
 const seriesCalc = computed(() => {
@@ -86,6 +82,40 @@ const optionsCalc = computed(() => {
 
     title: {
       text: `${title.value}`,
+    },
+    plotOptions: {
+      pie: {
+        donut: {
+          labels: {
+            show: true,
+            value: {
+              show: true,
+              fontSize: "12px",
+              fontFamily: "Helvetica, Arial, sans-serif",
+              fontWeight: 600,
+              color: undefined,
+              offsetY: 0,
+              formatter: function (val) {
+                return USDollar.format(val);
+              },
+            },
+            total: {
+              show: true,
+              label: "Total",
+              fontSize: "15px",
+              fontFamily: "Helvetica, Arial, sans-serif",
+              fontWeight: 600,
+              formatter: function (w) {
+                return USDollar.format(
+                  w.globals.seriesTotals.reduce((a, b) => {
+                    return a + b;
+                  }, 0)
+                );
+              },
+            },
+          },
+        },
+      },
     },
 
     labels: [],
