@@ -7,6 +7,8 @@
       title="Clientes"
       :rows="dataFiltered"
       :columns="columns"
+      :loading="loadingState"
+      loading-label="Cargando información"
       row-key="name"
     >
       <template v-slot:body-cell-documento="props">
@@ -46,6 +48,14 @@ let { data, columns } = toRefs(props);
 let nombre = ref(null);
 let dataTemp = ref(data);
 let dataFiltered = ref([]);
+
+const loadingState = computed(() => {
+  if (data.value[0]) {
+    console.log("value");
+    return false;
+  }
+  return true;
+});
 
 const showDocuments = () => {
   alert("Show Documents Functionality");
