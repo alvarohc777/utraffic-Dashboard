@@ -118,7 +118,7 @@ const fechaCorte = computed(() => {
 const fechaPagoSeries = computed(() => {
   let fechaDict = {};
   let pagos = [];
-  clientes.value.forEach((cliente) => {
+  clientesFiltrado.value.forEach((cliente) => {
     if (cliente.fechaCorte in fechaDict) {
       fechaDict[cliente.fechaCorte] += parseInt(cliente.pago);
     } else {
