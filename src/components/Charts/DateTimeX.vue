@@ -6,19 +6,22 @@
       ref="chart"
       :options="options"
       :series="series"
-      :key="title"
+      :key="options"
     ></apexchart>
   </div>
-  <p>{{ data[0][0] }}</p>
-  <p>{{ new Date("15 May 2023").getTime() }}</p>
+  <p>{{ fechaMin }}</p>
 </template>
 
 <script setup>
 import { ref, toRefs, toRef, watchEffect, onMounted, computed } from "vue";
 const props = defineProps({ title: String, data: Array });
 const { title, data } = toRefs(props);
+
+// const fechaMin = ref(data.value[0][0]);
+const fechaMin = ref(data.value && data.value[0] && data.value[0][0]);
+
 const selection = ref("one_year");
-const optionsOrig = ref();
+
 const options = computed(() => {
   let optionsPrueba = {
     title: {
@@ -73,7 +76,7 @@ const options = computed(() => {
     xaxis: {
       type: "datetime",
       // min: new Date("15 May 2023").getTime(),
-      min: parseInt(data.value[0][0]),
+      min: fechaMin.value,
       tickAmount: 6,
     },
     tooltip: {
