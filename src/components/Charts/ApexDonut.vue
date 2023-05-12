@@ -17,7 +17,6 @@
       label-style="font-size: 1.1em"
     >
       <q-spinner color="primary" size="3em"></q-spinner>
-      <!-- <q-spinner-gears size="50px" color="primary"></q-spinner-gears> -->
     </q-inner-loading>
   </div>
 </template>

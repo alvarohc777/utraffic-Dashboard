@@ -14,16 +14,6 @@
       <template v-slot:body-cell-documento="props">
         <q-td :props="props">
           <div>
-            <!-- <q-chip
-              :label="props.value"
-              size="sm"
-              dense
-              clickable
-              square
-              class="transparent"
-              @click="showDocuments"
-              icon="description"
-            /> -->
             <q-btn
               @click="showDocuments"
               dense
