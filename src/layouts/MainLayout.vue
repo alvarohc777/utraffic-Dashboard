@@ -5,8 +5,12 @@
         class="bg-white text-grey-8 window-width row justify-center items-center"
         height-hint="70"
       >
-        <q-btn flat rounded color="dark" label="¿Cómo funciona?"></q-btn>
-        <q-btn flat rounded color="dark" label="Preguntas Frecuentes"></q-btn>
+        <a href="/dashboard"
+          ><q-btn flat rounded color="dark" label="¿Cómo funciona?"></q-btn
+        ></a>
+        <a href="/cliente">
+          <q-btn flat rounded color="dark" label="Preguntas Frecuentes"></q-btn>
+        </a>
         <q-btn flat rounded color="dark" label="¿Quiénes Somos?"></q-btn>
         <q-btn flat rounded color="dark" label="Contacto"></q-btn>
         <q-btn flat rounded color="dark" label="Blog"></q-btn>
