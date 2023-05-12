@@ -14,7 +14,7 @@
       <template v-slot:body-cell-documento="props">
         <q-td :props="props">
           <div>
-            <q-chip
+            <!-- <q-chip
               :label="props.value"
               size="sm"
               dense

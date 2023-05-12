@@ -51,10 +51,13 @@
 
 <script setup>
 import { onMounted, ref, reactive, watchEffect, computed } from "vue";
-import { api } from "../../src/boot/axios";
+import { useQuasar } from "quasar";
 import ApexDonut from "src/components/Charts/ApexDonut.vue";
 import DateTimeX from "src/components/Charts/DateTimeX.vue";
 import FilterTable from "src/components/FilterTable.vue";
+import { api, apiCliente } from "../../src/boot/axios";
+
+let $q = useQuasar();
 
 const clientes = ref([]);
 const clientesFiltrado = ref([]);
@@ -122,6 +125,11 @@ const fechaPagoSeries = computed(() => {
 
 // get requests
 onMounted(() => {
+  $q.sessionStorage.set(
+    "finansofttoken",
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNjgzODA5NjgzLCJleHAiOjE2ODY0MDE2ODN9.dPVkxu166TZS25CWYPGGUQ6V4jSY3rBrxa9J82BIIQc"
+  );
+
   api
     .get("clientes")
     .then((res) => {
@@ -134,6 +142,13 @@ onMounted(() => {
     .then((res) => {
       tesoreria.value = res.data;
       createFilterData(tesoreria, tesoreriaKeys, "categoria");
+    })
+    .catch((err) => console.log(err.message));
+  apiCliente
+    .get("v1/customers?filters[identification][$eq]=1010063326&populate=*")
+    .then((res) => {
+      console.log("hola");
+      console.log(res);
     })
     .catch((err) => console.log(err.message));
 });

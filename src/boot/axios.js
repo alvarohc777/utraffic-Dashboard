@@ -8,17 +8,36 @@ import axios from "axios";
 // "export default () => {}" function below (which runs individually
 // for each client)
 const api = axios.create({ baseURL: "http://localhost:3000/" });
+const apiCliente = axios.create({ baseURL: "http://192.168.1.18:1337/api/" });
+
+// export default boot(({ app }) => {
+//   // for use inside Vue files (Options API) through this.$axios and this.$api
+
+//   app.config.globalProperties.$axios = axios;
+//   // ^ ^ ^ this will allow you to use this.$axios (for Vue Options API form)
+//   //       so you won't necessarily have to import axios in each vue file
+
+//   app.config.globalProperties.$api = api;
+//   // ^ ^ ^ this will allow you to use this.$api (for Vue Options API form)
+//   //       so you can easily perform requests against your app's API
+// });
 
 export default boot(({ app }) => {
-  // for use inside Vue files (Options API) through this.$axios and this.$api
-
   app.config.globalProperties.$axios = axios;
-  // ^ ^ ^ this will allow you to use this.$axios (for Vue Options API form)
-  //       so you won't necessarily have to import axios in each vue file
-
   app.config.globalProperties.$api = api;
-  // ^ ^ ^ this will allow you to use this.$api (for Vue Options API form)
-  //       so you can easily perform requests against your app's API
+  app.config.globalProperties.$api = apiCliente;
+
+  const apiInterceptor = (apiGenerico) => {
+    apiGenerico.interceptors.request.use(function (config) {
+      config.headers["Authorization"] = `Bearer ${
+        sessionStorage.getItem("finansofttoken").split("|")[1]
+      }`;
+      return config;
+    });
+  };
+
+  apiInterceptor(api);
+  apiInterceptor(apiCliente);
 });
 
-export { api };
+export { api, apiCliente };
