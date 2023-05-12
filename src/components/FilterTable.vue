@@ -23,7 +23,16 @@
               class="transparent"
               @click="showDocuments"
               icon="description"
-            />
+            /> -->
+            <q-btn
+              @click="showDocuments"
+              dense
+              round
+              flat
+              size="sm"
+              icon="description"
+            >
+            </q-btn>
           </div>
         </q-td>
       </template>
