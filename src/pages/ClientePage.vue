@@ -2,34 +2,19 @@
   <div
     class="row justify-evenly items-center"
     style="padding-top: 20px; padding-bottom: 20px"
-  >
-    <q-card class="my-card">
-      <q-img src="https://cdn.quasar.dev/img/parallax2.jpg">
-        <div class="absolute-bottom text-subtitle2 text-center">Title</div>
-      </q-img>
-    </q-card>
-    <q-card class="row justify-evenly"></q-card>
-    <q-card class="my-card">
-      <q-img src="https://cdn.quasar.dev/img/parallax2.jpg">
-        <div class="absolute-bottom text-subtitle2 text-center">Title</div>
-      </q-img>
-    </q-card>
-    <q-card class="my-card">
-      <q-img src="https://cdn.quasar.dev/img/parallax2.jpg">
-        <div class="absolute-bottom text-subtitle2 text-center">Title</div>
-      </q-img>
-    </q-card>
-    <q-card class="my-card">
-      <q-img src="https://cdn.quasar.dev/img/parallax2.jpg">
-        <div class="absolute-bottom text-subtitle2 text-center">Title</div>
-      </q-img>
-    </q-card>
-  </div>
+  ></div>
+
+  <h1>{{ nombre }}</h1>
+  <input type="text" v-model="newName" />
+  <button @click="updateNameQuery">Update Name</button>
+  <h5>{{ newName }}</h5>
+
   <div
     class="row justify-evenly items-center"
     style="padding-top: 20px; padding-bottom: 20px"
+    v-if="clientes"
   >
-    <filter-table :data="clientesFiltrado" :columns="columns">
+    <filter-table :data="clientes" :columns="columns" :key="nombre">
       <q-select
         v-model="nombre"
         outlined
@@ -44,34 +29,38 @@
         style="min-width: 120px"
       ></q-select>
     </filter-table>
-    <q-card class="my-card">
-      <q-img src="https://cdn.quasar.dev/img/parallax2.jpg">
-        <div class="absolute-bottom text-subtitle2 text-center">Title</div>
-      </q-img>
-    </q-card>
   </div>
 </template>
 
 <script setup>
-import FilterTable from "src/components/FilterTable.vue";
-import { ref, computed, onMounted, watchEffect, reactive } from "vue";
+// ---> Imports
+
+// packages
+import { useRouter, useRoute } from "vue-router";
 import { api } from "src/boot/axios";
+import { ref, reactive, watchEffect, onMounted } from "vue";
+
+// components
+import FilterTable from "src/components/FilterTable.vue";
+
+// Constants and Variables
+const router = useRouter();
+const route = useRoute();
+const nombre = ref(route.query.nombre);
 const clientes = ref([]);
 const clientesFiltrado = ref([]);
+const newName = ref(null);
 const nombres = ref([]);
-const nombre = ref(null);
-const clientesTitle = computed(() => {
-  if (nombre.value) {
-    return nombre.value;
-  }
-  return "Solicitudes";
-});
-const formattedTotal = new Intl.NumberFormat("en-US", {
-  style: "currency",
-  currency: "USD",
-});
-const onClick = () => {
-  alert("hola");
+
+// Functions
+const updateNameQuery = () => {
+  nombre.value = newName.value;
+  router.replace({
+    path: route.path,
+    query: { nombre: newName.value },
+  });
+  // router.replace({ ...router.currentRoute, query: { nombre: newName.value } });
+  // router.push({ query: { ...route.query, names: newName } });
 };
 
 const createFilterData = (data, target, attr) => {
@@ -83,17 +72,43 @@ const createFilterData = (data, target, attr) => {
   });
 };
 
+const formattedTotal = new Intl.NumberFormat("en-US", {
+  style: "currency",
+  currency: "USD",
+});
+
 onMounted(() => {
   api
     .get("clientes")
     .then((res) => {
-      clientes.value = res.data;
-      createFilterData(clientes, nombres, "nombre");
+      let nameHolder = {};
+      nameHolder.value = res.data;
+      createFilterData(nameHolder, nombres, "nombre");
     })
     .catch((err) => console.log(err.message));
-  api;
 });
 
+// Watchers
+watchEffect(() => {
+  api
+    .get("clientes", {
+      params: {
+        nombre: nombre.value,
+      },
+    })
+    .then((res) => {
+      clientes.value = res.data;
+      router.replace({
+        path: route.path,
+        query: { nombre: nombre.value },
+      });
+    })
+    .catch((err) => {
+      console.log(err.message);
+    });
+});
+
+// watch changes on dropdown menu selection
 watchEffect(() => {
   if (nombre.value && nombre.value !== "-") {
     clientesFiltrado.value = clientes.value.filter(
@@ -179,9 +194,19 @@ const columns = reactive([
 ]);
 </script>
 
+
+
+
+
+
+
+
 <style>
 .my-card {
   width: 100%;
   max-width: 250px;
+  padding: 2px;
+  margin: 10px;
+  background-color: purple;
 }
 </style>
