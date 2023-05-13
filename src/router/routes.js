@@ -9,9 +9,9 @@ const routes = [
     path: "/",
     component: IndexLayout,
     children: [
-      { path: "", component: IndexPage },
-      { path: "dashboard", component: DashboardPage },
-      { path: "cliente", component: ClientePage },
+      { path: "", name: "home", component: IndexPage },
+      { path: "dashboard", name: "dashboard", component: DashboardPage },
+      { path: "cliente", name: "cliente", component: ClientePage },
     ],
   },
 

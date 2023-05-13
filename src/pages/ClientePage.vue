@@ -133,6 +133,7 @@ const columns = reactive([
     label: "Nombre",
     align: "left",
     field: (row) => row.nombre,
+    format: (val, row) => {},
     sortable: true,
   },
   {

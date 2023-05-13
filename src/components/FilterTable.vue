@@ -33,7 +33,18 @@
         />
 
         <q-space></q-space>
-        <slot></slot>
+
+        <slot name="category-selector"></slot>
+      </template>
+      <template v-if="tableLinks === true" v-slot:body-cell-nombre="props">
+        <q-td :props="props">
+          <router-link
+            :to="{ name: 'cliente', query: { nombre: props.value } }"
+            style="text-decoration: none; color: black"
+          >
+            {{ props.value }}
+          </router-link>
+        </q-td>
       </template>
     </q-table>
   </div>
@@ -42,14 +53,15 @@
 <script setup>
 import { toRefs, ref, watchEffect, computed } from "vue";
 
-const props = defineProps(["data", "columns"]);
-let { data, columns } = toRefs(props);
+const props = defineProps(["data", "columns", "tableLinks"]);
+let { data, columns, tableLinks } = toRefs(props);
 let nombre = ref(null);
 let dataFiltered = ref([]);
 
 const loadingState = computed(() => {
   if (data.value[0]) {
     console.log("value");
+
     return false;
   }
   return true;
