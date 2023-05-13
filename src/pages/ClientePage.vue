@@ -15,19 +15,21 @@
     v-if="clientes"
   >
     <filter-table :data="clientes" :columns="columns" :key="nombre">
-      <q-select
-        v-model="nombre"
-        outlined
-        dense
-        options-dense
-        label="vendedor"
-        emit-value
-        map-options
-        :options="nombres"
-        option-value="name"
-        options-cover
-        style="min-width: 120px"
-      ></q-select>
+      <template #category-selector>
+        <q-select
+          v-model="nombre"
+          outlined
+          dense
+          options-dense
+          label="vendedor"
+          emit-value
+          map-options
+          :options="nombres"
+          option-value="name"
+          options-cover
+          style="min-width: 120px"
+        ></q-select>
+      </template>
     </filter-table>
   </div>
 </template>
@@ -38,7 +40,7 @@
 // packages
 import { useRouter, useRoute } from "vue-router";
 import { api } from "src/boot/axios";
-import { ref, reactive, watchEffect, onMounted } from "vue";
+import { ref, reactive, watchEffect, onMounted, watch } from "vue";
 
 // components
 import FilterTable from "src/components/FilterTable.vue";

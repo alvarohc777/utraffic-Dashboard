@@ -15,35 +15,43 @@
     </div>
 
     <div class="row justify-evenly">
-      <filter-table :data="clientesFiltrado" :columns="columns">
-        <q-select
-          v-model="nombre"
-          outlined
-          dense
-          options-dense
-          label="vendedor"
-          emit-value
-          map-options
-          :options="nombres"
-          option-value="name"
-          options-cover
-          style="min-width: 120px"
-        ></q-select>
+      <filter-table
+        :data="clientesFiltrado"
+        :columns="columns"
+        :tableLinks="true"
+      >
+        <template #category-selector>
+          <q-select
+            v-model="nombre"
+            outlined
+            dense
+            options-dense
+            label="vendedor"
+            emit-value
+            map-options
+            :options="nombres"
+            option-value="name"
+            options-cover
+            style="min-width: 120px"
+          ></q-select>
+        </template>
       </filter-table>
       <filter-table :data="tesoreriaFiltrado" :columns="columnsTesoreria">
-        <q-select
-          v-model="tesoreriaKey"
-          outlined
-          dense
-          options-dense
-          label="Cuenta"
-          emit-value
-          map-options
-          :options="tesoreriaKeys"
-          option-value="name"
-          options-cover
-          style="min-width: 120px"
-        ></q-select>
+        <template #category-selector>
+          <q-select
+            v-model="tesoreriaKey"
+            outlined
+            dense
+            options-dense
+            label="Cuenta"
+            emit-value
+            map-options
+            :options="tesoreriaKeys"
+            option-value="name"
+            options-cover
+            style="min-width: 120px"
+          ></q-select>
+        </template>
       </filter-table>
     </div>
   </q-page>
