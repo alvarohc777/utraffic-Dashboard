@@ -36,6 +36,7 @@
 
         <slot name="category-selector"></slot>
       </template>
+      <!-- Optional slot -->
       <template v-if="tableLinks === true" v-slot:body-cell-nombre="props">
         <q-td :props="props">
           <router-link
