@@ -65,9 +65,7 @@ const formattedTotal = new Intl.NumberFormat("en-US", {
   currency: "USD",
 });
 
-const onClick = () => {
-  alert("hola");
-};
+
 // Function to create
 const createFilterData = (data, target, attr) => {
   // target.value.push("-");
