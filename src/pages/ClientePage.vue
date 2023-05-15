@@ -1,38 +1,187 @@
 <template>
-  <div
-    class="row justify-evenly items-center"
-    style="padding-top: 20px; padding-bottom: 20px"
-  ></div>
+  <!-- <div class="q-pa-md example-row-equal-width" style="align-items: stretch;">
+    <div class="row rows">
+      <div class="col-2">
+        <q-card class="my-card">
+          <q-card-section style="padding-bottom: 0">
+            <div class="text-h5">{{ nombre }}</div>
+          </q-card-section>
 
-  <h1>{{ nombre }}</h1>
-  <input type="text" v-model="newName" />
-  <button @click="updateNameQuery">Update Name</button>
-  <h5>{{ newName }}</h5>
+          <q-card-section class="row justify-between">
+            <div>
+              <p style="margin: 0px" class="text-purple-10">
+                <strong> Créditos: </strong>
+              </p>
+              <div v-for="cliente in clientes" :key="cliente">
+                {{ cliente.nSolicitud }}
+              </div>
+            </div>
+            <img src="../../src/assets/profileIcon.png" style="width: 70px; height: 70px" />
+          </q-card-section>
+          <q-card-section>
+            {{ "\u2B50".repeat(calificacion) }}
+          </q-card-section>
+        </q-card>
+      </div>
+      <div class="col">
+        <div class="row justify-around items-center">
 
-  <div
-    class="row justify-evenly items-center"
-    style="padding-top: 20px; padding-bottom: 20px"
-    v-if="clientes"
-  >
+          <div v-for="cliente in clientes" :key="cliente">
+            <q-card class="my-card">
+              <img src="https://cdn.quasar.dev/img/mountains.jpg">
+              <div class="flex flex-center column">
+                <div class="row " style="width: 100%; padding: 5px;">
+                  <div class="fit row wrap justify-start items-start content-start">
+                    <div class="col">
+                      <p style="margin: 0px" class="text-purple-10">
+                        <strong> Crédito: </strong>
+                      </p>
+                      <p class="text-subtitle2">{{ cliente.nSolicitud }}</p>
+                    </div>
+                    <div class="col">
+                      <p style="margin: 0px" class="text-purple-10">
+                        <strong> Fecha de Corte: </strong>
+                      </p>
+                      <p class="text-subtitle2">{{ cliente.fechaCorte }}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="flex flex-center column">
+                <div class="row" style="width: 100%; padding: 5px;">
+                  <div class="fit row wrap justify-start items-start content-start">
+                    <div class="col">
+                      <p style="margin: 0px" class="text-purple-10">
+                        <strong> Monto: </strong>
+                      </p>
+                      <p class="text-subtitle2">{{ cliente.monto }}</p>
+                    </div>
+                    <div class="col">
+                      <p style="margin: 0px" class="text-purple-10">
+                        <strong> Plazo: </strong>
+                      </p>
+                      <p class="text-subtitle2">{{ cliente.plazo }}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+
+
+            </q-card>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row rows">
+      <div class="col">
+        <filter-table :data="clientes" :columns="columns" :key="nombre">
+          <template #category-selector>
+            <q-select v-model="nombre" outlined dense options-dense label="vendedor" emit-value map-options
+              :options="nombres" option-value="name" options-cover style="min-width: 120px"></q-select>
+          </template>
+        </filter-table>
+      </div>
+    </div>
+  </div> -->
+  <!-- #2fd4ad -->
+  <div v-if="nombre" class="row justify-between items-center q-pa-md"
+    style="padding-top: 20px; padding-bottom: 5px;  align-items: stretch;">
+
+    <q-card class="my-card">
+      <q-card-section style="padding-bottom: 0">
+        <div class="text-h5">{{ nombre }}</div>
+      </q-card-section>
+
+      <q-card-section class="row justify-between">
+        <div>
+          <p style="margin: 0px" class="text-purple-10">
+            <strong> Créditos: </strong>
+          </p>
+          <div v-for="cliente in clientes" :key="cliente">
+            {{ cliente.nSolicitud }}
+          </div>
+        </div>
+        <img src="../../src/assets/profileIcon.png" style="width: 70px; height: 70px" />
+      </q-card-section>
+      <q-card-section>
+        {{ "\u2B50".repeat(calificacion) }}
+      </q-card-section>
+    </q-card>
+
+
+
+
+    <div class="row justify-evenly" style="flex-grow: 1;">
+      <q-card class="my-card" v-for="cliente in clientes" :key="cliente">
+        <img src="https://cdn.quasar.dev/img/mountains.jpg">
+        <div class="flex flex-center column">
+          <div class="row " style="width: 100%; padding: 5px;">
+            <div class="fit row wrap justify-start items-start content-start">
+              <div class="col">
+                <p style="margin: 0px" class="text-purple-10">
+                  <strong> Crédito: </strong>
+                </p>
+                <p class="text-subtitle2">{{ cliente.nSolicitud }}</p>
+              </div>
+              <div class="col">
+                <p style="margin: 0px" class="text-purple-10">
+                  <strong> Fecha de Corte: </strong>
+                </p>
+                <p class="text-subtitle2">{{ cliente.fechaCorte }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="flex flex-center column">
+          <div class="row" style="width: 100%; padding: 5px;">
+            <div class="fit row wrap justify-start items-start content-start">
+              <div class="col">
+                <p style="margin: 0px" class="text-purple-10">
+                  <strong> Monto: </strong>
+                </p>
+                <p class="text-subtitle2">{{ cliente.monto }}</p>
+              </div>
+              <div class="col">
+                <p style="margin: 0px" class="text-purple-10">
+                  <strong> Plazo: </strong>
+                </p>
+                <p class="text-subtitle2">{{ cliente.plazo }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+
+      </q-card>
+    </div>
+
+  </div>
+
+
+
+
+
+  <div class="row justify-start items-center" style="padding-top: 5px; padding-bottom: 20px" v-if="clientes">
     <filter-table :data="clientes" :columns="columns" :key="nombre">
       <template #category-selector>
-        <q-select
-          v-model="nombre"
-          outlined
-          dense
-          options-dense
-          label="vendedor"
-          emit-value
-          map-options
-          :options="nombres"
-          option-value="name"
-          options-cover
-          style="min-width: 120px"
-        ></q-select>
+        <q-select v-model="nombre" outlined dense options-dense label="vendedor" emit-value map-options :options="nombres"
+          option-value="name" options-cover style="min-width: 120px"></q-select>
       </template>
     </filter-table>
   </div>
 </template>
+
+<style>
+.my-card {
+  width: 100%;
+
+  max-width: 220px;
+  padding: 2px;
+  margin: 5px;
+}
+</style>
 
 <script setup>
 // ---> Imports
@@ -40,7 +189,7 @@
 // packages
 import { useRouter, useRoute } from "vue-router";
 import { api } from "src/boot/axios";
-import { ref, reactive, watchEffect, onMounted, watch } from "vue";
+import { ref, reactive, watchEffect, onMounted, watch, computed } from "vue";
 
 // components
 import FilterTable from "src/components/FilterTable.vue";
@@ -49,10 +198,18 @@ import FilterTable from "src/components/FilterTable.vue";
 const router = useRouter();
 const route = useRoute();
 const nombre = ref(route.query.nombre);
+const loading = ref(true);
 const clientes = ref([]);
 const clientesFiltrado = ref([]);
 const newName = ref(null);
 const nombres = ref([]);
+
+const calificacion = computed(() => {
+  if (clientes.value[0]) {
+    return clientes.value[0].calificacion;
+  }
+  return null;
+});
 
 // Functions
 const updateNameQuery = () => {
@@ -79,6 +236,9 @@ const formattedTotal = new Intl.NumberFormat("en-US", {
   currency: "USD",
 });
 
+// Llena el array 'nombres' con todos los nombres disponibles
+// en la base de datos (solo lo hace una vez cuando se hace el
+// mount).
 onMounted(() => {
   api
     .get("clientes")
@@ -91,6 +251,9 @@ onMounted(() => {
 });
 
 // Watchers
+
+// Actualiza la variable clientes cuando cambia el nombre
+// escogido o cuando se actualiza el URL query
 watchEffect(() => {
   api
     .get("clientes", {
@@ -135,7 +298,7 @@ const columns = reactive([
     label: "Nombre",
     align: "left",
     field: (row) => row.nombre,
-    format: (val, row) => {},
+    format: (val, row) => row.nombre,
     sortable: true,
   },
   {
@@ -197,19 +360,3 @@ const columns = reactive([
 ]);
 </script>
 
-
-
-
-
-
-
-
-<style>
-.my-card {
-  width: 100%;
-  max-width: 250px;
-  padding: 2px;
-  margin: 10px;
-  background-color: purple;
-}
-</style>

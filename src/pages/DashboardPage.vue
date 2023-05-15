@@ -1,9 +1,6 @@
 <template>
   <q-page>
-    <div
-      class="col-md-6 col-xs-12 window-width row justify-around items-center"
-      style="padding-top: 20px"
-    >
+    <div class="col-md-6 col-xs-12 window-width row justify-around items-center" style="padding-top: 20px">
       <q-card>
         <date-time-x :title="nombre" :data="fechaPagoSeries" />
       </q-card>
@@ -15,42 +12,16 @@
     </div>
 
     <div class="row justify-evenly">
-      <filter-table
-        :data="clientesFiltrado"
-        :columns="columns"
-        :tableLinks="true"
-      >
+      <filter-table :data="clientesFiltrado" :columns="columns" :tableLinks="true">
         <template #category-selector>
-          <q-select
-            v-model="nombre"
-            outlined
-            dense
-            options-dense
-            label="vendedor"
-            emit-value
-            map-options
-            :options="nombres"
-            option-value="name"
-            options-cover
-            style="min-width: 120px"
-          ></q-select>
+          <q-select v-model="nombre" outlined dense options-dense label="vendedor" emit-value map-options
+            :options="nombres" option-value="name" options-cover style="min-width: 120px"></q-select>
         </template>
       </filter-table>
       <filter-table :data="tesoreriaFiltrado" :columns="columnsTesoreria">
         <template #category-selector>
-          <q-select
-            v-model="tesoreriaKey"
-            outlined
-            dense
-            options-dense
-            label="Cuenta"
-            emit-value
-            map-options
-            :options="tesoreriaKeys"
-            option-value="name"
-            options-cover
-            style="min-width: 120px"
-          ></q-select>
+          <q-select v-model="tesoreriaKey" outlined dense options-dense label="Cuenta" emit-value map-options
+            :options="tesoreriaKeys" option-value="name" options-cover style="min-width: 120px"></q-select>
         </template>
       </filter-table>
     </div>
