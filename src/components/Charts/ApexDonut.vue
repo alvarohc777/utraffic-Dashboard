@@ -1,21 +1,10 @@
 <template>
   <div class="chart-wrap relative-position">
     <div>
-      <apexchart
-        type="donut"
-        width="350"
-        :options="optionsCalc"
-        :series="seriesCalc"
-        :key="seriesCalc"
-      ></apexchart>
+      <apexchart type="donut" width="350" :options="optionsCalc" :series="seriesCalc" :key="seriesCalc"></apexchart>
     </div>
 
-    <q-inner-loading
-      :showing="visible"
-      label="Please wait..."
-      label-class="text-teal"
-      label-style="font-size: 1.1em"
-    >
+    <q-inner-loading :showing="visible" label="Please wait..." label-class="text-teal" label-style="font-size: 1.1em">
       <q-spinner color="primary" size="3em"></q-spinner>
     </q-inner-loading>
   </div>
