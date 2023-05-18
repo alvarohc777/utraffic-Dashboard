@@ -36,6 +36,10 @@ import DateTimeX from "src/components/Charts/DateTimeX.vue";
 import FilterTable from "src/components/FilterTable.vue";
 import { api, apiCliente } from "../../src/boot/axios";
 
+
+// utils
+import { scoreCalculator, progressCalculator } from "src/scripts/utils"
+
 let $q = useQuasar();
 
 const clientes = ref([]);
@@ -79,20 +83,26 @@ const createFilterData = (data, target, attr) => {
 const fechaPagoSeries = computed(() => {
   let fechaDict = {};
   let pagos = [];
+
+
   clientesFiltrado.value.forEach((cliente) => {
-    if (cliente.fechaCorte in fechaDict) {
-      fechaDict[cliente.fechaCorte] += parseInt(cliente.pago);
-    } else {
-      fechaDict[cliente.fechaCorte] = parseInt(cliente.pago);
-    }
-  });
+    cliente.planPago.forEach((pago) => {
+      if (pago.fecha in fechaDict) {
+        fechaDict[pago.fecha] += parseInt(pago.pago)
+      } else {
+        fechaDict[pago.fecha] = parseInt(pago.pago)
+      }
+    })
+  })
+
   for (var fecha in fechaDict) {
     let pago = fechaDict[fecha];
     fecha = fecha.split("/");
-    fecha = new Date(fecha[2], fecha[1], fecha[0]);
+    fecha = new Date(fecha[2], fecha[1] - 1, fecha[0]);
     fecha = Date.parse(fecha);
     pagos.push([fecha, pago]);
   }
+
   pagos = pagos.sort(function (a, b) {
     return a[0] - b[0];
   });
@@ -243,22 +253,25 @@ const columns = reactive([
     sortable: true,
   },
   {
-    name: "pago",
-    label: "Pago",
-    field: (row) => row.pago,
-    format: (val, row) => `${formattedTotal.format(row.pago)}`,
-    sortable: true,
+    name: "fechaSolicitud",
+    label: "Fecha solicitud",
+    align: "right",
+    field: (row) => row.fechaSolicitud,
+    // format: (val, row) => {
+    //   let fecha = row.fechaSolicitud.split("/");
+    //   return `${fecha[0]}/${fecha[1]}/${fecha[2].slice(2, 4)}`
+    // },
+    sortable: true
   },
   {
-    name: "fechaCorte",
-    label: "Fecha Corte",
-    align: "left",
-    field: (row) => row.fechaCorte,
-    sortable: true,
+    name: "progreso",
+    label: "Progreso",
+    align: "right",
+    field: (row) => row.planPago,
     format: (val, row) => {
-      let fecha = row.fechaCorte.split("/");
-      return `${fecha[0]}/${fecha[1]}/${fecha[2].slice(2, 4)}`;
-    },
+      let progress = progressCalculator(val)
+      return `${progress}%`
+    }
   },
   {
     name: "documento",
@@ -277,6 +290,8 @@ const columns = reactive([
     format: (val, row) => `${"\u2B50".repeat(row.calificacion)}`,
   },
 ]);
+
+
 </script>
 
 <style>

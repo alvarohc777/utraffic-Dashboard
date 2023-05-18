@@ -5,7 +5,8 @@ const progressCalculator = (planPago) => {
     pagos += cuota.estado === "pagado" ? 1 : 0;
     pagos += cuota.estado === "pagadoMora" ? 1 : 0;
   });
-  return pagos / numeroCuotas;
+  let progress = pagos / numeroCuotas;
+  return (progress * 100).toFixed(0);
 };
 const scoreCalculator = (planPago) => {
   let cuotasEnMora = 0;
