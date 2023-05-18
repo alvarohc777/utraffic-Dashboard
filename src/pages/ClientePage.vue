@@ -29,7 +29,9 @@
         <p class="text-subtitle2">{{ formattedTotal.format(total) }}</p>
       </q-card-section>
       <q-card-section class="row justify-center">
-        <semi-circular :progress="calificacion * 100 / 5" :title="'Calificación'" :score="clientes[0].calificacion" />
+
+        <semi-circular :progress="calificacion * 100 / 5" :title="'Calificación'" :score="clientes[0].calificacion"
+          :key="clientes[0].calificacion" />
 
       </q-card-section>
     </q-card>
@@ -39,7 +41,9 @@
 
     <div class="row justify-evenly" style="flex-grow: 1;">
       <q-card class="my-card row justify-between column" style="max-width: 350px;">
-        <date-time-x :data="fechaPagoSeries" width="100%" />
+        <q-card>
+          <date-time-x :data="fechaPagoSeries" width="100%" :key="fechaPagoSeries" />
+        </q-card>
         <apex-donut :clientes="clientes" width="100%" />
       </q-card>
       <q-card class="my-card row justify-between column" v-for=" cliente  in  clientes " :key="cliente">

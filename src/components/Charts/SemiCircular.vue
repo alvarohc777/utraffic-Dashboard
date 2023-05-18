@@ -44,14 +44,7 @@ let options = reactive({
       enabled: true
     }
   },
-  // title: {
-  //   text: `Hola`,
-  //   style: {
-  //     color: "#4a148c",
-  //     fontWeight: 600,
-  //     fontSize: "14px",
-  //   }
-  // },
+
   plotOptions: {
     radialBar: {
       startAngle: -90,

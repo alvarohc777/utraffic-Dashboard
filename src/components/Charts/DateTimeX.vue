@@ -1,6 +1,6 @@
 <template>
   <div id="chart-timeline" class="chart-wrap">
-    <apexchart type="area" :width="width" ref="chart" :options="options" :series="series" :key="series"></apexchart>
+    <apexchart type="area" :width="width" ref="chart" :options="options" :series="series" :key="data"></apexchart>
     <q-inner-loading :showing="visible">
       <q-spinner color="primary" size="3em"></q-spinner>
     </q-inner-loading>
