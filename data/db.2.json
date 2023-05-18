@@ -1,0 +1,145 @@
+{
+  "clientes": [
+    {
+      "nombre": "Luis Jimenez",
+      "nSolicitud": "12344",
+      "monto": "5000000",
+      "fechaSolicitud": "15/01/2023",
+      "plazo": "5",
+      "planPago": [
+        { "fecha": "15/02/2023", "pago": "1000000", "estado": "pagado" },
+        { "fecha": "15/03/2023", "pago": "1000000", "estado": "pagado" },
+        { "fecha": "15/04/2023", "pago": "1000000", "estado": "pagadoMora" },
+        { "fecha": "15/05/2023", "pago": "1000000", "estado": "mora" },
+        { "fecha": "15/06/2023", "pago": "1000000", "estado": "null" }
+      ],
+      "documento": "",
+      "calificacion": "4"
+    },
+    {
+      "nombre": "Alvaro Herrada",
+      "nSolicitud": "12345",
+      "monto": "4000000",
+      "fechaSolicitud": "01/01/2023",
+      "plazo": "4",
+      "planPago": [
+        { "fecha": "01/02/2023", "pago": "1000000", "estado": "pagado" },
+        { "fecha": "01/03/2023", "pago": "1000000", "estado": "pagado" },
+        { "fecha": "01/04/2023", "pago": "1000000", "estado": "pagado" },
+        { "fecha": "01/05/2023", "pago": "1000000", "estado": "pagado" }
+      ],
+      "documento": "",
+      "calificacion": "5"
+    },
+    {
+      "nombre": "Maria Aleja",
+      "nSolicitud": "12346",
+      "monto": "24000000",
+      "plazo": "12",
+      "planPago": [
+        { "fecha": "15/10/2022", "pago": "2000000", "estado": "pagado" },
+        { "fecha": "15/11/2022", "pago": "2000000", "estado": "pagado" },
+        { "fecha": "15/12/2022", "pago": "2000000", "estado": "pagado" },
+        { "fecha": "15/01/2023", "pago": "2000000", "estado": "pagado" },
+        { "fecha": "15/02/2023", "pago": "2000000", "estado": "pagado" },
+        { "fecha": "15/03/2023", "pago": "2000000", "estado": "pagado" },
+        { "fecha": "15/04/2023", "pago": "2000000", "estado": "pagado" },
+        { "fecha": "15/05/2023", "pago": "2000000", "estado": "pagado" },
+        { "fecha": "15/06/2023", "pago": "2000000", "estado": "null" },
+        { "fecha": "15/07/2023", "pago": "2000000", "estado": "null" },
+        { "fecha": "15/08/2023", "pago": "2000000", "estado": "null" },
+        { "fecha": "15/09/2023", "pago": "2000000", "estado": "null" },
+        { "fecha": "15/10/2023", "pago": "2000000", "estado": "null" }
+      ],
+      "fechaSolicitud": "15/09/2022",
+      "documento": "",
+      "calificacion": "5"
+    },
+    {
+      "nombre": "Alvaro Herrada",
+      "nSolicitud": "12347",
+      "monto": "10000000",
+      "fechaSolicitud": "15/11/2022",
+      "plazo": "10",
+      "planPago": [
+        { "fecha": "15/12/2022", "pago": "1000000", "estado": "pagado" },
+        { "fecha": "15/01/2023", "pago": "1000000", "estado": "pagado" },
+        { "fecha": "15/02/2023", "pago": "1000000", "estado": "pagado" },
+        { "fecha": "15/03/2023", "pago": "1000000", "estado": "pagado" },
+        { "fecha": "15/04/2023", "pago": "1000000", "estado": "pagado" },
+        { "fecha": "15/05/2023", "pago": "1000000", "estado": "pagado" },
+        { "fecha": "15/06/2023", "pago": "1000000", "estado": "null" },
+        { "fecha": "15/07/2023", "pago": "1000000", "estado": "null" },
+        { "fecha": "15/08/2023", "pago": "1000000", "estado": "null" },
+        { "fecha": "15/09/2023", "pago": "1000000", "estado": "null" }
+      ],
+      "documento": "",
+      "calificacion": "5"
+    },
+    {
+      "nombre": "Luis Jimenez",
+      "nSolicitud": "12348",
+      "monto": "2000000",
+      "fechaSolicitud": "01/01/2022",
+      "plazo": "10",
+      "planPago": [
+        { "fecha": "01/02/2022", "pago": "1000000", "estado": "pagado" },
+        { "fecha": "01/03/2022", "pago": "1000000", "estado": "pagado" },
+        { "fecha": "01/04/2022", "pago": "1000000", "estado": "pagado" },
+        { "fecha": "01/05/2022", "pago": "1000000", "estado": "pagado" },
+        { "fecha": "01/06/2022", "pago": "1000000", "estado": "pagado" },
+        { "fecha": "01/07/2022", "pago": "1000000", "estado": "pagado" },
+        { "fecha": "01/08/2022", "pago": "1000000", "estado": "pagado" },
+        { "fecha": "01/09/2022", "pago": "1000000", "estado": "pagado" },
+        { "fecha": "01/10/2022", "pago": "1000000", "estado": "pagado" },
+        { "fecha": "01/11/2022", "pago": "1000000", "estado": "pagado" }
+      ],
+      "documento": "",
+      "calificacion": "4"
+    }
+  ],
+  "tesoreria": [
+    {
+      "categoria": "Dinero para prestar",
+      "nSolicitud": "12322",
+      "monto": "90000000",
+      "plazo": "3",
+      "pago": "1800000"
+    },
+    {
+      "categoria": "Deudas",
+      "nSolicitud": "12345",
+      "monto": "10000000",
+      "plazo": "12",
+      "pago": "3000000"
+    },
+    {
+      "categoria": "Nómina",
+      "nSolicitud": "12346",
+      "monto": "8000000",
+      "plazo": "12",
+      "pago": "2000000"
+    },
+    {
+      "categoria": "Recaudo",
+      "nSolicitud": "12347",
+      "monto": "10000000",
+      "plazo": "6",
+      "pago": "900000"
+    },
+    {
+      "categoria": "Nómina",
+      "nSolicitud": "12348",
+      "monto": "6000000",
+      "plazo": "24",
+      "pago": "4000000"
+    },
+    {
+      "categoria": "Recaudo",
+      "nSolicitud": "12349",
+      "monto": "15000000",
+      "plazo": "9",
+      "pago": "1000000"
+    }
+  ]
+}
