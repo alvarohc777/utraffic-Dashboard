@@ -133,13 +133,6 @@
       "monto": "6000000",
       "plazo": "24",
       "pago": "4000000"
-    },
-    {
-      "categoria": "Recaudo",
-      "nSolicitud": "12349",
-      "monto": "15000000",
-      "plazo": "9",
-      "pago": "1000000"
     }
   ]
 }
