@@ -29,23 +29,24 @@
         <p class="text-subtitle2">{{ formattedTotal.format(total) }}</p>
       </q-card-section>
       <q-card-section class="row justify-center">
-        <semi-circular :progress="calificacion * 100 / 5" :title="'Calificación'" />
+        <semi-circular :progress="calificacion * 100 / 5" :title="'Calificación'" :score="clientes[0].calificacion" />
 
       </q-card-section>
-
-
-
     </q-card>
 
 
 
 
     <div class="row justify-evenly" style="flex-grow: 1;">
-      <!-- <q-card></q-card> -->
+      <q-card class="my-card row justify-between column" style="max-width: 350px;">
+        <date-time-x :data="fechaPagoSeries" width="100%" />
+        <apex-donut :clientes="clientes" width="100%" />
+      </q-card>
       <q-card class="my-card row justify-between column" v-for=" cliente  in  clientes " :key="cliente">
         <p class="text-h5 text-purple-10 text-center"> {{ cliente.nSolicitud }}</p>
         <!-- <donut-individual :series="createSeries(cliente.monto, total)" :title="cliente.nSolicitud" /> -->
-        <semi-circular :progress="progressCalculator(cliente.planPago)" title="Progreso" />
+        <semi-circular :progress="progressCalculator(cliente.planPago)" title="Progreso"
+          :score="scoreCalculator(cliente.planPago)" />
 
         <!-- <h5>{{ [cliente.monto, total] }}</h5> -->
         <div>
@@ -140,6 +141,8 @@ import { ref, reactive, watchEffect, onMounted, watch, computed } from "vue";
 import FilterTable from "src/components/FilterTable.vue";
 import SemiCircular from "src/components/Charts/SemiCircular.vue";
 import DonutIndividual from "src/components/Charts/DonutIndividual.vue";
+import DateTimeX from "src/components/Charts/DateTimeX.vue";
+import ApexDonut from "src/components/Charts/ApexDonut.vue";
 
 // utils
 import { progressCalculator, scoreCalculator } from "src/scripts/utils"
@@ -174,6 +177,44 @@ const createFilterData = (data, target, attr) => {
 
 const createSeries = ((monto, total) => {
   return [parseFloat(monto), total - parseFloat(monto)]
+})
+
+// Computed properties
+
+const clientesTitle = computed(() => {
+  if (nombre.value) {
+    return nombre.value;
+  }
+  return "Solicitudes";
+});
+
+const fechaPagoSeries = computed(() => {
+  let fechaDict = {}
+  let pagos = []
+
+  clientesFiltrado.value.forEach((cliente) => {
+    cliente.planPago.forEach((pago) => {
+      if (pago.fecha in fechaDict) {
+        fechaDict[pago.fecha] += parseInt(pago.pago)
+      } else {
+        fechaDict[pago.fecha] = parseInt(pago.pago)
+      }
+    })
+  })
+
+  for (var fecha in fechaDict) {
+    let pago = fechaDict[fecha];
+    fecha = fecha.split("/");
+    fecha = new Date(fecha[2], fecha[1] - 1, fecha[0]);
+    fecha = Date.parse(fecha);
+    pagos.push([fecha, pago]);
+  }
+
+  pagos = pagos.sort(function (a, b) {
+    return a[0] - b[0];
+  });
+
+  return pagos;
 })
 
 const total = computed(() => {

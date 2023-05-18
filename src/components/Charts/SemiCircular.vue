@@ -3,9 +3,9 @@
 
     <apexchart type="radialBar" width="100%" :options="options" :series="[progress]" :key="options" />
 
+    <p class="text-h6 text-purple-10 text-center">{{ title }}
+    </p>
   </div>
-  <p class="text-h6 text-purple-10 text-center">{{ title }}
-  </p>
 </template>
 
 <style>
@@ -19,10 +19,21 @@
 
 import { computed, reactive, ref, toRefs } from 'vue';
 
-const props = defineProps(["progress", "title"]);
-let { progress, title } = toRefs(props);
+const props = defineProps(["progress", "title", "score"]);
+let { progress, title, score } = toRefs(props);
 
-
+// const scoreColor = ref("red")
+const scoreColor = computed(() => {
+  if (!score.value) {
+    return "#4a148c"
+  }
+  if (score.value <= 2) {
+    return "red"
+  } else if (score.value <= 3) {
+    return "yellow"
+  }
+  return "green"
+})
 
 let options = reactive({
 
@@ -74,7 +85,7 @@ let options = reactive({
       top: 0
     }
   },
-  colors: ['#4a148c'],
+  colors: [scoreColor.value],
   fill: {
     type: 'gradient',
     gradient: {
