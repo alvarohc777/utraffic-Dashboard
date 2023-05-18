@@ -1,6 +1,6 @@
 <template>
   <div id="chart-timeline" class="chart-wrap">
-    <apexchart type="area" width="400" ref="chart" :options="options" :series="series" :key="series"></apexchart>
+    <apexchart type="area" :width="width" ref="chart" :options="options" :series="series" :key="series"></apexchart>
     <q-inner-loading :showing="visible">
       <q-spinner color="primary" size="3em"></q-spinner>
     </q-inner-loading>
@@ -9,14 +9,14 @@
 
 <script setup>
 import { ref, toRefs, computed, watchEffect } from "vue";
-const props = defineProps({ title: String, data: Array });
-const { title, data } = toRefs(props);
+const props = defineProps(["title", "data", "width"]);
+const { title, data, width } = toRefs(props);
 
 const fechaMin = ref(data.value && data.value[0] && data.value[0][0]);
 const visible = ref(true);
 
 const titleDefault = computed(() => {
-  if (title.value === null) {
+  if (title.value === null || title.value === undefined) {
     return "Histórico pagos"
   }
   return title.value
@@ -34,6 +34,11 @@ const options = computed(() => {
   let optionsPrueba = {
     title: {
       text: `${titleDefault.value}`,
+      style: {
+        color: "#4a148c",
+        fontWeight: 600,
+        fontSize: "14px",
+      }
     },
 
     chart: {

@@ -1,7 +1,7 @@
 <template>
   <div class="chart-wrap relative-position">
     <div>
-      <apexchart type="donut" width="350" :options="optionsCalc" :series="seriesCalc" :key="seriesCalc"></apexchart>
+      <apexchart type="donut" :width="width" :options="optionsCalc" :series="seriesCalc" :key="seriesCalc"></apexchart>
     </div>
 
     <q-inner-loading :showing="visible" label="Please wait..." label-class="text-teal" label-style="font-size: 1.1em">
@@ -20,8 +20,8 @@
 import { computed, toRefs, ref, watchEffect } from "vue";
 
 // Convertir props a variable
-const props = defineProps({ clientes: Object, title: String });
-let { clientes, title } = toRefs(props);
+const props = defineProps(["clientes", "title", "width"]);
+let { clientes, title, width } = toRefs(props);
 const visible = ref(true);
 
 watchEffect(() => {
@@ -37,6 +37,8 @@ let USDollar = new Intl.NumberFormat("es-US", {
   currency: "USD",
 });
 
+
+
 const seriesCalc = computed(() => {
   let series = [];
 
@@ -46,6 +48,12 @@ const seriesCalc = computed(() => {
 
   return series;
 });
+const titleDefault = computed(() => {
+  if (title.value === null || title.value === undefined) {
+    return "Proporción créditos"
+  }
+  return title.value
+})
 
 const optionsCalc = computed(() => {
   let options = {
@@ -58,7 +66,12 @@ const optionsCalc = computed(() => {
     },
 
     title: {
-      text: `${title.value}`,
+      text: `${titleDefault.value}`,
+      style: {
+        color: "#4a148c",
+        fontWeight: 600,
+        fontSize: "14px",
+      }
     },
     plotOptions: {
       pie: {
@@ -117,9 +130,10 @@ const optionsCalc = computed(() => {
       },
     ],
     legend: {
-      position: "right",
+      position: "bottom",
       offsetY: 0,
-      height: 230,
+      // height: 230,
+
     },
   };
 

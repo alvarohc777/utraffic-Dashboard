@@ -2,12 +2,12 @@
   <q-page>
     <div class="col-md-6 col-xs-12 window-width row justify-around items-center" style="padding-top: 20px">
       <q-card>
-        <date-time-x :title="nombre" :data="fechaPagoSeries" />
+        <date-time-x :title="nombre" :data="fechaPagoSeries" :width="400" />
       </q-card>
 
       <q-card class="row justify-evenly">
-        <apex-donut :clientes="clientesFiltrado" :title="clientesTitle" />
-        <apex-donut :clientes="tesoreriaFiltrado" :title="tesoreriaTitle" />
+        <apex-donut :clientes="clientesFiltrado" :title="clientesTitle" width="350" />
+        <apex-donut :clientes="tesoreriaFiltrado" :title="tesoreriaTitle" width="350" />
       </q-card>
     </div>
 
