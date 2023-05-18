@@ -3,9 +3,9 @@
   <div v-if="clientesOriginal.length !== clientes.length" class="row justify-between items-center q-pa-md page"
     style="padding-top: 20px; padding-bottom: 5px;  align-items: stretch;">
 
-    <q-card class="my-card">
+    <q-card class="my-card flex" style="flex-direction: column; justify-content: space-between;">
       <q-card-section>
-        <div class="text-h5">{{ nombre }}</div>
+        <div class="text-h5 text-purple-10">{{ nombre }}</div>
       </q-card-section>
 
       <q-card-section class="row justify-between">
@@ -16,9 +16,17 @@
           <div v-for="cliente in clientes" :key="cliente">
             {{ cliente.nSolicitud }}
           </div>
+
         </div>
+
         <img src="../../src/assets/profileIcon.png" style="width: 70px; height: 70px" />
 
+      </q-card-section>
+      <q-card-section>
+        <p style="margin: 0px" class="text-purple-10">
+          <strong> Total: </strong>
+        </p>
+        <p>{{ formattedTotal.format(total) }}</p>
       </q-card-section>
       <q-card-section class="row justify-center">
         <semi-circular :calificacion="calificacion" />
@@ -33,13 +41,14 @@
 
     <div class="row justify-evenly" style="flex-grow: 1;">
       <q-card class="my-card" v-for="cliente in clientes" :key="cliente">
-        <img src="https://cdn.quasar.dev/img/mountains.jpg">
+        <donut-individual :series="createSeries(cliente.monto, total)" :title="cliente.nSolicitud" />
+        <!-- <h5>{{ [cliente.monto, total] }}</h5> -->
         <div>
           <q-card-section>
 
 
             <div class="flex flex-center column">
-              <div class="row " style="width: 100%; padding: 10px 5px 0 5px;">
+              <div class="row " style="width: 100%">
                 <div class="fit row wrap justify-start items-start content-start">
                   <div class="col">
                     <p style="margin: 0px" class="text-purple-10">
@@ -57,7 +66,7 @@
               </div>
             </div>
             <div class="flex flex-center column">
-              <div class="row" style="width: 100%; padding: 10px 5px 0 5px;">
+              <div class="row" style="width: 100%">
                 <div class="fit row wrap justify-start items-start content-start">
                   <div class="col">
                     <p style="margin: 0px" class="text-purple-10">
@@ -102,7 +111,7 @@
 .my-card {
   width: 100%;
 
-  max-width: 220px;
+  max-width: 250px;
   padding: 2px;
   margin: 5px;
 }
@@ -124,7 +133,8 @@ import { ref, reactive, watchEffect, onMounted, watch, computed } from "vue";
 
 // components
 import FilterTable from "src/components/FilterTable.vue";
-import SemiCircular from "src/components/Charts/SemiCircular.vue"
+import SemiCircular from "src/components/Charts/SemiCircular.vue";
+import DonutIndividual from "src/components/Charts/DonutIndividual.vue";
 
 // Constants and Variables
 const router = useRouter();
@@ -133,8 +143,9 @@ const nombre = ref(route.query.nombre);
 const clientes = ref([]);
 const clientesOriginal = ref([]);
 const clientesFiltrado = ref([]);
-const newName = ref(null);
 const nombres = ref([]);
+const series = ref([1, 2, 3])
+
 
 const calificacion = computed(() => {
   if (clientes.value[0]) {
@@ -143,17 +154,8 @@ const calificacion = computed(() => {
   return null;
 });
 
-// Functions
-const updateNameQuery = () => {
-  nombre.value = newName.value;
-  router.replace({
-    path: route.path,
-    query: { nombre: newName.value },
-  });
-  // router.replace({ ...router.currentRoute, query: { nombre: newName.value } });
-  // router.push({ query: { ...route.query, names: newName } });
-};
-
+// Llena un array target sin duplicados partiendo de
+// los atributos de un objeto data, el atributo es attr
 const createFilterData = (data, target, attr) => {
   data.value.forEach((row) => {
     if (target.value.indexOf(row[`${attr}`]) == -1) {
@@ -161,6 +163,18 @@ const createFilterData = (data, target, attr) => {
     }
   });
 };
+
+const createSeries = ((monto, total) => {
+  return [parseFloat(monto), total - parseFloat(monto)]
+})
+
+const total = computed(() => {
+  let total = 0
+  clientes.value.forEach((cliente) => {
+    total += parseFloat(cliente.monto)
+  })
+  return total;
+})
 
 const formattedTotal = new Intl.NumberFormat("en-US", {
   style: "currency",
@@ -207,7 +221,6 @@ watchEffect(() => {
 });
 
 watchEffect(() => {
-
   console.log(route.query.nombre)
   nombre.value = route.query.nombre
 })
