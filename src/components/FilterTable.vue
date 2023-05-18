@@ -1,36 +1,17 @@
 <template>
   <div class="q-pa-md" style="max-width: 785px">
-    <q-table
-      flat
-      bordered
-      dense
-      title="Clientes"
-      :rows="dataFiltered"
-      :columns="columns"
-      :loading="loadingState"
-      loading-label="Cargando información"
-      row-key="name"
-    >
+    <q-table flat bordered dense title="Clientes" :rows="dataFiltered" :columns="columns" :loading="loadingState"
+      loading-label="Cargando información" row-key="name">
       <template v-slot:body-cell-documento="props">
         <q-td :props="props">
           <div>
-            <q-btn
-              @click="showDocuments"
-              dense
-              round
-              flat
-              size="sm"
-              icon="description"
-            >
+            <q-btn @click="showDocuments" dense round flat size="sm" icon="description">
             </q-btn>
           </div>
         </q-td>
       </template>
       <template v-slot:top>
-        <img
-          style="height: 50px; width: 50px"
-          src="../../public/icons/android-chrome-192x192.png"
-        />
+        <img style="height: 50px; width: 50px" src="../../public/icons/android-chrome-192x192.png" />
 
         <q-space></q-space>
 
@@ -39,10 +20,8 @@
       <!-- Optional slot -->
       <template v-if="tableLinks === true" v-slot:body-cell-nombre="props">
         <q-td :props="props">
-          <router-link
-            :to="{ name: 'cliente', query: { nombre: props.value } }"
-            style="text-decoration: none; color: black"
-          >
+          <router-link :to="{ name: 'cliente', query: { nombre: props.value } }"
+            style="text-decoration: none; color: black">
             {{ props.value }}
           </router-link>
         </q-td>
