@@ -90,7 +90,7 @@ const optionsCalc = computed(() => {
       },
     },
 
-    labels: [title.value, "Total"],
+    labels: [title.value, "Otras"],
     chart: {
       width: 0,
       type: "donut",
