@@ -9,6 +9,7 @@
 
 <script setup>
 import { ref, toRefs, computed, watchEffect } from "vue";
+import { compactNumbers } from "src/scripts/utils"
 const props = defineProps(["title", "data", "width"]);
 const { title, data, width } = toRefs(props);
 
@@ -29,6 +30,8 @@ watchEffect(() => {
     visible.value = true;
   }
 });
+
+
 
 const options = computed(() => {
   let optionsPrueba = {
@@ -76,6 +79,13 @@ const options = computed(() => {
       type: "datetime",
       min: fechaMin.value,
       tickAmount: 6,
+    },
+    yaxis: {
+      labels: {
+        formatter: function (value) {
+          return compactNumbers.format(value);
+        }
+      }
     },
     tooltip: {
       x: {

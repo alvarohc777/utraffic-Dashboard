@@ -18,6 +18,7 @@
 
 <script setup>
 import { computed, toRefs, ref, watchEffect } from "vue";
+import { formattedTotal } from "src/scripts/utils"
 
 // Convertir props a variable
 const props = defineProps(["clientes", "title", "width"]);
@@ -32,10 +33,7 @@ watchEffect(() => {
     visible.value = true;
   }
 });
-let USDollar = new Intl.NumberFormat("es-US", {
-  style: "currency",
-  currency: "USD",
-});
+
 
 
 
@@ -60,7 +58,7 @@ const optionsCalc = computed(() => {
     yaxis: {
       labels: {
         formatter: function (value) {
-          return `${USDollar.format(value)}`;
+          return `${formattedTotal.format(value)}`;
         },
       },
     },
@@ -86,7 +84,7 @@ const optionsCalc = computed(() => {
               color: undefined,
               offsetY: 0,
               formatter: function (val) {
-                return USDollar.format(val);
+                return formattedTotal.format(val);
               },
             },
             total: {
@@ -96,7 +94,7 @@ const optionsCalc = computed(() => {
               fontFamily: "Helvetica, Arial, sans-serif",
               fontWeight: 600,
               formatter: function (w) {
-                return USDollar.format(
+                return formattedTotal.format(
                   w.globals.seriesTotals.reduce((a, b) => {
                     return a + b;
                   }, 0)

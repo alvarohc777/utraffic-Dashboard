@@ -145,7 +145,7 @@ import DateTimeX from "src/components/Charts/DateTimeX.vue";
 import ApexDonut from "src/components/Charts/ApexDonut.vue";
 
 // utils
-import { progressCalculator, scoreCalculator } from "src/scripts/utils"
+import { progressCalculator, scoreCalculator, formattedTotal } from "src/scripts/utils"
 
 // Constants and Variables
 const router = useRouter();
@@ -225,10 +225,8 @@ const total = computed(() => {
   return total;
 })
 
-const formattedTotal = new Intl.NumberFormat("en-US", {
-  style: "currency",
-  currency: "USD",
-});
+
+
 
 // Llena el array 'nombres' con todos los nombres disponibles
 // en la base de datos (solo lo hace una vez cuando se hace el

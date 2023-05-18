@@ -38,7 +38,8 @@ import { api, apiCliente } from "../../src/boot/axios";
 
 
 // utils
-import { scoreCalculator, progressCalculator } from "src/scripts/utils"
+import { scoreCalculator, progressCalculator, formattedTotal } from "src/scripts/utils"
+
 
 let $q = useQuasar();
 
@@ -64,10 +65,6 @@ const tesoreriaTitle = computed(() => {
   return "Solicitudes";
 });
 
-const formattedTotal = new Intl.NumberFormat("en-US", {
-  style: "currency",
-  currency: "USD",
-});
 
 
 // Function to create

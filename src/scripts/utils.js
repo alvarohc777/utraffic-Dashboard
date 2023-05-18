@@ -25,4 +25,13 @@ const scoreCalculator = (planPago) => {
   );
 };
 
-export { progressCalculator, scoreCalculator };
+const compactNumbers = new Intl.NumberFormat("es-US", {
+  notation: "compact",
+});
+
+let formattedTotal = new Intl.NumberFormat("es-US", {
+  style: "currency",
+  currency: "USD",
+});
+
+export { progressCalculator, scoreCalculator, compactNumbers, formattedTotal };
