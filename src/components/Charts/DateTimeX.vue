@@ -1,13 +1,6 @@
 <template>
   <div id="chart-timeline" class="chart-wrap">
-    <apexchart
-      type="area"
-      width="400"
-      ref="chart"
-      :options="options"
-      :series="series"
-      :key="series"
-    ></apexchart>
+    <apexchart type="area" width="400" ref="chart" :options="options" :series="series" :key="series"></apexchart>
     <q-inner-loading :showing="visible">
       <q-spinner color="primary" size="3em"></q-spinner>
     </q-inner-loading>
@@ -21,6 +14,13 @@ const { title, data } = toRefs(props);
 
 const fechaMin = ref(data.value && data.value[0] && data.value[0][0]);
 const visible = ref(true);
+
+const titleDefault = computed(() => {
+  if (title.value === null) {
+    return "Histórico pagos"
+  }
+  return title.value
+})
 watchEffect(() => {
   if (data.value[0]) {
     visible.value = false;
@@ -33,7 +33,7 @@ watchEffect(() => {
 const options = computed(() => {
   let optionsPrueba = {
     title: {
-      text: `${title.value}`,
+      text: `${titleDefault.value}`,
     },
 
     chart: {
@@ -96,9 +96,9 @@ const series = computed(() => {
       name: "Total recaudado",
       data: data.value,
     },
+
   ];
 });
 </script>
 
-<style>
-</style>
+<style></style>
