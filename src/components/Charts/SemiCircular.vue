@@ -1,10 +1,11 @@
 <template>
   <div>
 
-    <apexchart type="radialBar" width="150" :options="options" :series="[calificacionPorcentaje]" :key="options" />
+    <apexchart type="radialBar" width="100%" :options="options" :series="[progress]" :key="options" />
 
   </div>
-  <p class="text-subtitle2 text-purple-10"> Calificacion</p>
+  <p class="text-h6 text-purple-10 text-center">{{ title }}
+  </p>
 </template>
 
 <style>
@@ -18,11 +19,9 @@
 
 import { computed, reactive, ref, toRefs } from 'vue';
 
-const props = defineProps(["calificacion"]);
-let { calificacion } = toRefs(props);
-let calificacionPorcentaje = computed(() => {
-  return calificacion.value * 100 / 5
-})
+const props = defineProps(["progress", "title"]);
+let { progress, title } = toRefs(props);
+
 
 
 let options = reactive({
@@ -34,6 +33,14 @@ let options = reactive({
       enabled: true
     }
   },
+  // title: {
+  //   text: `Hola`,
+  //   style: {
+  //     color: "#4a148c",
+  //     fontWeight: 600,
+  //     fontSize: "14px",
+  //   }
+  // },
   plotOptions: {
     radialBar: {
       startAngle: -90,

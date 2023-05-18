@@ -26,10 +26,11 @@
         <p style="margin: 0px" class="text-purple-10">
           <strong> Total: </strong>
         </p>
-        <p>{{ formattedTotal.format(total) }}</p>
+        <p class="text-subtitle2">{{ formattedTotal.format(total) }}</p>
       </q-card-section>
       <q-card-section class="row justify-center">
-        <semi-circular :calificacion="calificacion" />
+        <semi-circular :progress="calificacion * 100 / 5" :title="'Calificación'" />
+
       </q-card-section>
 
 
@@ -40,8 +41,12 @@
 
 
     <div class="row justify-evenly" style="flex-grow: 1;">
-      <q-card class="my-card" v-for="cliente in clientes" :key="cliente">
-        <donut-individual :series="createSeries(cliente.monto, total)" :title="cliente.nSolicitud" />
+      <!-- <q-card></q-card> -->
+      <q-card class="my-card row justify-between column" v-for=" cliente  in  clientes " :key="cliente">
+        <p class="text-h5 text-purple-10 text-center"> {{ cliente.nSolicitud }}</p>
+        <!-- <donut-individual :series="createSeries(cliente.monto, total)" :title="cliente.nSolicitud" /> -->
+        <semi-circular :progress="progressCalculator(cliente.planPago)" title="Progreso" />
+
         <!-- <h5>{{ [cliente.monto, total] }}</h5> -->
         <div>
           <q-card-section>
@@ -58,9 +63,9 @@
                   </div>
                   <div class="col">
                     <p style="margin: 0px" class="text-purple-10">
-                      <strong> Fecha Corte: </strong>
+                      <strong> Fecha Solicitud: </strong>
                     </p>
-                    <p class="text-subtitle2">{{ cliente.fechaCorte }}</p>
+                    <p class="text-subtitle2">{{ cliente.fechaSolicitud }}</p>
                   </div>
                 </div>
               </div>
@@ -72,7 +77,7 @@
                     <p style="margin: 0px" class="text-purple-10">
                       <strong> Monto: </strong>
                     </p>
-                    <p class="text-subtitle2">{{ cliente.monto }}</p>
+                    <p class="text-subtitle2">{{ formattedTotal.format(cliente.monto) }}</p>
                   </div>
                   <div class="col">
                     <p style="margin: 0px" class="text-purple-10">
@@ -135,6 +140,9 @@ import { ref, reactive, watchEffect, onMounted, watch, computed } from "vue";
 import FilterTable from "src/components/FilterTable.vue";
 import SemiCircular from "src/components/Charts/SemiCircular.vue";
 import DonutIndividual from "src/components/Charts/DonutIndividual.vue";
+
+// utils
+import { progressCalculator, scoreCalculator } from "src/scripts/utils"
 
 // Constants and Variables
 const router = useRouter();
@@ -276,22 +284,25 @@ const columns = reactive([
     sortable: true,
   },
   {
-    name: "pago",
-    label: "Pago",
-    field: (row) => row.pago,
-    format: (val, row) => `${formattedTotal.format(row.pago)}`,
-    sortable: true,
+    name: "fechaSolicitud",
+    label: "Fecha solicitud",
+    align: "right",
+    field: (row) => row.fechaSolicitud,
+    // format: (val, row) => {
+    //   let fecha = row.fechaSolicitud.split("/");
+    //   return `${fecha[0]}/${fecha[1]}/${fecha[2].slice(2, 4)}`
+    // },
+    sortable: true
   },
   {
-    name: "fechaCorte",
-    label: "Fecha Corte",
-    align: "left",
-    field: (row) => row.fechaCorte,
-    sortable: true,
+    name: "progreso",
+    label: "Progreso",
+    align: "right",
+    field: (row) => row.planPago,
     format: (val, row) => {
-      let fecha = row.fechaCorte.split("/");
-      return `${fecha[0]}/${fecha[1]}/${fecha[2].slice(2, 4)}`;
-    },
+      let progress = progressCalculator(val)
+      return `${progress}%`
+    }
   },
   {
     name: "documento",
@@ -301,13 +312,14 @@ const columns = reactive([
     format: () => "",
   },
   {
-    name: "calificacion",
-    required: true,
-    label: "Calificacion",
+    name: "cumplimiento",
+    label: "Cumplimiento",
     align: "left",
-    field: (row) => row.calificacion,
-    sortable: true,
-    format: (val, row) => `${"\u2B50".repeat(row.calificacion)}`,
+    field: (row) => {
+      let calificacion = scoreCalculator(row.planPago)
+      return `${"\u2B50".repeat(calificacion)}`
+    }
+
   },
 ]);
 </script>
