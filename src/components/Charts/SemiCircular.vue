@@ -45,7 +45,9 @@ let options = reactive({
     }
   },
 
+
   plotOptions: {
+
     radialBar: {
       startAngle: -90,
       endAngle: 90,
@@ -101,7 +103,6 @@ let options = reactive({
       shade: 'dark',
       type: 'horizontal',
       shadeIntensity: 0.5,
-      // gradientToColors: ['#000',],
       inverseColors: true,
       opacityFrom: 1,
       opacityTo: 1,
