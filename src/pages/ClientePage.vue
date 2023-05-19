@@ -44,10 +44,14 @@
         <q-card>
           <date-time-x :data="fechaPagoSeries" width="100%" :key="fechaPagoSeries" />
         </q-card>
-        <apex-donut :clientes="clientes" width="100%" />
+        <apex-donut :clientes="clientes" width="100%" :key="clientes" />
       </q-card>
       <q-card class="my-card row justify-between column" v-for=" cliente  in  clientes " :key="cliente">
-        <p class="text-h5 text-purple-10 text-center"> {{ cliente.nSolicitud }}</p>
+        <div>
+
+          <p class="text-h6 text-purple-10 text-center" style="margin-bottom: 0;"> Crédito</p>
+          <p class="text-subtitle2  text-center"> {{ cliente.nSolicitud }}</p>
+        </div>
         <!-- <donut-individual :series="createSeries(cliente.monto, total)" :title="cliente.nSolicitud" /> -->
         <semi-circular :progress="progressCalculator(cliente.planPago)" title="Progreso"
           :score="scoreCalculator(cliente.planPago)" />
@@ -55,8 +59,6 @@
         <!-- <h5>{{ [cliente.monto, total] }}</h5> -->
         <div>
           <q-card-section>
-
-
             <div class="flex flex-center column">
               <div class="row " style="width: 100%">
                 <div class="fit row wrap justify-start items-start content-start">

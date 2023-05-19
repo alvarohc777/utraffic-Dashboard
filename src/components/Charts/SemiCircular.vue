@@ -3,7 +3,7 @@
 
     <apexchart type="radialBar" width="100%" :options="options" :series="[progress]" :key="options" />
 
-    <p class="text-h6 text-purple-10 text-center">{{ title }}
+    <p class="text-subtitle2 text-center">{{ title }}
     </p>
   </div>
 </template>
@@ -28,11 +28,11 @@ const scoreColor = computed(() => {
     return "#4a148c"
   }
   if (score.value <= 2) {
-    return "red"
+    return "#F90716"
   } else if (score.value <= 3) {
-    return "yellow"
+    return "#F6F54D"
   }
-  return "green"
+  return "#00FFD1"
 })
 
 let options = reactive({
@@ -85,7 +85,7 @@ let options = reactive({
       shade: 'dark',
       type: 'horizontal',
       shadeIntensity: 0.5,
-      gradientToColors: ['#000',],
+      // gradientToColors: ['#000',],
       inverseColors: true,
       opacityFrom: 1,
       opacityTo: 1,
