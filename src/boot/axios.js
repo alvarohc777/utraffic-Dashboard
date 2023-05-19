@@ -24,7 +24,7 @@ const apiCliente = axios.create({ baseURL: "http://192.168.1.18:1337/api/" });
 
 export default boot(({ app }) => {
   app.config.globalProperties.$axios = axios;
-  app.config.globalProperties.$api = api;
+  // app.config.globalProperties.$api = api;
   app.config.globalProperties.$api = apiCliente;
 
   const apiInterceptor = (apiGenerico) => {
@@ -36,7 +36,7 @@ export default boot(({ app }) => {
     });
   };
 
-  apiInterceptor(api);
+  // apiInterceptor(api);
   apiInterceptor(apiCliente);
 });
 
