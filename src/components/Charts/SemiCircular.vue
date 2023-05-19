@@ -49,6 +49,22 @@ let options = reactive({
     radialBar: {
       startAngle: -90,
       endAngle: 90,
+      hollow: {
+        margin: 0,
+        size: '65%',
+        background: '#fff',
+        image: undefined,
+        imageOffsetX: 0,
+        imageOffsetY: 0,
+        position: 'front',
+        dropShadow: {
+          enabled: true,
+          top: 3,
+          left: 0,
+          blur: 4,
+          opacity: 0.24
+        }
+      },
       track: {
         background: "#e7e7e7",
         strokeWidth: '97%',
@@ -92,6 +108,9 @@ let options = reactive({
       stops: [0, 100]
 
     }
+  },
+  stroke: {
+    lineCap: 'round'
   },
 
   labels: ['Average Results'],
