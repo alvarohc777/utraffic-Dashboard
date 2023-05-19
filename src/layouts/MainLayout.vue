@@ -1,16 +1,11 @@
 <template>
   <q-layout view="lHh Lpr lFf">
     <q-header>
-      <q-toolbar
-        class="bg-white text-grey-8 window-width row justify-center items-center"
-        height-hint="70"
-      >
+      <q-toolbar class="bg-white text-grey-8 window-width row justify-center items-center" height-hint="70">
         <router-link :to="{ name: 'dashboard' }">
           <q-btn flat rounded color="dark" label="Dashboard"></q-btn>
         </router-link>
-        <!-- <a href="/dashboard"
-          ><q-btn flat rounded color="dark" label="¿Cómo funciona?"></q-btn
-        ></a> -->
+
 
         <router-link :to="{ name: 'cliente' }">
           <q-btn flat rounded color="dark" label="Cliente Stats"></q-btn>

@@ -69,7 +69,6 @@ const tesoreriaTitle = computed(() => {
 
 // Function to create
 const createFilterData = (data, target, attr) => {
-  // target.value.push("-");
   data.value.forEach((row) => {
     if (target.value.indexOf(row[`${attr}`]) == -1) {
       target.value.push(row[`${attr}`]);
@@ -78,33 +77,7 @@ const createFilterData = (data, target, attr) => {
 };
 
 const fechaPagoSeries = computed(() => {
-  // let fechaDict = {};
-  // let pagos = [];
 
-
-  // clientesFiltrado.value.forEach((cliente) => {
-  //   cliente.planPago.forEach((pago) => {
-  //     if (pago.fecha in fechaDict) {
-  //       fechaDict[pago.fecha] += parseInt(pago.pago)
-  //     } else {
-  //       fechaDict[pago.fecha] = parseInt(pago.pago)
-  //     }
-  //   })
-  // })
-
-  // for (var fecha in fechaDict) {
-  //   let pago = fechaDict[fecha];
-  //   fecha = fecha.split("/");
-  //   fecha = new Date(fecha[2], fecha[1] - 1, fecha[0]);
-  //   fecha = Date.parse(fecha);
-  //   pagos.push([fecha, pago]);
-  // }
-
-  // pagos = pagos.sort(function (a, b) {
-  //   return a[0] - b[0];
-  // });
-
-  // return [{ name: "Total recaudado", data: pagos }];
   let [fechaDict, pagosDict, moraDict] = datePayDictCreate(clientesFiltrado.value)
   let proyeccion = datePaySeriesCreate(fechaDict)
   let pagos = datePaySeriesCreate(pagosDict)
@@ -260,10 +233,6 @@ const columns = reactive([
     label: "Fecha solicitud",
     align: "right",
     field: (row) => row.fechaSolicitud,
-    // format: (val, row) => {
-    //   let fecha = row.fechaSolicitud.split("/");
-    //   return `${fecha[0]}/${fecha[1]}/${fecha[2].slice(2, 4)}`
-    // },
     sortable: true
   },
   {

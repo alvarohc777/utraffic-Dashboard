@@ -141,7 +141,7 @@
 // packages
 import { useRouter, useRoute } from "vue-router";
 import { api } from "src/boot/axios";
-import { ref, reactive, watchEffect, onMounted, watch, computed } from "vue";
+import { ref, reactive, watchEffect, onMounted, computed } from "vue";
 
 // components
 import FilterTable from "src/components/FilterTable.vue";
@@ -161,7 +161,7 @@ const clientes = ref([]);
 const clientesOriginal = ref([]);
 const clientesFiltrado = ref([]);
 const nombres = ref([]);
-const series = ref([1, 2, 3])
+
 
 
 const calificacion = computed(() => {
@@ -181,9 +181,7 @@ const createFilterData = (data, target, attr) => {
   });
 };
 
-const createSeries = ((monto, total) => {
-  return [parseFloat(monto), total - parseFloat(monto)]
-})
+
 
 // Computed properties
 

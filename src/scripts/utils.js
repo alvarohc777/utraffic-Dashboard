@@ -8,6 +8,7 @@ const progressCalculator = (planPago) => {
   let progress = pagos / numeroCuotas;
   return (progress * 100).toFixed(0);
 };
+
 const scoreCalculator = (planPago) => {
   let cuotasEnMora = 0;
   let numeroCuotasGeneradas = 0;
@@ -35,20 +36,8 @@ const formattedTotal = new Intl.NumberFormat("es-US", {
   currency: "USD",
 });
 
-// DateTimeX series creation
-// const datePayDictCreate = (customers, datePayDict) => {
-//   customers.forEach((cliente) => {
-//     cliente.planPago.forEach((pago) => {
-//       if (pago.fecha in datePayDict) {
-//         datePayDict[pago.fecha] += parseInt(pago.pago);
-//       } else {
-//         datePayDict[pago.fecha] = parseInt(pago.pago);
-//       }
-//     });
-//   });
-//   return datePayDict;
-// };
-
+// Cretes Date-Pay array and duplicates las entry
+// so the whole month is plotted
 const datePaySeriesCreate = (datePayDict) => {
   let datePayArray = [];
   for (var date in datePayDict) {
@@ -76,6 +65,7 @@ const datePaySeriesCreate = (datePayDict) => {
   return datePayArray;
 };
 
+// Creates planPago, Pagos and mora arrays
 const datePayDictCreate = (customers) => {
   let planPago = {};
   let pagos = {};
