@@ -2,7 +2,7 @@
   <q-page>
     <div class="col-md-6 col-xs-12 window-width row justify-around items-center" style="padding-top: 20px">
       <q-card>
-        <date-time-x :title="nombre" :data="fechaPagoSeries" :width="400" />
+        <date-time-x :title="nombre" :series="fechaPagoSeries" :width="400" />
       </q-card>
 
       <q-card class="row justify-evenly">
@@ -38,7 +38,7 @@ import { api, apiCliente } from "../../src/boot/axios";
 
 
 // utils
-import { scoreCalculator, progressCalculator, formattedTotal } from "src/scripts/utils"
+import { scoreCalculator, progressCalculator, formattedTotal, datePayDictCreate, datePaySeriesCreate } from "src/scripts/utils"
 
 
 let $q = useQuasar();
@@ -78,33 +78,39 @@ const createFilterData = (data, target, attr) => {
 };
 
 const fechaPagoSeries = computed(() => {
-  let fechaDict = {};
-  let pagos = [];
+  // let fechaDict = {};
+  // let pagos = [];
 
 
-  clientesFiltrado.value.forEach((cliente) => {
-    cliente.planPago.forEach((pago) => {
-      if (pago.fecha in fechaDict) {
-        fechaDict[pago.fecha] += parseInt(pago.pago)
-      } else {
-        fechaDict[pago.fecha] = parseInt(pago.pago)
-      }
-    })
-  })
+  // clientesFiltrado.value.forEach((cliente) => {
+  //   cliente.planPago.forEach((pago) => {
+  //     if (pago.fecha in fechaDict) {
+  //       fechaDict[pago.fecha] += parseInt(pago.pago)
+  //     } else {
+  //       fechaDict[pago.fecha] = parseInt(pago.pago)
+  //     }
+  //   })
+  // })
 
-  for (var fecha in fechaDict) {
-    let pago = fechaDict[fecha];
-    fecha = fecha.split("/");
-    fecha = new Date(fecha[2], fecha[1] - 1, fecha[0]);
-    fecha = Date.parse(fecha);
-    pagos.push([fecha, pago]);
-  }
+  // for (var fecha in fechaDict) {
+  //   let pago = fechaDict[fecha];
+  //   fecha = fecha.split("/");
+  //   fecha = new Date(fecha[2], fecha[1] - 1, fecha[0]);
+  //   fecha = Date.parse(fecha);
+  //   pagos.push([fecha, pago]);
+  // }
 
-  pagos = pagos.sort(function (a, b) {
-    return a[0] - b[0];
-  });
+  // pagos = pagos.sort(function (a, b) {
+  //   return a[0] - b[0];
+  // });
 
-  return pagos;
+  // return [{ name: "Total recaudado", data: pagos }];
+  let [fechaDict, pagosDict, moraDict] = datePayDictCreate(clientesFiltrado.value)
+  let proyeccion = datePaySeriesCreate(fechaDict)
+  let pagos = datePaySeriesCreate(pagosDict)
+  let mora = datePaySeriesCreate(moraDict)
+
+  return [{ name: "Proyección", data: proyeccion }, { name: "Pagos", data: pagos, }, { name: "Mora", data: mora }];
 });
 
 // get requests

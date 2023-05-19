@@ -42,7 +42,7 @@
     <div class="row justify-evenly" style="flex-grow: 1;">
       <q-card class="my-card row justify-between column" style="max-width: 350px;">
         <q-card>
-          <date-time-x :data="fechaPagoSeries" width="100%" :key="fechaPagoSeries" />
+          <date-time-x :series="fechaPagoSeries" width="100%" :key="fechaPagoSeries" />
         </q-card>
         <apex-donut :clientes="clientes" width="100%" :key="clientes" />
       </q-card>
@@ -151,7 +151,7 @@ import DateTimeX from "src/components/Charts/DateTimeX.vue";
 import ApexDonut from "src/components/Charts/ApexDonut.vue";
 
 // utils
-import { progressCalculator, scoreCalculator, formattedTotal } from "src/scripts/utils"
+import { progressCalculator, scoreCalculator, formattedTotal, datePayDictCreate, datePaySeriesCreate } from "src/scripts/utils"
 
 // Constants and Variables
 const router = useRouter();
@@ -195,32 +195,16 @@ const clientesTitle = computed(() => {
 });
 
 const fechaPagoSeries = computed(() => {
-  let fechaDict = {}
-  let pagos = []
 
-  clientesFiltrado.value.forEach((cliente) => {
-    cliente.planPago.forEach((pago) => {
-      if (pago.fecha in fechaDict) {
-        fechaDict[pago.fecha] += parseInt(pago.pago)
-      } else {
-        fechaDict[pago.fecha] = parseInt(pago.pago)
-      }
-    })
-  })
+  let [fechaDict, pagosDict, moraDict] = datePayDictCreate(clientesFiltrado.value)
+  let proyeccion = datePaySeriesCreate(fechaDict)
+  let pagos = datePaySeriesCreate(pagosDict)
+  let mora = datePaySeriesCreate(moraDict)
 
-  for (var fecha in fechaDict) {
-    let pago = fechaDict[fecha];
-    fecha = fecha.split("/");
-    fecha = new Date(fecha[2], fecha[1] - 1, fecha[0]);
-    fecha = Date.parse(fecha);
-    pagos.push([fecha, pago]);
-  }
+  // let lastDate = mora[mora.length -1 ]
+  // lastDate.setMonth(new Date(lastDate))
 
-  pagos = pagos.sort(function (a, b) {
-    return a[0] - b[0];
-  });
-
-  return pagos;
+  return [{ name: "Proyección", data: proyeccion }, { name: "Pagos", data: pagos, }, { name: "Mora", data: mora }];
 })
 
 const total = computed(() => {

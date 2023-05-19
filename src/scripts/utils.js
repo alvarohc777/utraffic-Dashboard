@@ -25,13 +25,94 @@ const scoreCalculator = (planPago) => {
   );
 };
 
+// Formatting functions
 const compactNumbers = new Intl.NumberFormat("es-US", {
   notation: "compact",
 });
 
-let formattedTotal = new Intl.NumberFormat("es-US", {
+const formattedTotal = new Intl.NumberFormat("es-US", {
   style: "currency",
   currency: "USD",
 });
 
-export { progressCalculator, scoreCalculator, compactNumbers, formattedTotal };
+// DateTimeX series creation
+// const datePayDictCreate = (customers, datePayDict) => {
+//   customers.forEach((cliente) => {
+//     cliente.planPago.forEach((pago) => {
+//       if (pago.fecha in datePayDict) {
+//         datePayDict[pago.fecha] += parseInt(pago.pago);
+//       } else {
+//         datePayDict[pago.fecha] = parseInt(pago.pago);
+//       }
+//     });
+//   });
+//   return datePayDict;
+// };
+
+const datePaySeriesCreate = (datePayDict) => {
+  let datePayArray = [];
+  for (var date in datePayDict) {
+    let payment = datePayDict[date];
+    date = date.split("/");
+    date = new Date(date[2], date[1] - 1, date[0]);
+    date = Date.parse(date);
+    datePayArray.push([date, payment]);
+  }
+  datePayArray = datePayArray.sort(function (a, b) {
+    return a[0] - b[0];
+  });
+
+  let lastDate =
+    datePayArray[datePayArray.length - 1] &&
+    datePayArray[datePayArray.length - 1][0];
+  let lastPay =
+    datePayArray[datePayArray.length - 1] &&
+    datePayArray[datePayArray.length - 1][1];
+
+  console.log(lastDate);
+  lastDate = new Date(lastDate).setMonth(new Date(lastDate).getMonth() + 1);
+  console.log(lastDate);
+  datePayArray.push([lastDate, lastPay]);
+  return datePayArray;
+};
+
+const datePayDictCreate = (customers) => {
+  let planPago = {};
+  let pagos = {};
+  let mora = {};
+  customers.forEach((cliente) => {
+    cliente.planPago.forEach((pago) => {
+      if (pago.fecha in planPago) {
+        planPago[pago.fecha] += parseInt(pago.pago);
+      } else {
+        planPago[pago.fecha] = parseInt(pago.pago);
+      }
+
+      if (pago.estado === "pagado" || pago.estado === "pagadoMora") {
+        if (pago.fecha in pagos) {
+          pagos[pago.fecha] += parseInt(pago.pago);
+        } else {
+          pagos[pago.fecha] = parseInt(pago.pago);
+        }
+      }
+
+      if (pago.estado === "mora") {
+        if (pago.fecha in mora) {
+          mora[pago.fecha] += parseInt(pago.pago);
+        } else {
+          mora[pago.fecha] = parseInt(pago.pago);
+        }
+      }
+    });
+  });
+  return [planPago, pagos, mora];
+};
+
+export {
+  progressCalculator,
+  scoreCalculator,
+  compactNumbers,
+  formattedTotal,
+  datePayDictCreate,
+  datePaySeriesCreate,
+};

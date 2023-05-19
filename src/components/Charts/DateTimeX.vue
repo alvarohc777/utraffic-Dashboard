@@ -1,6 +1,6 @@
 <template>
   <div id="chart-timeline" class="chart-wrap">
-    <apexchart type="area" :width="width" ref="chart" :options="options" :series="series" :key="data"></apexchart>
+    <apexchart type="area" :width="width" ref="chart" :options="options" :series="series" :key="series"></apexchart>
     <q-inner-loading :showing="visible">
       <q-spinner color="primary" size="3em"></q-spinner>
     </q-inner-loading>
@@ -10,10 +10,10 @@
 <script setup>
 import { ref, toRefs, computed, watchEffect } from "vue";
 import { compactNumbers } from "src/scripts/utils"
-const props = defineProps(["title", "data", "width"]);
-const { title, data, width } = toRefs(props);
+const props = defineProps(["title", "series", "width"]);
+const { title, series, width } = toRefs(props);
 
-const fechaMin = ref(data.value && data.value[0] && data.value[0][0]);
+const fechaMin = ref(series.value && series.value[0] && series.value[0][0]);
 const visible = ref(true);
 
 const titleDefault = computed(() => {
@@ -23,10 +23,10 @@ const titleDefault = computed(() => {
   return title.value
 })
 watchEffect(() => {
-  if (data.value[0]) {
+  if (series.value[0]) {
     visible.value = false;
   }
-  if (!data.value[0]) {
+  if (!series.value[0]) {
     visible.value = true;
   }
 });
@@ -101,19 +101,14 @@ const options = computed(() => {
         stops: [0, 100],
       },
     },
+    stroke: {
+      curve: 'stepline',
+    },
   };
 
   return optionsPrueba;
 });
-const series = computed(() => {
-  return [
-    {
-      name: "Total recaudado",
-      data: data.value,
-    },
 
-  ];
-});
 </script>
 
 <style></style>
