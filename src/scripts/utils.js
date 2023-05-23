@@ -42,8 +42,8 @@ const datePaySeriesCreate = (datePayDict) => {
   let datePayArray = [];
   for (var date in datePayDict) {
     let payment = datePayDict[date];
-    date = date.split("/");
-    date = new Date(date[2], date[1] - 1, date[0]);
+    date = date.split("-");
+    date = new Date(date[0], date[1] - 1, date[2]);
     date = Date.parse(date);
     datePayArray.push([date, payment]);
   }
@@ -70,25 +70,25 @@ const datePayDictCreate = (customers) => {
   let mora = {};
   customers.forEach((cliente) => {
     cliente.planPago.forEach((pago) => {
-      if (pago.fecha in planPago) {
-        planPago[pago.fecha] += parseInt(pago.pago);
+      if (pago.date in planPago) {
+        planPago[pago.date] += parseInt(pago.amount);
       } else {
-        planPago[pago.fecha] = parseInt(pago.pago);
+        planPago[pago.date] = parseInt(pago.amount);
       }
 
       if (pago.estado === "pagado" || pago.estado === "pagadoMora") {
-        if (pago.fecha in pagos) {
-          pagos[pago.fecha] += parseInt(pago.pago);
+        if (pago.date in pagos) {
+          pagos[pago.date] += parseInt(pago.amount);
         } else {
-          pagos[pago.fecha] = parseInt(pago.pago);
+          pagos[pago.date] = parseInt(pago.amount);
         }
       }
 
       if (pago.estado === "mora") {
-        if (pago.fecha in mora) {
-          mora[pago.fecha] += parseInt(pago.pago);
+        if (pago.date in mora) {
+          mora[pago.date] += parseInt(pago.amount);
         } else {
-          mora[pago.fecha] = parseInt(pago.pago);
+          mora[pago.date] = parseInt(pago.amount);
         }
       }
     });

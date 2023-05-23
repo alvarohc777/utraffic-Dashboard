@@ -85,7 +85,6 @@ const fechaPagoSeries = computed(() => {
 
   return [{ name: "Proyección", data: proyeccion }, { name: "Pagos", data: pagos, }, { name: "Mora", data: mora }];
 });
-
 const jsonTransform = (data) => {
   //   let newJson2 = data.map((item) => {
   //     if (!item.attributes.customer.data) {
@@ -104,10 +103,13 @@ const jsonTransform = (data) => {
   //     }
   //   })
 
+
   let newJson = []
   data.forEach((item) => {
     let customerData = item.attributes.customer.data;
     let nombre = customerData ? customerData.attributes.full_name : null;
+    let paymentHistorical = item.attributes.payment_historical ? item.attributes.payment_historical : [];
+
 
     if (nombre) {
       let info = {
@@ -116,7 +118,8 @@ const jsonTransform = (data) => {
         monto: item.attributes.amount,
         fechaSolicitud: item.attributes.applicationdate,
         plazo: item.attributes.term,
-        planPago: [],
+        planPago: paymentHistorical,
+        // planPago: [],
         documento: null,
         calificacion: null
       }
@@ -124,7 +127,8 @@ const jsonTransform = (data) => {
     }
   })
 
-  console.log(newJson)
+
+  console.log("prueba", newJson)
   return newJson
   // console.log("customer", data[0].attributes.customer.data.attributes.full_name)
 }

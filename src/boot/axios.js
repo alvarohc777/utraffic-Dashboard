@@ -10,7 +10,7 @@ import axios from "axios";
 const api = axios.create({ baseURL: "http://localhost:3000/" });
 const apiCliente = axios.create({
   baseURL:
-    "https://e06d-2800-e2-307f-fe05-143d-fcac-2120-5859.ngrok-free.app/api/",
+    "https://52b6-2800-e2-307f-fe05-2433-64b0-cfef-a37c.ngrok-free.app/api/",
 });
 
 // export default boot(({ app }) => {
