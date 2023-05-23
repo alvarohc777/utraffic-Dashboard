@@ -46,63 +46,8 @@
         </q-card>
         <apex-donut :clientes="clientes" width="100%" :key="clientes" />
       </q-card>
-      <q-card class="my-card row justify-between column" v-for=" cliente  in  clientes " :key="cliente">
-        <div>
-
-          <p class="text-h6 text-purple-10 text-center" style="margin-bottom: 0;"> Crédito</p>
-          <p class="text-subtitle2  text-center"> {{ cliente.nSolicitud }}</p>
-        </div>
-        <!-- <donut-individual :series="createSeries(cliente.monto, total)" :title="cliente.nSolicitud" /> -->
-        <semi-circular :progress="progressCalculator(cliente.planPago)" title="Progreso"
-          :score="scoreCalculator(cliente.planPago)" />
-
-        <!-- <h5>{{ [cliente.monto, total] }}</h5> -->
-        <div>
-          <q-card-section>
-            <div class="flex flex-center column">
-              <div class="row " style="width: 100%">
-                <div class="fit row wrap justify-start items-start content-start">
-                  <div class="col">
-                    <p style="margin: 0px" class="text-purple-10">
-                      <strong> Crédito: </strong>
-                    </p>
-                    <p class="text-subtitle2">{{ cliente.nSolicitud }}</p>
-                  </div>
-                  <div class="col">
-                    <p style="margin: 0px" class="text-purple-10">
-                      <strong> Fecha Solicitud: </strong>
-                    </p>
-                    <p class="text-subtitle2">{{ cliente.fechaSolicitud }}</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="flex flex-center column">
-              <div class="row" style="width: 100%">
-                <div class="fit row wrap justify-start items-start content-start">
-                  <div class="col">
-                    <p style="margin: 0px" class="text-purple-10">
-                      <strong> Monto: </strong>
-                    </p>
-                    <p class="text-subtitle2">{{ formattedTotal.format(cliente.monto) }}</p>
-                  </div>
-                  <div class="col">
-                    <p style="margin: 0px" class="text-purple-10">
-                      <strong> Plazo: </strong>
-                    </p>
-                    <p class="text-subtitle2">{{ cliente.plazo }}</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </q-card-section>
-        </div>
-
-
-
-      </q-card>
+      <solicitud-card :cliente="cliente" v-for=" cliente  in  clientes " :key="cliente" />
     </div>
-
   </div>
 
 
@@ -149,6 +94,7 @@ import SemiCircular from "src/components/Charts/SemiCircular.vue";
 import DonutIndividual from "src/components/Charts/DonutIndividual.vue";
 import DateTimeX from "src/components/Charts/DateTimeX.vue";
 import ApexDonut from "src/components/Charts/ApexDonut.vue";
+import SolicitudCard from "src/components/SolicitudCard.vue"
 
 // utils
 import { progressCalculator, scoreCalculator, formattedTotal, datePayDictCreate, datePaySeriesCreate } from "src/scripts/utils"
