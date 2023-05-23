@@ -6,8 +6,8 @@
       </q-card>
 
       <q-card class="row justify-evenly">
-        <apex-donut :clientes="clientesFiltrado" :title="clientesTitle" width="350" />
-        <apex-donut :clientes="tesoreriaFiltrado" :title="tesoreriaTitle" width="350" />
+        <apex-donut :clientes="clientesFiltrado" :title="clientesTitle" width="100%" />
+        <apex-donut :clientes="tesoreriaFiltrado" :title="tesoreriaTitle" width="100%" />
       </q-card>
     </div>
 
@@ -86,6 +86,49 @@ const fechaPagoSeries = computed(() => {
   return [{ name: "Proyección", data: proyeccion }, { name: "Pagos", data: pagos, }, { name: "Mora", data: mora }];
 });
 
+const jsonTransform = (data) => {
+  //   let newJson2 = data.map((item) => {
+  //     if (!item.attributes.customer.data) {
+  //       console.log(item.id)
+
+  //     }
+  //     return {
+  //       nombre: item.attributes.customer.data,
+  //       nSolicitud: item.id,
+  //       monto: item.attributes.amount,
+  //       fechaSolicitud: item.attributes.applicationdate,
+  //       plazo: item.attributes.term,
+  //       planPago: [],
+  //       documento: null,
+  //       calificacion: null
+  //     }
+  //   })
+
+  let newJson = []
+  data.forEach((item) => {
+    let customerData = item.attributes.customer.data;
+    let nombre = customerData ? customerData.attributes.full_name : null;
+
+    if (nombre) {
+      let info = {
+        nombre: nombre,
+        nSolicitud: item.id,
+        monto: item.attributes.amount,
+        fechaSolicitud: item.attributes.applicationdate,
+        plazo: item.attributes.term,
+        planPago: [],
+        documento: null,
+        calificacion: null
+      }
+      newJson.push(info)
+    }
+  })
+
+  console.log(newJson)
+  return newJson
+  // console.log("customer", data[0].attributes.customer.data.attributes.full_name)
+}
+
 // get requests
 onMounted(() => {
   $q.sessionStorage.set(
@@ -93,13 +136,13 @@ onMounted(() => {
     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwiaWF0IjoxNjg0ODUzNDkxLCJleHAiOjE2ODc0NDU0OTF9.1bxW_sbUbzNqIwPMXaDRkeIu__GIrk3LBZUENilkI5A"
   );
 
-  api
-    .get("clientes")
-    .then((res) => {
-      clientes.value = res.data;
-      createFilterData(clientes, nombres, "nombre");
-    })
-    .catch((err) => console.log(err.message));
+  // api
+  //   .get("clientes")
+  //   .then((res) => {
+  //     clientes.value = res.data;
+  //     createFilterData(clientes, nombres, "nombre");
+  //   })
+  //   .catch((err) => console.log(err.message));
   api
     .get("tesoreria")
     .then((res) => {
@@ -108,12 +151,16 @@ onMounted(() => {
     })
     .catch((err) => console.log(err.message));
   apiCliente
-    .get("/v1/customers?filters[identification][$eq]=1010063326&populate=*")
-    .then((res) => {
+    .get("/credits?populate=customer")
+    .then((res) =>
+      res.data.data
+    )
+    .then((data) => {
+      console.log("hola", data)
+      clientes.value = jsonTransform(data)
+      createFilterData(clientes, nombres, "nombre")
 
-      console.log(res.data.data[0].attributes.identification);
     })
-    .catch((err) => console.log(err.message));
 });
 
 // watch changes on dropdown menu selection
@@ -210,7 +257,7 @@ const columns = reactive([
     name: "nSolicitud",
     required: true,
     label: "N° Solicitud",
-    align: "left",
+    align: "right",
     field: (row) => row.nSolicitud,
     sortable: true,
   },

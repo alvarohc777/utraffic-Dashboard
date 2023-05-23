@@ -1,6 +1,6 @@
 <template>
   <div class="chart-wrap relative-position">
-    <div>
+    <div class="chart-container">
       <apexchart type="donut" :width="width" :options="optionsCalc" :series="seriesCalc" :key="seriesCalc"></apexchart>
     </div>
 
@@ -13,6 +13,11 @@
 <style>
 .chart-wrap {
   height: 260px;
+}
+
+.chart-container {
+  max-width: 100%;
+  max-height: 100%;
 }
 </style>
 
@@ -119,7 +124,7 @@ const optionsCalc = computed(() => {
         breakpoint: 480,
         options: {
           chart: {
-            width: 200,
+            width: 100,
           },
           legend: {
             show: false,
@@ -128,6 +133,7 @@ const optionsCalc = computed(() => {
       },
     ],
     legend: {
+      show: false,
       position: "bottom",
       offsetY: 0,
       // height: 230,

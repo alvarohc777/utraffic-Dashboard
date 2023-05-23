@@ -11,9 +11,6 @@ const api = axios.create({ baseURL: "http://localhost:3000/" });
 const apiCliente = axios.create({
   baseURL:
     "https://e06d-2800-e2-307f-fe05-143d-fcac-2120-5859.ngrok-free.app/api/",
-  headers: {
-    "Access-Control-Allow-Origin": "*",
-  },
 });
 
 // export default boot(({ app }) => {
