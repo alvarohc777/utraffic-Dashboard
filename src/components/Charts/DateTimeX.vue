@@ -44,6 +44,7 @@ const options = computed(() => {
       }
     },
 
+
     chart: {
       id: "area-datetime",
       type: "area",
@@ -87,10 +88,14 @@ const options = computed(() => {
         }
       }
     },
+
     tooltip: {
-      x: {
-        format: "dd MMM yyyy",
-      },
+      shared: true,
+      intersect: false,
+
+      y: {
+        formatter: "hola"
+      }
     },
     fill: {
       type: "gradient",
@@ -104,10 +109,14 @@ const options = computed(() => {
     stroke: {
       curve: 'stepline',
     },
+
   };
+
 
   return optionsPrueba;
 });
+
+
 
 </script>
 

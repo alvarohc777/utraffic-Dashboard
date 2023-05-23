@@ -57,10 +57,8 @@ const datePaySeriesCreate = (datePayDict) => {
   let lastPay =
     datePayArray[datePayArray.length - 1] &&
     datePayArray[datePayArray.length - 1][1];
-
-  console.log(lastDate);
   lastDate = new Date(lastDate).setMonth(new Date(lastDate).getMonth() + 1);
-  console.log(lastDate);
+
   datePayArray.push([lastDate, lastPay]);
   return datePayArray;
 };

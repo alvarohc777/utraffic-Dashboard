@@ -40,8 +40,6 @@ let dataFiltered = ref([]);
 
 const loadingState = computed(() => {
   if (data.value[0]) {
-    console.log("value");
-
     return false;
   }
   return true;

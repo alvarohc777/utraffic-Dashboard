@@ -91,7 +91,6 @@ import { ref, reactive, watchEffect, onMounted, computed } from "vue";
 // components
 import FilterTable from "src/components/FilterTable.vue";
 import SemiCircular from "src/components/Charts/SemiCircular.vue";
-import DonutIndividual from "src/components/Charts/DonutIndividual.vue";
 import DateTimeX from "src/components/Charts/DateTimeX.vue";
 import ApexDonut from "src/components/Charts/ApexDonut.vue";
 import SolicitudCard from "src/components/SolicitudCard.vue"
