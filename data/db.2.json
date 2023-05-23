@@ -44,7 +44,7 @@
         { "fecha": "01/02/2023", "pago": "2000000", "estado": "pagado" },
         { "fecha": "01/03/2023", "pago": "2000000", "estado": "pagado" },
         { "fecha": "01/04/2023", "pago": "2000000", "estado": "pagado" },
-        { "fecha": "01/05/2023", "pago": "2000000", "estado": "pagado" },
+        { "fecha": "01/05/2023", "pago": "2000000", "estado": "mora" },
         { "fecha": "01/06/2023", "pago": "2000000", "estado": "null" },
         { "fecha": "01/07/2023", "pago": "2000000", "estado": "null" },
         { "fecha": "01/08/2023", "pago": "2000000", "estado": "null" },
