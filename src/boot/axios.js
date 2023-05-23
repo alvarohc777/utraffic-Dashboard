@@ -8,7 +8,13 @@ import axios from "axios";
 // "export default () => {}" function below (which runs individually
 // for each client)
 const api = axios.create({ baseURL: "http://localhost:3000/" });
-const apiCliente = axios.create({ baseURL: "http://192.168.1.18:1337/api/" });
+const apiCliente = axios.create({
+  baseURL:
+    "https://e06d-2800-e2-307f-fe05-143d-fcac-2120-5859.ngrok-free.app/api/",
+  headers: {
+    "Access-Control-Allow-Origin": "*",
+  },
+});
 
 // export default boot(({ app }) => {
 //   // for use inside Vue files (Options API) through this.$axios and this.$api
@@ -32,6 +38,7 @@ export default boot(({ app }) => {
       config.headers["Authorization"] = `Bearer ${
         sessionStorage.getItem("finansofttoken").split("|")[1]
       }`;
+      config.headers["ngrok-skip-browser-warning"] = true;
       return config;
     });
   };

@@ -90,7 +90,7 @@ const fechaPagoSeries = computed(() => {
 onMounted(() => {
   $q.sessionStorage.set(
     "finansofttoken",
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNjgzODA5NjgzLCJleHAiOjE2ODY0MDE2ODN9.dPVkxu166TZS25CWYPGGUQ6V4jSY3rBrxa9J82BIIQc"
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwiaWF0IjoxNjg0ODUzNDkxLCJleHAiOjE2ODc0NDU0OTF9.1bxW_sbUbzNqIwPMXaDRkeIu__GIrk3LBZUENilkI5A"
   );
 
   api
@@ -108,10 +108,10 @@ onMounted(() => {
     })
     .catch((err) => console.log(err.message));
   apiCliente
-    .get("v1/customers?filters[identification][$eq]=1010063326&populate=*")
+    .get("/v1/customers?filters[identification][$eq]=1010063326&populate=*")
     .then((res) => {
-      console.log("hola");
-      console.log(res);
+
+      console.log(res.data.data[0].attributes.identification);
     })
     .catch((err) => console.log(err.message));
 });
