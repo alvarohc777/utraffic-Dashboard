@@ -38,7 +38,7 @@ import { api, apiCliente } from "../../src/boot/axios";
 
 
 // utils
-import { scoreCalculator, progressCalculator, formattedTotal, datePayDictCreate, datePaySeriesCreate } from "src/scripts/utils"
+import { scoreCalculator, jsonTransform, progressCalculator, formattedTotal, datePayDictCreate, datePaySeriesCreate } from "src/scripts/utils"
 
 
 let $q = useQuasar();
@@ -85,53 +85,7 @@ const fechaPagoSeries = computed(() => {
 
   return [{ name: "Proyección", data: proyeccion }, { name: "Pagos", data: pagos, }, { name: "Mora", data: mora }];
 });
-const jsonTransform = (data) => {
-  //   let newJson2 = data.map((item) => {
-  //     if (!item.attributes.customer.data) {
-  //       console.log(item.id)
 
-  //     }
-  //     return {
-  //       nombre: item.attributes.customer.data,
-  //       nSolicitud: item.id,
-  //       monto: item.attributes.amount,
-  //       fechaSolicitud: item.attributes.applicationdate,
-  //       plazo: item.attributes.term,
-  //       planPago: [],
-  //       documento: null,
-  //       calificacion: null
-  //     }
-  //   })
-
-
-  let newJson = []
-  data.forEach((item) => {
-    let customerData = item.attributes.customer.data;
-    let nombre = customerData ? customerData.attributes.full_name : null;
-    let paymentHistorical = item.attributes.payment_historical ? item.attributes.payment_historical : [];
-
-
-    if (nombre) {
-      let info = {
-        nombre: nombre,
-        nSolicitud: item.id,
-        monto: item.attributes.amount,
-        fechaSolicitud: item.attributes.applicationdate,
-        plazo: item.attributes.term,
-        planPago: paymentHistorical,
-        // planPago: [],
-        documento: null,
-        calificacion: null
-      }
-      newJson.push(info)
-    }
-  })
-
-
-  console.log("prueba", newJson)
-  return newJson
-  // console.log("customer", data[0].attributes.customer.data.attributes.full_name)
-}
 
 // get requests
 onMounted(() => {

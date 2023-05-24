@@ -96,6 +96,50 @@ const datePayDictCreate = (customers) => {
   return [planPago, pagos, mora];
 };
 
+const jsonTransform = (data) => {
+  //   let newJson2 = data.map((item) => {
+  //     if (!item.attributes.customer.data) {
+  //       console.log(item.id)
+
+  //     }
+  //     return {
+  //       nombre: item.attributes.customer.data,
+  //       nSolicitud: item.id,
+  //       monto: item.attributes.amount,
+  //       fechaSolicitud: item.attributes.applicationdate,
+  //       plazo: item.attributes.term,
+  //       planPago: [],
+  //       documento: null,
+  //       calificacion: null
+  //     }
+  //   })
+
+  let newJson = [];
+  data.forEach((item) => {
+    let customerData = item.attributes.customer.data;
+    let nombre = customerData ? customerData.attributes.full_name : null;
+    let paymentHistorical = item.attributes.payment_historical
+      ? item.attributes.payment_historical
+      : [];
+
+    if (nombre) {
+      let info = {
+        nombre: nombre,
+        nSolicitud: item.id,
+        monto: item.attributes.amount,
+        fechaSolicitud: item.attributes.applicationdate,
+        plazo: item.attributes.term,
+        planPago: paymentHistorical,
+        // planPago: [],
+        documento: null,
+        calificacion: null,
+      };
+      newJson.push(info);
+    }
+  });
+  return newJson;
+};
+
 export {
   progressCalculator,
   scoreCalculator,
@@ -103,4 +147,5 @@ export {
   formattedTotal,
   datePayDictCreate,
   datePaySeriesCreate,
+  jsonTransform,
 };
