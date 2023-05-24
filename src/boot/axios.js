@@ -9,8 +9,7 @@ import axios from "axios";
 // for each client)
 const api = axios.create({ baseURL: "http://localhost:3000/" });
 const apiCliente = axios.create({
-  baseURL:
-    "https://52b6-2800-e2-307f-fe05-2433-64b0-cfef-a37c.ngrok-free.app/api/",
+  baseURL: "http://192.168.1.18:1337/api/",
 });
 
 // export default boot(({ app }) => {

@@ -44,7 +44,7 @@
         <q-card>
           <date-time-x :series="fechaPagoSeries" width="100%" :key="fechaPagoSeries" />
         </q-card>
-        <apex-donut :clientes="clientes" width="100%" :key="clientes" />
+        <apex-donut :clientes="clientes" width="90%" :key="clientes" />
       </q-card>
       <solicitud-card :cliente="cliente" v-for=" cliente  in  clientes " :key="cliente" />
     </div>
