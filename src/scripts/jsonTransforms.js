@@ -39,19 +39,15 @@ const objectTransform = (dataObj, keysToFind) => {
   // Crear exception aquí*
   if (Array.isArray(dataObj)) return "Error This is an Array";
   keysToFind.forEach((keyToFind) => {
-    if (typeof keyToFind === "string") {
-      newObject[keyToFind] = findVal(dataObj, keyToFind);
-    } else {
-      // newObject[`${keyToFind[0]}_${keyToFind[1]}`] = findVal(
-      //   findVal(dataObj, keyToFind[0]),
-      //   keyToFind[1]
-      // );
+    if (keyToFind.length === 2) {
+      newObject[keyToFind[0]] = findVal(dataObj, keyToFind[1]);
+    } else if (keyToFind.length === 3) {
       if (!(keyToFind[0] in newObject)) {
         newObject[keyToFind[0]] = {};
       }
-      newObject[keyToFind[0]][keyToFind[1]] = findVal(
-        findVal(dataObj, keyToFind[0]),
-        keyToFind[1]
+      newObject[keyToFind[0]] = findVal(
+        findVal(dataObj, keyToFind[1]),
+        keyToFind[2]
       );
     }
   });
@@ -62,7 +58,21 @@ const objectTransform = (dataObj, keysToFind) => {
 //   // Crear exception aquí*
 //   if (Array.isArray(dataObj)) return "Error This is an Array";
 //   keysToFind.forEach((keyToFind) => {
-//     newObject[keyToFind] = findVal(dataObj, keyToFind);
+//     if (typeof keyToFind === "string") {
+//       newObject[keyToFind] = findVal(dataObj, keyToFind);
+//     } else {
+//       // newObject[`${keyToFind[0]}_${keyToFind[1]}`] = findVal(
+//       //   findVal(dataObj, keyToFind[0]),
+//       //   keyToFind[1]
+//       // );
+//       if (!(keyToFind[0] in newObject)) {
+//         newObject[keyToFind[0]] = {};
+//       }
+//       newObject[keyToFind[0]][keyToFind[1]] = findVal(
+//         findVal(dataObj, keyToFind[0]),
+//         keyToFind[1]
+//       );
+//     }
 //   });
 //   return newObject;
 // };

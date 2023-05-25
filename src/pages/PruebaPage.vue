@@ -32,7 +32,7 @@ onMounted(() => {
       console.log("Test creditS request: ", res.data.data)
       // credits.value = jsonClientes(res.data.data)
       // console.log("Clientes Transform: ", credits.value)
-      let keysToFind = ['id', ['customer', 'full_name']]
+      let keysToFind = [['valor', 'amount'], ['cliente_nombre', 'customer', 'full_name']]
 
       let newJson = jsonTransform(res.data.data, keysToFind)
       console.log("new Json recursive: ", newJson)
