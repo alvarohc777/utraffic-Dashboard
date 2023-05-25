@@ -10,7 +10,9 @@
         <router-link :to="{ name: 'cliente' }">
           <q-btn flat rounded color="dark" label="Cliente Stats"></q-btn>
         </router-link>
-        <q-btn flat rounded color="dark" label="¿Quiénes Somos?"></q-btn>
+        <router-link :to="{ name: 'pruebas' }">
+          <q-btn flat rounded color="dark" label="Pruebas"></q-btn>
+        </router-link>
         <q-btn flat rounded color="dark" label="Contacto"></q-btn>
         <q-btn flat rounded color="dark" label="Blog"></q-btn>
 

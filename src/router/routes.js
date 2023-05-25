@@ -3,6 +3,7 @@ import IndexPage from "pages/IndexPage";
 import ErrorPage from "pages/ErrorNotFound.vue";
 import DashboardPage from "pages/DashboardPage";
 import ClientePage from "pages/ClientePage";
+import PruebaPage from "pages/PruebaPage";
 
 const routes = [
   {
@@ -12,6 +13,7 @@ const routes = [
       { path: "", name: "home", component: IndexPage },
       { path: "dashboard", name: "dashboard", component: DashboardPage },
       { path: "cliente", name: "cliente", component: ClientePage },
+      { path: "pruebas", name: "pruebas", component: PruebaPage },
     ],
   },
 
