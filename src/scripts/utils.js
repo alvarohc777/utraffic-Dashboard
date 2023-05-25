@@ -2,8 +2,8 @@ const progressCalculator = (planPago) => {
   let pagos = 0;
   let numeroCuotas = planPago.length;
   planPago.forEach((cuota) => {
-    pagos += cuota.estado === "pagado" ? 1 : 0;
-    pagos += cuota.estado === "pagadoMora" ? 1 : 0;
+    pagos += cuota.status === "pagado" ? 1 : 0;
+    pagos += cuota.status === "pagadoMora" ? 1 : 0;
   });
   let progress = pagos / numeroCuotas;
   return (progress * 100).toFixed(0);
@@ -14,12 +14,12 @@ const scoreCalculator = (planPago) => {
   let numeroCuotasGeneradas = 0;
   planPago.forEach((cuota) => {
     // Total cuotas en mora / pagadas en mora
-    cuotasEnMora += cuota.estado === "mora" ? 1 : 0;
-    cuotasEnMora += cuota.estado === "pagadoMora" ? 1 : 0;
+    cuotasEnMora += cuota.status === "mora" ? 1 : 0;
+    cuotasEnMora += cuota.status === "pagadoMora" ? 1 : 0;
     // Total cuotas generadas
-    numeroCuotasGeneradas += cuota.estado === "pagadoMora" ? 1 : 0;
-    numeroCuotasGeneradas += cuota.estado === "pagado" ? 1 : 0;
-    numeroCuotasGeneradas += cuota.estado === "mora" ? 1 : 0;
+    numeroCuotasGeneradas += cuota.status === "pagadoMora" ? 1 : 0;
+    numeroCuotasGeneradas += cuota.status === "pagado" ? 1 : 0;
+    numeroCuotasGeneradas += cuota.status === "mora" ? 1 : 0;
   });
   return Math.floor(
     ((numeroCuotasGeneradas - cuotasEnMora) / numeroCuotasGeneradas) * 5
@@ -76,7 +76,7 @@ const datePayDictCreate = (customers) => {
         planPago[pago.date] = parseInt(pago.amount);
       }
 
-      if (pago.estado === "pagado" || pago.estado === "pagadoMora") {
+      if (pago.status === "pagado" || pago.status === "pagadoMora") {
         if (pago.date in pagos) {
           pagos[pago.date] += parseInt(pago.amount);
         } else {
@@ -84,15 +84,16 @@ const datePayDictCreate = (customers) => {
         }
       }
 
-      if (pago.estado === "mora") {
+      if (pago.status === "mora") {
         if (pago.date in mora) {
-          mora[pago.date] += parseInt(pago.amount);
+          mora[pago.date] -= parseInt(pago.amount);
         } else {
-          mora[pago.date] = parseInt(pago.amount);
+          mora[pago.date] = -parseInt(pago.amount);
         }
       }
     });
   });
+
   return [planPago, pagos, mora];
 };
 
@@ -118,8 +119,8 @@ const jsonTransform = (data) => {
   data.forEach((item) => {
     let customerData = item.attributes.customer.data;
     let nombre = customerData ? customerData.attributes.full_name : null;
-    let paymentHistorical = item.attributes.payment_historical
-      ? item.attributes.payment_historical
+    let planPago = item.attributes.payment_fee
+      ? item.attributes.payment_fee
       : [];
 
     if (nombre) {
@@ -129,7 +130,7 @@ const jsonTransform = (data) => {
         monto: item.attributes.amount,
         fechaSolicitud: item.attributes.applicationdate,
         plazo: item.attributes.term,
-        planPago: paymentHistorical,
+        planPago: planPago,
         // planPago: [],
         documento: null,
         calificacion: null,
@@ -137,6 +138,7 @@ const jsonTransform = (data) => {
       newJson.push(info);
     }
   });
+  // console.log("new Json", newJson[0]);
   return newJson;
 };
 

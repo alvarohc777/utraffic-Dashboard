@@ -85,7 +85,7 @@
 
 // packages
 import { useRouter, useRoute } from "vue-router";
-import { api } from "src/boot/axios";
+import { api, apiCliente } from "src/boot/axios";
 import { ref, reactive, watchEffect, onMounted, computed } from "vue";
 
 // components
@@ -165,15 +165,24 @@ const total = computed(() => {
 // en la base de datos (solo lo hace una vez cuando se hace el
 // mount).
 onMounted(() => {
-  api
-    .get("clientes")
-    .then((res) => {
-      clientesOriginal.value = res.data
-      let nameHolder = {};
-      nameHolder.value = res.data;
-      createFilterData(nameHolder, nombres, "nombre");
+  // api
+  //   .get("clientes")
+  //   .then((res) => {
+  //     clientesOriginal.value = res.data
+  //     let nameHolder = {};
+  //     nameHolder.value = res.data;
+  //     createFilterData(nameHolder, nombres, "nombre");
+  //   })
+  //   .catch((err) => console.log(err.message));
+  apiCliente
+    .get("/credits?populate=customer")
+    .then((res) => res.data.data)
+    .then((data) => {
+      let nameHolder = {}
+      nameHolder.value = jsonTransform(data)
+      clientesOriginal.value = jsonTransform(data)
+      createFilterData(nameHolder, nombres, "nombre")
     })
-    .catch((err) => console.log(err.message));
 });
 
 // Watchers
@@ -181,23 +190,29 @@ onMounted(() => {
 // Actualiza la variable clientes cuando cambia el nombre
 // escogido o cuando se actualiza el URL query
 watchEffect(() => {
-  api
-    .get("clientes", {
-      params: {
-        nombre: nombre.value,
-      },
-    })
-    .then((res) => {
+  // api
+  //   .get("clientes", {
+  //     params: {
+  //       nombre: nombre.value,
+  //     },
+  //   })
+  //   .then((res) => {
 
-      clientes.value = res.data;
-      router.replace({
-        path: route.path,
-        query: { nombre: nombre.value },
-      });
+  //     clientes.value = res.data;
+  //     router.replace({
+  //       path: route.path,
+  //       query: { nombre: nombre.value },
+  //     });
+  //   })
+  //   .catch((err) => {
+  //     console.log(err.message);
+  //   });
+  apiCliente
+    .get("/credits?populate=customer", {
+      params: {
+
+      }
     })
-    .catch((err) => {
-      console.log(err.message);
-    });
 });
 
 watchEffect(() => {

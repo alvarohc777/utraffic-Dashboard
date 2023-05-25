@@ -82,6 +82,9 @@ const fechaPagoSeries = computed(() => {
   let proyeccion = datePaySeriesCreate(fechaDict)
   let pagos = datePaySeriesCreate(pagosDict)
   let mora = datePaySeriesCreate(moraDict)
+  console.log("proyección", proyeccion)
+  console.log("pagos", pagos)
+
 
   return [{ name: "Proyección", data: proyeccion }, { name: "Pagos", data: pagos, }, { name: "Mora", data: mora }];
 });
@@ -93,14 +96,6 @@ onMounted(() => {
     "finansofttoken",
     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwiaWF0IjoxNjg0ODUzNDkxLCJleHAiOjE2ODc0NDU0OTF9.1bxW_sbUbzNqIwPMXaDRkeIu__GIrk3LBZUENilkI5A"
   );
-
-  // api
-  //   .get("clientes")
-  //   .then((res) => {
-  //     clientes.value = res.data;
-  //     createFilterData(clientes, nombres, "nombre");
-  //   })
-  //   .catch((err) => console.log(err.message));
   api
     .get("tesoreria")
     .then((res) => {
@@ -169,7 +164,7 @@ const columnsTesoreria = reactive([
     name: "nSolicitud",
     required: true,
     label: "N° Solicitud",
-    align: "left",
+    align: "right",
     field: (row) => row.nSolicitud,
     sortable: true,
   },
@@ -261,7 +256,7 @@ const columns = reactive([
     name: "calificacion",
     required: true,
     label: "Calificacion",
-    align: "left",
+    align: "center",
     field: (row) => row.calificacion,
     sortable: true,
     format: (val, row) => `${"\u2B50".repeat(row.calificacion)}`,
