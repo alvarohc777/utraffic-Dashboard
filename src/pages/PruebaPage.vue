@@ -20,7 +20,8 @@ import { apiCliente } from 'src/boot/axios';
 import { format, useQuasar } from 'quasar';
 import { onMounted, ref, reactive, watchEffect } from 'vue';
 import FilterTable from 'src/components/FilterTable.vue';
-import { formattedTotal, createFilterData, progressCalculator, mesesPagos } from 'src/scripts/utils'
+import { formattedTotal, createFilterData } from 'src/scripts/utils'
+import { progressCalculator, mesesPagos, currentFee } from 'src/scripts/paymentInfo'
 import { jsonTransform } from 'src/scripts/jsonTransforms'
 
 // Esto debe settearse al iniciar sesión
@@ -221,6 +222,16 @@ const columns = reactive([
     format: (val, row) => {
       let progress = progressCalculator(val)
       return `${progress}%`
+    }
+  },
+  {
+    name: "currentFee",
+    label: "Próximo Pago",
+    align: "right",
+    sortable: true,
+    field: (row) => row.paymentFee,
+    format: (val, row) => {
+      return currentFee(val)
     }
   },
 
