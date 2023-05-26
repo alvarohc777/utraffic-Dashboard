@@ -1,5 +1,6 @@
 <template>
-  <div class="q-pa-md" style="max-width: 785px">
+  <!-- <div class="q-pa-md" style="max-width: 785px"> -->
+  <div class="q-pa-md" style="max-width: 100%">
     <q-table flat bordered dense title="Clientes" :rows="dataFiltered" :columns="columns" :loading="loadingState"
       loading-label="Cargando información" row-key="name">
       <template v-slot:body-cell-documento="props">
