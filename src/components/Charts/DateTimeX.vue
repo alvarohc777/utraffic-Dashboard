@@ -1,11 +1,13 @@
 <template>
-  <div id="chart-timeline" class="chart-wrap">
+  <div id="chart-timeline">
     <apexchart type="area" :width="width" ref="chart" :options="options" :series="series" :key="series"></apexchart>
     <q-inner-loading :showing="visible">
       <q-spinner color="primary" size="3em"></q-spinner>
     </q-inner-loading>
   </div>
 </template>
+
+<style></style>
 
 <script setup>
 import { ref, toRefs, computed, watchEffect } from "vue";
@@ -48,7 +50,7 @@ const options = computed(() => {
     chart: {
       id: "area-datetime",
       type: "area",
-      height: 350,
+      height: 450,
       zoom: {
         autoScaleYaxis: true,
       },
@@ -120,4 +122,4 @@ const options = computed(() => {
 
 </script>
 
-<style></style>
+
