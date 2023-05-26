@@ -1,12 +1,30 @@
+// Calcula el porcentaje de meses pagos
+// planPago: Array o string ("null" si Array no existe en DB)
+// output -> progress: float
 const progressCalculator = (planPago) => {
+  let progress = 0;
+  if (planPago === "null") return (progress * 100).toFixed(0);
   let pagos = 0;
   let numeroCuotas = planPago.length;
   planPago.forEach((cuota) => {
     pagos += cuota.status === "pagado" ? 1 : 0;
     pagos += cuota.status === "pagadoMora" ? 1 : 0;
   });
-  let progress = pagos / numeroCuotas;
+  progress = pagos / numeroCuotas;
   return (progress * 100).toFixed(0);
+};
+
+// Calcula los meses pagos
+// planPago: Array o string ("null" si Array no existe en json)
+// output -> mesesPagos: int
+const mesesPagos = (planPago) => {
+  let mesesPagos = 0;
+  if (planPago === "null") return 0;
+  planPago.forEach((cuota) => {
+    mesesPagos += cuota.status === "pagado" ? 1 : 0;
+    mesesPagos += cuota.status === "pagadoMora" ? 1 : 0;
+  });
+  return mesesPagos;
 };
 
 const scoreCalculator = (planPago) => {
@@ -98,23 +116,6 @@ const datePayDictCreate = (customers) => {
 };
 
 const jsonTransform = (data) => {
-  //   let newJson2 = data.map((item) => {
-  //     if (!item.attributes.customer.data) {
-  //       console.log(item.id)
-
-  //     }
-  //     return {
-  //       nombre: item.attributes.customer.data,
-  //       nSolicitud: item.id,
-  //       monto: item.attributes.amount,
-  //       fechaSolicitud: item.attributes.applicationdate,
-  //       plazo: item.attributes.term,
-  //       planPago: [],
-  //       documento: null,
-  //       calificacion: null
-  //     }
-  //   })
-
   let newJson = [];
   data.forEach((item) => {
     let customerData = item.attributes.customer.data;
@@ -150,4 +151,6 @@ export {
   datePayDictCreate,
   datePaySeriesCreate,
   jsonTransform,
+  createFilterData,
+  mesesPagos,
 };

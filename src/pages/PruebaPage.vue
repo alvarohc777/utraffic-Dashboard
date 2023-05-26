@@ -1,17 +1,26 @@
 <template>
   <p>
-    hola
+    { Hola }
   </p>
+
+  <div style="max-width: 100%; justify-content: center;" class="row ">
+    <filter-table :data="creditsFiltered" :columns="columns">
+      <template #category-selector>
+        <q-select v-model="advisor" outlined dense options-dense label="Cuenta" emit-value map-options :options="advisors"
+          option-value="name" options-cover style="min-width: 120px"></q-select>
+      </template>
+    </filter-table>
+  </div>
 </template>
 <style></style>
 
 
 <script setup>
 import { apiCliente } from 'src/boot/axios';
-import { useQuasar } from 'quasar';
-import { onMounted, ref, reactive } from 'vue';
+import { format, useQuasar } from 'quasar';
+import { onMounted, ref, reactive, watchEffect } from 'vue';
 import FilterTable from 'src/components/FilterTable.vue';
-
+import { formattedTotal, createFilterData, progressCalculator, mesesPagos } from 'src/scripts/utils'
 import { jsonTransform } from 'src/scripts/jsonTransforms'
 
 // Esto debe settearse al iniciar sesión
@@ -87,27 +96,90 @@ apiCliente
   .catch((err) => console.log(err.message));
 
 
-// Json Transformation Functions
+
 
 
 const columns = reactive([
-  {
-    name: "nombre",
-    required: true,
-    label: "Nombre",
-    align: "left",
-    field: (row) => row.nombre,
-    format: (val, row) => row.nombre,
-    sortable: true,
-  },
   {
     name: "nSolicitud",
     required: true,
     label: "N° Solicitud",
     align: "right",
-    field: (row) => row.id,
+    field: (row) => row.creditId,
     sortable: true,
   },
+  {
+    name: "cliente",
+    required: true,
+    label: "Cliente",
+    align: "left",
+    field: (row) => row.cliente,
+    format: (val, row) => row.cliente,
+    sortable: true,
+  },
+  {
+    name: "monto",
+    label: "Monto",
+    field: (row) => row.monto,
+    sortable: true,
+    format: (val, row) => `${formattedTotal.format(row.monto)}`
+  },
+
+  {
+    name: "fechaSolicitud",
+    label: "Fecha solicitud",
+    align: "right",
+    field: (row) => row.fechaSolicitud,
+    sortable: true
+  },
+  {
+    name: "calificacion",
+    required: true,
+    label: "Calificacion",
+    align: "left",
+    field: (row) => row.calificacion,
+    sortable: true,
+    format: (val, row) => `${"\u2B50".repeat(row.calificacion)}`,
+  },
+  {
+    name: "asesor",
+    required: true,
+    label: "Asesor",
+    align: "left",
+    field: (row) => row.asesor,
+    sortable: true,
+  },
+  {
+    name: "plazo",
+    label: "Plazo (m)",
+    align: "right",
+    field: (row) => row.plazo,
+    sortable: true,
+  },
+  {
+    name: "mesesPagos",
+    label: "Meses Pagos (m)",
+    align: "right",
+    field: (row) => row.paymentHistorical,
+    sortable: true,
+    format: (val, row) => {
+      let pagos = mesesPagos(val)
+      return `${pagos}`
+    }
+  },
+  {
+    name: "progreso",
+    label: "Progreso",
+    align: "right",
+    sortable: true,
+    field: (row) => row.paymentFee,
+    format: (val, row) => {
+      let progress = progressCalculator(val)
+      return `${progress}%`
+    }
+  },
+
+
 
 ]);
 

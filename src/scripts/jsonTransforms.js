@@ -1,31 +1,3 @@
-// const jsonClientes = (data) => {
-//   let newJson = [];
-//   data.forEach((item) => {
-//     let customerData = item.attributes.customer.data;
-//     let nombre = customerData ? customerData.attributes.full_name : null;
-//     let planPago = item.attributes.payment_fee
-//       ? item.attributes.payment_fee
-//       : [];
-
-//     if (nombre) {
-//       let info = {
-//         nombre: nombre,
-//         nSolicitud: item.id,
-//         monto: item.attributes.amount,
-//         fechaSolicitud: item.attributes.applicationdate,
-//         plazo: item.attributes.term,
-//         planPago: planPago,
-//         // planPago: [],
-//         documento: null,
-//         calificacion: null,
-//       };
-//       newJson.push(info);
-//     }
-//   });
-//   // console.log("new Json", newJson[0]);
-//   return newJson;
-// };
-
 const jsonTransform = (dataArray, keysToFind) => {
   let newJson = [];
   dataArray.forEach((data) => {
@@ -86,7 +58,7 @@ const findVal = (obj, keyToFind) => {
   if (obj[keyToFind]) return obj[keyToFind];
   if (Array.isArray(obj[keyToFind])) return obj[keyToFind];
   if (obj[keyToFind] == "") return obj[keyToFind];
-  if (obj[keyToFind] === null) return "Valor es null";
+  if (obj[keyToFind] === null) return "null";
 
   // If not, iterates through every key in the object
   for (let key in obj) {
