@@ -11,9 +11,9 @@
 </template>
 
 <style>
-.chart-wrap {
+/* .chart-wrap {
   height: 260px;
-}
+} */
 
 .chart-container {
   max-width: 100%;
@@ -26,15 +26,15 @@ import { computed, toRefs, ref, watchEffect } from "vue";
 import { formattedTotal } from "src/scripts/utils"
 
 // Convertir props a variable
-const props = defineProps(["clientes", "title", "width"]);
-let { clientes, title, width } = toRefs(props);
+const props = defineProps(["data", "title", "width"]);
+let { data, title, width } = toRefs(props);
 const visible = ref(true);
 
 watchEffect(() => {
-  if (clientes.value[0]) {
+  if (data.value[0]) {
     visible.value = false;
   }
-  if (!clientes.value[0]) {
+  if (!data.value[0]) {
     visible.value = true;
   }
 });
@@ -45,7 +45,7 @@ watchEffect(() => {
 const seriesCalc = computed(() => {
   let series = [];
 
-  clientes.value.forEach((cliente) => {
+  data.value.forEach((cliente) => {
     series.push(parseFloat(cliente.monto));
   });
 
@@ -142,8 +142,8 @@ const optionsCalc = computed(() => {
   };
 
   let labels = [];
-  clientes.value.forEach((cliente) => {
-    labels.push(`${cliente.nSolicitud}`);
+  data.value.forEach((item) => {
+    labels.push(`${item.creditId}`);
   });
   options.labels = labels;
   return options;
