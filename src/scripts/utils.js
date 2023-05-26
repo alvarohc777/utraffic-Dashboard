@@ -151,6 +151,22 @@ const createFilterData = (data, target, attr) => {
   });
 };
 
+// Creates select Element filtered Data
+const selectFilter = (data, dataFiltered, field, fields, attr) => {
+  if (field.value && field.value !== "-") {
+    dataFiltered.value = data.value.filter((row) => row[attr] === field.value);
+    if (fields.value.indexOf("-") == -1) {
+      fields.value.unshift("-");
+    }
+    return;
+  }
+  if (field.value == "-") {
+    fields.value.shift();
+    field.value = null;
+  }
+  dataFiltered.value = data.value;
+};
+
 export {
   progressCalculator,
   scoreCalculator,
@@ -161,4 +177,5 @@ export {
   jsonTransform,
   createFilterData,
   mesesPagos,
+  selectFilter,
 };

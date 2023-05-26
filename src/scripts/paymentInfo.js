@@ -3,7 +3,7 @@
 // output -> progress: float
 const progressCalculator = (planPago) => {
   let progress = 0;
-  if (planPago === "null") return (progress * 100).toFixed(0);
+  if (planPago === "null") return 0;
   let pagos = 0;
   let numeroCuotas = planPago.length;
   planPago.forEach((cuota) => {
@@ -11,7 +11,7 @@ const progressCalculator = (planPago) => {
     pagos += cuota.status === "pagadoMora" ? 1 : 0;
   });
   progress = pagos / numeroCuotas;
-  return (progress * 100).toFixed(0);
+  return progress;
 };
 
 // Calcula los meses pagos
@@ -50,6 +50,83 @@ const currentFee = (paymentFee) => {
     if (paymentFee[i].status == null || paymentFee[i].status == "mora")
       return paymentFee[i].date;
   }
+  return "Finalizada";
 };
 
-export { scoreCalculator, mesesPagos, progressCalculator, currentFee };
+const creditStatus = (paymentFee) => {
+  for (let i = 0; i < paymentFee.length; i++) {
+    if (paymentFee[i].status == "mora") return "Mora";
+  }
+  return "On Time";
+};
+
+// Cretes Date-Pay array and duplicates las entry
+// so the whole month is plotted
+const datePaySeriesCreate = (datePayDict) => {
+  let datePayArray = [];
+  for (var date in datePayDict) {
+    let payment = datePayDict[date];
+    date = date.split("-");
+    date = new Date(date[0], date[1] - 1, date[2]);
+    date = Date.parse(date);
+    datePayArray.push([date, payment]);
+  }
+  datePayArray = datePayArray.sort(function (a, b) {
+    return a[0] - b[0];
+  });
+
+  let lastDate =
+    datePayArray[datePayArray.length - 1] &&
+    datePayArray[datePayArray.length - 1][0];
+  let lastPay =
+    datePayArray[datePayArray.length - 1] &&
+    datePayArray[datePayArray.length - 1][1];
+  lastDate = new Date(lastDate).setMonth(new Date(lastDate).getMonth() + 1);
+
+  datePayArray.push([lastDate, lastPay]);
+  return datePayArray;
+};
+
+// Creates planPago, Pagos and mora arrays
+const datePayDictCreate = (customers) => {
+  let planPago = {};
+  let pagos = {};
+  let mora = {};
+  customers.forEach((cliente) => {
+    cliente.paymentFee.forEach((pago) => {
+      if (pago.date in planPago) {
+        planPago[pago.date] += parseInt(pago.amount);
+      } else {
+        planPago[pago.date] = parseInt(pago.amount);
+      }
+
+      if (pago.status === "pagado" || pago.status === "pagadoMora") {
+        if (pago.date in pagos) {
+          pagos[pago.date] += parseInt(pago.amount);
+        } else {
+          pagos[pago.date] = parseInt(pago.amount);
+        }
+      }
+
+      if (pago.status === "mora") {
+        if (pago.date in mora) {
+          mora[pago.date] -= parseInt(pago.amount);
+        } else {
+          mora[pago.date] = -parseInt(pago.amount);
+        }
+      }
+    });
+  });
+
+  return [planPago, pagos, mora];
+};
+
+export {
+  scoreCalculator,
+  mesesPagos,
+  progressCalculator,
+  currentFee,
+  creditStatus,
+  datePayDictCreate,
+  datePaySeriesCreate,
+};
