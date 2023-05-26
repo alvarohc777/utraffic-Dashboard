@@ -143,6 +143,14 @@ const jsonTransform = (data) => {
   return newJson;
 };
 
+const createFilterData = (data, target, attr) => {
+  data.value.forEach((row) => {
+    if (target.value.indexOf(row[`${attr}`]) == -1) {
+      target.value.push(row[`${attr}`]);
+    }
+  });
+};
+
 export {
   progressCalculator,
   scoreCalculator,

@@ -31,8 +31,34 @@ $q.sessionStorage.set(
 );
 
 const credits = ref([]);
+const creditsFiltered = ref([])
 const clientes = ref([]);
-const advisor = ref([]);
+const advisors = ref([]);
+const advisor = ref(null);
+const creditsFiltrado = ref([])
+
+const funct = (data, dataFiltered, field, fields, attr) => {
+  if (field.value && field.value !== '-') {
+    dataFiltered.value = data.value.filter(
+      (row) => row[attr] === field.value
+    )
+    if (fields.value.indexOf('-') == -1) {
+      fields.value.unshift('-');
+    }
+    return
+  }
+  if (field.value == '-') {
+    fields.value.shift();
+    field.value = null;
+  }
+  dataFiltered.value = data.value
+}
+
+
+watchEffect(() => {
+  funct(credits, creditsFiltered, advisor, advisors, 'asesor')
+});
+
 
 onMounted(() => {
   apiCliente
@@ -41,10 +67,23 @@ onMounted(() => {
       console.log("Test creditS request: ", res.data.data)
       // credits.value = jsonClientes(res.data.data)
       // console.log("Clientes Transform: ", credits.value)
-      let keysToFind = [['valor', 'amount'], ['cliente_nombre', 'customer', 'full_name']]
+      let keysToFind = [['creditId', 'credit_id'],
+      ['id', 'id'],
+      ['cliente', 'customer', 'full_name'],
+      ['monto', 'amount'],
+      ['plazo', 'term'],
+      ['fechaSolicitud', 'applicationdate'],
+      ['calificacion', 'score'],
+      ['asesor', 'businessadvisor', 'full_name'],
+      ['paymentHistorical', 'payment_historical'],
+      ['campoInexistente', 'campoInexistente'],
+      ['paymentFee', 'payment_fee']
+      ]
 
-      let newJson = jsonTransform(res.data.data, keysToFind)
-      console.log("new Json recursive: ", newJson)
+      credits.value = jsonTransform(res.data.data, keysToFind)
+      createFilterData(credits, advisors, 'asesor')
+      // advisors.value = credits.value
+      console.log("new Json recursive: ", credits)
     })
     .catch((err) => console.log(err.message));
 
@@ -80,8 +119,14 @@ apiCliente
   .get("/businessadvisors?populate[credits][populate]=customer")
   .then((res) => {
     // console.log("Test businessadvisorS request:", res.data.data)
-    advisor.value = res.data.data
+    // advisor.value = res.data.data
     // Crear transformation funtion ADVISOR
+
+    // let keysToFind = [
+    //   ['asesorNombre', 'businessadvisor', 'full_name'],
+    //   ['credits', 'credits']
+    // ]
+    // let newJson = jsonTransform(res.data.data, keysToFind)
   })
   .catch((err) => console.log(err.message));
 
