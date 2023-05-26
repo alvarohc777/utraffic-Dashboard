@@ -18,6 +18,9 @@
             :options="nombres" option-value="name" options-cover style="min-width: 120px"></q-select>
         </template>
       </filter-table>
+
+
+
       <filter-table :data="tesoreriaFiltrado" :columns="columnsTesoreria">
         <template #category-selector>
           <q-select v-model="tesoreriaKey" outlined dense options-dense label="Cuenta" emit-value map-options
@@ -38,8 +41,8 @@ import { api, apiCliente } from "../../src/boot/axios";
 
 
 // utils
-import { scoreCalculator, jsonTransform, progressCalculator, formattedTotal, datePayDictCreate, datePaySeriesCreate } from "src/scripts/utils"
-
+import { jsonTransform, formattedTotal, datePayDictCreate, datePaySeriesCreate } from "src/scripts/utils"
+import { progressCalculator, mesesPagos, currentFee } from 'src/scripts/paymentInfo'
 
 let $q = useQuasar();
 
@@ -83,7 +86,7 @@ const fechaPagoSeries = computed(() => {
   let pagos = datePaySeriesCreate(pagosDict)
   let mora = datePaySeriesCreate(moraDict)
   console.log("proyección", proyeccion)
-  console.log("pagos", pagos)
+  console.log("pagos", fechaDict)
 
 
   return [{ name: "Proyección", data: proyeccion }, { name: "Pagos", data: pagos, }, { name: "Mora", data: mora }];
