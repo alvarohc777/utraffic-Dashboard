@@ -2,7 +2,9 @@
   <!-- <div class="q-pa-md" style="max-width: 785px"> -->
   <div class="q-pa-md" style="max-width: 100%">
     <q-table flat bordered dense title="Clientes" :rows="dataFiltered" :columns="columns" :loading="loadingState"
-      loading-label="Cargando información" row-key="name">
+      loading-label="Cargando información" row-key="name" :filter="filter" binary-state-sort="">
+
+      <!-- Show Documents -->
       <template v-slot:body-cell-documento="props">
         <q-td :props="props">
           <div>
@@ -11,11 +13,24 @@
           </div>
         </q-td>
       </template>
+
+
+      <template v-slot:top-right>
+
+      </template>
+
       <template v-slot:top>
         <img style="height: 50px; width: 50px" src="../../public/icons/android-chrome-192x192.png" />
 
         <q-space></q-space>
+        <q-input borderless dense debounce="300" v-model="filter" placeholder="Search">
+          <template v-slot:append>
+            <q-icon name="search"></q-icon>
+          </template>
+        </q-input>
 
+
+        <!-- Select Slot -->
         <slot name="category-selector"></slot>
       </template>
       <!-- Optional slot -->
@@ -38,7 +53,7 @@ const props = defineProps(["data", "columns", "tableLinks"]);
 let { data, columns, tableLinks } = toRefs(props);
 let nombre = ref(null);
 let dataFiltered = ref([]);
-
+const filter = ref('')
 const loadingState = computed(() => {
   if (data.value[0]) {
     return false;
