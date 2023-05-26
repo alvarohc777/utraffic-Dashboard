@@ -1,16 +1,18 @@
 <template>
-  <p>
-    { Hola }
-  </p>
+  <q-page-container>
+    <q-page>
 
-  <div style="max-width: 100%; justify-content: center;" class="row ">
-    <filter-table :data="creditsFiltered" :columns="columns">
-      <template #category-selector>
-        <q-select v-model="advisor" outlined dense options-dense label="Cuenta" emit-value map-options :options="advisors"
-          option-value="name" options-cover style="min-width: 120px"></q-select>
-      </template>
-    </filter-table>
-  </div>
+      <div style="max-width: 100%; justify-content: center;" class="row ">
+        <filter-table :data="creditsFiltered" :columns="columns">
+          <template #category-selector>
+            <q-select v-model="advisor" outlined dense options-dense label="Cuenta" emit-value map-options
+              :options="advisors" option-value="name" options-cover style="min-width: 120px"></q-select>
+          </template>
+        </filter-table>
+      </div>
+
+    </q-page>
+  </q-page-container>
 </template>
 <style></style>
 
@@ -20,8 +22,8 @@ import { apiCliente } from 'src/boot/axios';
 import { format, useQuasar } from 'quasar';
 import { onMounted, ref, reactive, watchEffect } from 'vue';
 import FilterTable from 'src/components/FilterTable.vue';
-import { formattedTotal, createFilterData } from 'src/scripts/utils'
-import { progressCalculator, mesesPagos, currentFee } from 'src/scripts/paymentInfo'
+import { formattedTotal, createFilterData, selectFilter } from 'src/scripts/utils'
+import { progressCalculator, mesesPagos, currentFee, creditStatus } from 'src/scripts/paymentInfo'
 import { jsonTransform } from 'src/scripts/jsonTransforms'
 
 // Esto debe settearse al iniciar sesión
@@ -38,26 +40,9 @@ const advisors = ref([]);
 const advisor = ref(null);
 const creditsFiltrado = ref([])
 
-const funct = (data, dataFiltered, field, fields, attr) => {
-  if (field.value && field.value !== '-') {
-    dataFiltered.value = data.value.filter(
-      (row) => row[attr] === field.value
-    )
-    if (fields.value.indexOf('-') == -1) {
-      fields.value.unshift('-');
-    }
-    return
-  }
-  if (field.value == '-') {
-    fields.value.shift();
-    field.value = null;
-  }
-  dataFiltered.value = data.value
-}
-
 
 watchEffect(() => {
-  funct(credits, creditsFiltered, advisor, advisors, 'asesor')
+  selectFilter(credits, creditsFiltered, advisor, advisors, 'asesor')
 });
 
 
@@ -206,22 +191,17 @@ const columns = reactive([
     name: "mesesPagos",
     label: "Meses Pagos (m)",
     align: "right",
-    field: (row) => row.paymentHistorical,
+    field: (row) => mesesPagos(row.paymentFee),
     sortable: true,
-    format: (val, row) => {
-      let pagos = mesesPagos(val)
-      return `${pagos}`
-    }
   },
   {
     name: "progreso",
     label: "Progreso",
     align: "right",
     sortable: true,
-    field: (row) => row.paymentFee,
+    field: (row) => progressCalculator(row.paymentFee),
     format: (val, row) => {
-      let progress = progressCalculator(val)
-      return `${progress}%`
+      return `${(val * 100).toFixed(0)}%`
     }
   },
   {
@@ -233,6 +213,14 @@ const columns = reactive([
     format: (val, row) => {
       return currentFee(val)
     }
+  },
+  {
+    name: "CreditStatus",
+    label: "Estado",
+    align: "right",
+    sortable: true,
+    field: (row) => creditStatus(row.paymentFee),
+
   },
 
 
