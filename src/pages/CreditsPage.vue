@@ -3,9 +3,13 @@
 
     <q-page>
       <q-card class="row justify-evenly">
-        <date-time-x :title="advisorTitle" :series="timeSeries" width="140%" />
-        <apex-donut :data="creditsFiltered" :title="advisorTitle" width="100%" />
-        <!-- <proyection-bar :series="timeSeries"></proyection-bar> -->
+        <date-time-x :title="advisor" :series="timeSeries" width="140%" />
+        <apex-donut :data="creditsFiltered" :title="advisor" width="100%" />
+        <apex-bar-vue width="140%" :categories="dataBar[0]" :series="dataBar[1]" :title="advisor" />
+
+        <column-markers width="140%" :series="seriesColumnMarkers" />
+        <column-stacked width="140%" />
+        <column-negative width="140%" />
       </q-card>
       <div style="max-width: 100%; justify-content: center;" class="row ">
         <filter-table :data="creditsFiltered" :columns="columns">
@@ -15,9 +19,10 @@
           </template>
         </filter-table>
       </div>
+
+      <p>{{ seriesColumnMarkers }}</p>
     </q-page>
   </q-page-container>
-  <!-- <p>{{ timeSeries }}</p> -->
 </template>
 <style></style>
 
@@ -33,8 +38,10 @@ import { useQuasar } from 'quasar';
 import FilterTable from 'src/components/FilterTable.vue';
 import ApexDonut from 'src/components/Charts/ApexDonut.vue';
 import DateTimeX from 'src/components/Charts/DateTimeX.vue';
-import proyectionBar from 'src/components/Charts/proyectionBar.vue'
-
+import ColumnMarkers from 'src/components/Charts/ColumnMarkers.vue'
+import ColumnNegative from 'src/components/Charts/ColumnNegative.vue';
+import ColumnStacked from 'src/components/Charts/ColumnStacked.vue';
+import ApexBarVue from 'src/components/Charts/ApexBar.vue';
 // // Scripts
 import { progressCalculator, mesesPagos, currentFee, creditStatus, datePayDictCreate, datePaySeriesCreate, projection, pagosMora, pagos } from 'src/scripts/paymentInfo'
 import { formattedTotal, createFilterData, selectFilter, } from 'src/scripts/utils'
@@ -48,37 +55,110 @@ $q.sessionStorage.set(
 );
 $q.sessionStorage.set("asesorId", '1')
 
+
+// Pasar esto a una función externa
+const totalByCategory = (data, categoryField, seriesField) => {
+  let categories = []
+  let series = []
+  data.forEach((entry) => {
+    if (!categories.includes(entry[categoryField])) {
+      categories.push(entry[categoryField])
+      series.push(parseFloat(entry[seriesField]))
+    } else {
+      series[categories.indexOf(entry[categoryField])] += parseFloat(entry[seriesField])
+    }
+  })
+  return [categories, series]
+}
+
+
+// Ingresar dos diccionarios de forma {date: }
+// Se obtienen de totalByMonth, retorna array de fechas con totales
+const goalsAdd = (pagos, projection) => {
+  let series = []
+  Object.entries(projection).forEach((entry) => {
+    if (entry[0] in pagos) {
+      let date = entry[0]
+      let pago = pagos[entry[0]]
+      let goal = entry[1]
+      series.push({
+        x: date,
+        y: pago,
+        goals: [{
+          name: 'Expected',
+          value: goal,
+          strokeHeight: 5,
+          strokeColor: '#775DD0'
+        }]
+      })
+
+    }
+  })
+  return series
+}
+
+
+const totalByMonth = (data) => {
+  let obj = {}
+  Object.entries(data).forEach((entry) => {
+    if (entry[0].slice(0, 7) in obj) {
+      obj[entry[0].slice(0, 7)] += entry[1]
+    } else {
+      obj[entry[0].slice(0, 7)] = entry[1]
+    }
+  })
+  return obj
+}
+
+const seriesColumnMarkers = computed(() => {
+  let projectionSeries = projection(creditsFiltered.value)
+  let pagosSeries = pagos(creditsFiltered.value)
+  console.log('----------->: ', projectionSeries)
+  console.log('----------->: ', pagosSeries)
+  projectionSeries = totalByMonth(projectionSeries)
+  pagosSeries = totalByMonth(pagosSeries)
+
+
+
+  return [{ name: 'Actual', data: goalsAdd(pagosSeries, projectionSeries) }]
+
+})
+
+const createSeries = (data, key) => {
+  Object.entries(data)
+}
+
+const addGoals2 = (projection, data) => {
+  Object.entries(projection).forEach((entry) => {
+    if (entry[0] in data) {
+      data[entry]
+    }
+  })
+}
+
+
+
+const dataBar = computed(() => {
+
+  let categoryField = (advisor.value) ? 'cliente' : 'asesor'
+  let [categories, series] = totalByCategory(creditsFiltered.value, categoryField, 'monto')
+  return [categories, [{ data: series }]]
+})
+
+
 const credits = ref([]);
 const creditsFiltered = ref([])
 const advisors = ref([]);
 const advisor = ref(null);
-const advisorTitle = computed(() => {
-  if (advisor.value) {
-    return advisor.value
-  }
-  return 'Solicitudes'
-})
 
 
 const timeSeries = computed(() => {
-  console.log(creditsFiltered.value)
+
   let projectionSeries = projection(creditsFiltered.value)
+
   projectionSeries = datePaySeriesCreate(projectionSeries)
-  let pagosMoraSeries = pagosMora(creditsFiltered.value)
-  pagosMoraSeries = datePaySeriesCreate(pagosMoraSeries)
-  let pagosSeries = pagos(creditsFiltered.value)
-  pagosSeries = datePaySeriesCreate(pagosSeries)
 
-
-
-  return [
-    { name: "Projection", type: 'line', data: projectionSeries },
-    { name: "Pagos", type: 'column', data: pagosSeries },
-    { name: "Mora", type: 'column', data: pagosMoraSeries },
-
-  ];
-  // return [{ name: "Pagos", type: 'column', data: pagos }, { name: "Mora", type: 'column', data: mora }, { name: "Proyección", type: 'line', data: proyeccion },];
-
+  return [{ name: "Projection", type: 'area', data: projectionSeries }]
 })
 
 
@@ -86,14 +166,13 @@ watchEffect(() => {
   selectFilter(credits, creditsFiltered, advisor, advisors, 'asesor')
 });
 
-
 onMounted(() => {
   apiCliente
     .get('/credits?populate=customer&populate=businessadvisor')
     .then((res) => {
-      console.log("Test creditS request: ", res.data.data)
+
       // credits.value = jsonClientes(res.data.data)
-      // console.log("Clientes Transform: ", credits.value)
+
       let keysToFind = [['creditId', 'credit_id'],
       ['id', 'id'],
       ['cliente', 'customer', 'full_name'],
@@ -113,16 +192,10 @@ onMounted(() => {
       credits.value = jsonTransform(res.data.data, keysToFind)
       createFilterData(credits, advisors, 'asesor')
       // advisors.value = credits.value
-      console.log("new Json recursive: ", credits)
+      console.log("new Json recursive: ", credits.value[0].paymentPlan)
     })
     .catch((err) => console.log(err.message));
 })
-// Credits Fetch
-
-
-
-
-
 
 
 
