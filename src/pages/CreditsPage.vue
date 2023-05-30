@@ -5,7 +5,7 @@
       <q-card class="row justify-evenly">
         <date-time-x :title="advisorTitle" :series="timeSeries" width="140%" />
         <apex-donut :data="creditsFiltered" :title="advisorTitle" width="100%" />
-        <proyection-bar :series="timeSeries"></proyection-bar>
+        <!-- <proyection-bar :series="timeSeries"></proyection-bar> -->
       </q-card>
       <div style="max-width: 100%; justify-content: center;" class="row ">
         <filter-table :data="creditsFiltered" :columns="columns">
@@ -17,7 +17,7 @@
       </div>
     </q-page>
   </q-page-container>
-  <p>{{ timeSeries }}</p>
+  <!-- <p>{{ timeSeries }}</p> -->
 </template>
 <style></style>
 
@@ -36,7 +36,7 @@ import DateTimeX from 'src/components/Charts/DateTimeX.vue';
 import proyectionBar from 'src/components/Charts/proyectionBar.vue'
 
 // // Scripts
-import { progressCalculator, mesesPagos, currentFee, creditStatus, datePayDictCreate, datePaySeriesCreate } from 'src/scripts/paymentInfo'
+import { progressCalculator, mesesPagos, currentFee, creditStatus, datePayDictCreate, datePaySeriesCreate, projection, pagosMora, pagos } from 'src/scripts/paymentInfo'
 import { formattedTotal, createFilterData, selectFilter, } from 'src/scripts/utils'
 import { jsonTransform } from 'src/scripts/jsonTransforms'
 
@@ -46,6 +46,7 @@ $q.sessionStorage.set(
   "finansofttoken",
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwiaWF0IjoxNjg0ODUzNDkxLCJleHAiOjE2ODc0NDU0OTF9.1bxW_sbUbzNqIwPMXaDRkeIu__GIrk3LBZUENilkI5A"
 );
+$q.sessionStorage.set("asesorId", '1')
 
 const credits = ref([]);
 const creditsFiltered = ref([])
@@ -61,12 +62,22 @@ const advisorTitle = computed(() => {
 
 const timeSeries = computed(() => {
   console.log(creditsFiltered.value)
-  let [fechaDict, pagosDict, moraDict] = datePayDictCreate(creditsFiltered.value)
-  let proyeccion = datePaySeriesCreate(fechaDict)
-  let pagos = datePaySeriesCreate(pagosDict)
-  let mora = datePaySeriesCreate(moraDict)
+  let projectionSeries = projection(creditsFiltered.value)
+  projectionSeries = datePaySeriesCreate(projectionSeries)
+  let pagosMoraSeries = pagosMora(creditsFiltered.value)
+  pagosMoraSeries = datePaySeriesCreate(pagosMoraSeries)
+  let pagosSeries = pagos(creditsFiltered.value)
+  pagosSeries = datePaySeriesCreate(pagosSeries)
 
-  return [{ name: "Pagos", data: pagos, type: 'column' }, { name: "Mora", data: mora, type: 'column' }, { name: "Proyección", data: proyeccion, type: 'line' },];
+
+
+  return [
+    { name: "Projection", type: 'line', data: projectionSeries },
+    { name: "Pagos", type: 'column', data: pagosSeries },
+    { name: "Mora", type: 'column', data: pagosMoraSeries },
+
+  ];
+  // return [{ name: "Pagos", type: 'column', data: pagos }, { name: "Mora", type: 'column', data: mora }, { name: "Proyección", type: 'line', data: proyeccion },];
 
 })
 
@@ -95,7 +106,8 @@ onMounted(() => {
       ['asesorId', 'businessadvisor', 'id'],
       ['paymentHistorical', 'payment_historical'],
       ['campoInexistente', 'campoInexistente'],
-      ['paymentFee', 'payment_fee']
+      ['paymentFee', 'payment_fee'],
+      ['paymentPlan', 'payment_plan']
       ]
 
       credits.value = jsonTransform(res.data.data, keysToFind)
@@ -200,11 +212,23 @@ const columns = reactive([
     sortable: true,
     field: (row) => row.paymentFee,
     format: (val, row) => {
-      return currentFee(val)
+      let [date, _] = currentFee(val)
+      return date
     }
   },
   {
-    name: "CreditStatus",
+    name: "currentPayment",
+    label: "Pago",
+    align: "right",
+    sortable: true,
+    field: (row) => row.paymentFee,
+    format: (val, row) => {
+      let [_, pago] = currentFee(val)
+      return formattedTotal.format(pago)
+    }
+  },
+  {
+    name: "creditStatus",
     label: "Estado",
     align: "right",
     sortable: true,
