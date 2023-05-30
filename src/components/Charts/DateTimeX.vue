@@ -4,6 +4,7 @@
     <q-inner-loading :showing="visible">
       <q-spinner color="primary" size="3em"></q-spinner>
     </q-inner-loading>
+
   </div>
 </template>
 
@@ -20,7 +21,7 @@ const visible = ref(true);
 
 const titleDefault = computed(() => {
   if (title.value === null || title.value === undefined) {
-    return "Histórico pagos"
+    return "Proyección"
   }
   return title.value
 })
@@ -33,16 +34,7 @@ watchEffect(() => {
   }
 });
 
-// const options = computed(() => {
-//   let optionsPrueba = {
-//     chart: {
-//       height: 350,
-//       type: 'line',
-//       stacked: false
-//     }
-//   }
-//   return optionsPrueba
-// })
+
 
 
 
@@ -62,7 +54,7 @@ const options = computed(() => {
 
     chart: {
       id: "area-datetime",
-      // type: "line",
+      type: "area",
       height: 450,
       stacked: false,
       zoom: {
@@ -72,16 +64,13 @@ const options = computed(() => {
     stroke: {
       width: [4, 4, 1]
     },
-
-
-
     dataLabels: {
       enabled: false,
     },
-    // markers: {
-    //   size: 0,
-    //   style: "hollow",
-    // },
+    markers: {
+      size: 0,
+      style: "hollow",
+    },
     xaxis: {
       type: "datetime",
       min: fechaMin.value,
@@ -108,18 +97,19 @@ const options = computed(() => {
       shared: true,
       intersect: false,
     },
-    // fill: {
-    //   type: "gradient",
-    //   gradient: {
-    //     shadeIntensity: 1,
-    //     opacityFrom: 0.7,
-    //     opacityTo: 0.9,
-    //     stops: [0, 100],
-    //   },
-    // },
-    // stroke: {
-    //   curve: 'stepline',
-    // },
+    fill: {
+      type: 'gradient',
+      gradient: {
+        shadeIntensity: 1,
+        opacityFrom: 0.7,
+        opacityTo: 0.9,
+        stops: [0, 100]
+      }
+    },
+    stroke: {
+      curve: 'smooth',
+    },
+
 
   };
 
