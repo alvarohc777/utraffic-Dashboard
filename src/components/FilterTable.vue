@@ -42,6 +42,15 @@
           </router-link>
         </q-td>
       </template>
+      <template v-slot:body-cell-creditStatus="props">
+
+        <q-td :props="props">
+          <div>
+            <q-badge :color="statusDict[props.value]" :label="props.value"></q-badge>
+          </div>
+
+        </q-td>
+      </template>
     </q-table>
   </div>
 </template>
@@ -49,6 +58,11 @@
 <script setup>
 import { toRefs, ref, watchEffect, computed } from "vue";
 
+const statusDict = {
+  'On Time': 'green',
+  'Mora': 'red',
+
+}
 const props = defineProps(["data", "columns", "tableLinks"]);
 let { data, columns, tableLinks } = toRefs(props);
 let nombre = ref(null);
