@@ -48,9 +48,9 @@ const currentFee = (paymentFee) => {
   // let fee = null
   for (let i = 0; i < paymentFee.length; i++) {
     if (paymentFee[i].status == null || paymentFee[i].status == "mora")
-      return paymentFee[i].date;
+      return [paymentFee[i].date, paymentFee[i].amount];
   }
-  return "Finalizada";
+  return ["Finalizada", 0];
 };
 
 const creditStatus = (paymentFee) => {
@@ -60,7 +60,7 @@ const creditStatus = (paymentFee) => {
   return "On Time";
 };
 
-// Cretes Date-Pay array and duplicates las entry
+// Cretes Date-Pay array and duplicates last entry
 // so the whole month is plotted
 const datePaySeriesCreate = (datePayDict) => {
   let datePayArray = [];
@@ -75,44 +75,90 @@ const datePaySeriesCreate = (datePayDict) => {
     return a[0] - b[0];
   });
 
-  let lastDate =
-    datePayArray[datePayArray.length - 1] &&
-    datePayArray[datePayArray.length - 1][0];
-  let lastPay =
-    datePayArray[datePayArray.length - 1] &&
-    datePayArray[datePayArray.length - 1][1];
-  lastDate = new Date(lastDate).setMonth(new Date(lastDate).getMonth() + 1);
-
-  datePayArray.push([lastDate, lastPay]);
   return datePayArray;
+};
+
+const projection = (customers) => {
+  let projection = {};
+  customers.forEach((customer) => {
+    if (customer.paymentPlan.length === 0) return;
+    customer.paymentPlan.forEach((payment) => {
+      if (payment.date in projection) {
+        projection[payment.date] += parseFloat(payment.amount);
+      } else {
+        projection[payment.date] = parseFloat(payment.amount);
+      }
+    });
+  });
+  return projection;
+};
+
+const pagos = (customers) => {
+  let pagos = {};
+  customers.forEach((customer) => {
+    if (customer.paymentHistorical.length === 0) return;
+
+    customer.paymentHistorical.forEach((payment) => {
+      if (payment.date in pagos) {
+        pagos[payment.date] += parseFloat(payment.amount);
+      } else {
+        pagos[payment.date] = parseFloat(payment.amount);
+      }
+    });
+  });
+  return pagos;
+};
+
+const pagosMora = (customers) => {
+  let pagosMora = {};
+
+  customers.forEach((customer) => {
+    if (customer.paymentFee.length === 0) {
+      console.log("se salio");
+      return;
+    }
+
+    customer.paymentFee.forEach((payment) => {
+      if (payment.status === "mora" || payment.status === "pagadoMoraParcial") {
+        if (payment.date in pagosMora) {
+          pagosMora[payment.date] -= parseInt(payment.amount);
+        } else {
+          pagosMora[payment.date] = -parseInt(payment.amount);
+        }
+      }
+    });
+  });
+  return pagosMora;
 };
 
 // Creates planPago, Pagos and mora arrays
 const datePayDictCreate = (customers) => {
   let planPago = {};
-  let pagos = {};
-  let mora = {};
   customers.forEach((cliente) => {
+    if (cliente.paymentFee.length === 0) {
+      return;
+    }
     cliente.paymentFee.forEach((pago) => {
       if (pago.date in planPago) {
-        planPago[pago.date] += parseInt(pago.amount);
+        planPago[pago.date] += parseFloat(pago.amount);
       } else {
-        planPago[pago.date] = parseInt(pago.amount);
+        planPago[pago.date] = parseFloat(pago.amount);
       }
+      // console.log(pago.date);
 
       if (pago.status === "pagado" || pago.status === "pagadoMora") {
         if (pago.date in pagos) {
-          pagos[pago.date] += parseInt(pago.amount);
+          pagos[pago.date] += parseFloat(pago.amount);
         } else {
-          pagos[pago.date] = parseInt(pago.amount);
+          pagos[pago.date] = parseFloat(pago.amount);
         }
       }
 
       if (pago.status === "mora") {
         if (pago.date in mora) {
-          mora[pago.date] -= parseInt(pago.amount);
+          mora[pago.date] -= parseFloat(pago.amount);
         } else {
-          mora[pago.date] = -parseInt(pago.amount);
+          mora[pago.date] = -parseFloat(pago.amount);
         }
       }
     });
@@ -129,4 +175,7 @@ export {
   creditStatus,
   datePayDictCreate,
   datePaySeriesCreate,
+  projection,
+  pagosMora,
+  pagos,
 };

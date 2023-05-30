@@ -1,6 +1,6 @@
 <template>
   <div id="chart-timeline">
-    <apexchart type="area" :width="width" ref="chart" :options="options" :series="series" :key="series"></apexchart>
+    <apexchart :width="width" :options="options" :series="series" :key="series"></apexchart>
     <q-inner-loading :showing="visible">
       <q-spinner color="primary" size="3em"></q-spinner>
     </q-inner-loading>
@@ -33,6 +33,19 @@ watchEffect(() => {
   }
 });
 
+// const options = computed(() => {
+//   let optionsPrueba = {
+//     chart: {
+//       height: 350,
+//       type: 'line',
+//       stacked: false
+//     }
+//   }
+//   return optionsPrueba
+// })
+
+
+
 
 
 const options = computed(() => {
@@ -49,35 +62,26 @@ const options = computed(() => {
 
     chart: {
       id: "area-datetime",
-      type: "area",
+      // type: "line",
       height: 450,
+      stacked: false,
       zoom: {
         autoScaleYaxis: true,
       },
     },
-    annotations: {
-      yaxis: [
-        {
-          y: 30,
-          borderColor: "#999",
-          label: {
-            show: true,
-            text: "Recaudo",
-            style: {
-              color: "#fff",
-              background: "#e28743",
-            },
-          },
-        },
-      ],
+    stroke: {
+      width: [4, 4, 1]
     },
+
+
+
     dataLabels: {
       enabled: false,
     },
-    markers: {
-      size: 0,
-      style: "hollow",
-    },
+    // markers: {
+    //   size: 0,
+    //   style: "hollow",
+    // },
     xaxis: {
       type: "datetime",
       min: fechaMin.value,
@@ -90,27 +94,32 @@ const options = computed(() => {
         }
       }
     },
+    tooltip: {
+      fixed: {
+        enabled: true,
+        position: 'topLeft', // topRight, topLeft, bottomRight, bottomLeft
+        offsetY: 30,
+        offsetX: 60
+      },
+      shared: true
+    },
 
     tooltip: {
       shared: true,
       intersect: false,
-
-      y: {
-        formatter: "hola"
-      }
     },
-    fill: {
-      type: "gradient",
-      gradient: {
-        shadeIntensity: 1,
-        opacityFrom: 0.7,
-        opacityTo: 0.9,
-        stops: [0, 100],
-      },
-    },
-    stroke: {
-      curve: 'stepline',
-    },
+    // fill: {
+    //   type: "gradient",
+    //   gradient: {
+    //     shadeIntensity: 1,
+    //     opacityFrom: 0.7,
+    //     opacityTo: 0.9,
+    //     stops: [0, 100],
+    //   },
+    // },
+    // stroke: {
+    //   curve: 'stepline',
+    // },
 
   };
 
