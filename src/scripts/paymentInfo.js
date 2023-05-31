@@ -82,6 +82,8 @@ const datePaySeriesCreate = (datePayDict) => {
   return datePayArray;
 };
 
+// Creates projection of customer
+// returns dictionary of {date: amount}
 const projection = (customers) => {
   let projection = {};
   customers.forEach((customer) => {
