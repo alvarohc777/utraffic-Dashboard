@@ -23,7 +23,7 @@ const titleDefault = computed(() => {
   if (title.value === null || title.value === undefined) {
     return "Proyección"
   }
-  return title.value
+  return `Proyección ${title.value}`
 })
 watchEffect(() => {
   if (series.value[0]) {

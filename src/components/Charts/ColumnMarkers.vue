@@ -6,15 +6,28 @@
 
 <script setup>
 import { compactNumbers } from 'src/scripts/utils';
-import { reactive, ref, toRefs } from 'vue';
-const props = defineProps(['series'])
-const { series } = toRefs(props)
-
+import { reactive, ref, toRefs, computed } from 'vue';
+const props = defineProps(['series', 'title'])
+const { series, title } = toRefs(props)
+const titleDefault = computed(() => {
+  if (title.value === null || title.value === undefined) {
+    return "Pagos realizados"
+  }
+  return `Pagos - ${title.value}`
+})
 let options = reactive({
 
   chart: {
-    height: 350,
+    height: 250,
     type: 'bar'
+  },
+  title: {
+    text: `${titleDefault.value}`,
+    style: {
+      color: "#4a148c",
+      fontWeight: 600,
+      fontSize: "14px",
+    }
   },
   plotOptions: {
     bar: {
@@ -44,6 +57,11 @@ let options = reactive({
         return compactNumbers.format(value);
       }
     }
+  },
+  legend: {
+    show: false,
+    position: "bottom",
+    offsetY: 0,
   },
 })
 

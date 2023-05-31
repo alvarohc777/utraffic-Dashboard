@@ -20,7 +20,7 @@ const titleDefault = computed(() => {
   if (title.value === null || title.value === undefined) {
     return "Total créditos"
   }
-  return title.value
+  return `Monto Total por cliente - ${title.value}`
 })
 
 

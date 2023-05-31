@@ -55,7 +55,7 @@ const titleDefault = computed(() => {
   if (title.value === null || title.value === undefined) {
     return "Proporción créditos"
   }
-  return title.value
+  return `Proporción créditos - ${title.value}`
 })
 
 const optionsCalc = computed(() => {
