@@ -35,6 +35,7 @@ let options = computed(() => {
         fontSize: "14px",
       }
     },
+
     chart: {
       type: 'bar',
       height: 350
@@ -57,7 +58,15 @@ let options = computed(() => {
         }
       }
     },
+    tooltip: {
+      y: {
+        formatter: function (value) {
+          return compactNumbers.format(value);
+        }
+      },
+    }
   }
+
   return options
 }
 )

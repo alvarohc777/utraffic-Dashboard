@@ -9,7 +9,9 @@ import axios from "axios";
 // for each client)
 const api = axios.create({ baseURL: "http://localhost:3000/" });
 const apiCliente = axios.create({
-  baseURL: "http://192.168.1.18:1337/api/",
+  // baseURL: "http://192.168.1.5:1337/api/",
+  baseURL: "http://192.168.18.15:1337/api/",
+  // baseURL: "http://169.254.1.24:1337/api/",
 });
 
 // export default boot(({ app }) => {

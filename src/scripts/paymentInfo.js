@@ -47,7 +47,11 @@ const scoreCalculator = (planPago) => {
 const currentFee = (paymentFee) => {
   // let fee = null
   for (let i = 0; i < paymentFee.length; i++) {
-    if (paymentFee[i].status == null || paymentFee[i].status == "mora")
+    if (
+      paymentFee[i].status == null ||
+      paymentFee[i].status == "mora" ||
+      paymentFee[i].status == "pagoParcial"
+    )
       return [paymentFee[i].date, paymentFee[i].amount];
   }
   return ["Finalizada", 0];

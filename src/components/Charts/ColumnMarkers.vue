@@ -1,5 +1,6 @@
 <template>
-  <apexchart :width="width" :options="options" :series="series"></apexchart>
+  <apexchart :width="width" :options="options" :series="series" :key="series"></apexchart>
+  <!-- <p>{{ series }}</p> -->
 </template>
 <style></style>
 
@@ -27,7 +28,7 @@ let options = reactive({
   legend: {
     show: true,
     showForSingleSeries: true,
-    customLegendItems: ['Actual', 'Expected'],
+    customLegendItems: ['Proyectado', 'Recaudado'],
     markers: {
       fillColors: ['#00E396', '#775DD0']
     }

@@ -143,7 +143,7 @@ const optionsCalc = computed(() => {
 
   let labels = [];
   data.value.forEach((item) => {
-    labels.push(`${item.creditId}`);
+    labels.push(`${item.cliente}`);
   });
   options.labels = labels;
   return options;

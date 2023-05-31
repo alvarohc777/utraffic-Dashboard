@@ -8,8 +8,8 @@
         <apex-bar-vue width="140%" :categories="dataBar[0]" :series="dataBar[1]" :title="advisor" />
 
         <column-markers width="140%" :series="seriesColumnMarkers" />
-        <column-stacked width="140%" />
-        <column-negative width="140%" />
+        <!-- <column-stacked width="140%" />
+        <column-negative width="140%" /> -->
       </q-card>
       <div style="max-width: 100%; justify-content: center;" class="row ">
         <filter-table :data="creditsFiltered" :columns="columns">
@@ -20,7 +20,7 @@
         </filter-table>
       </div>
 
-      <p>{{ seriesColumnMarkers }}</p>
+
     </q-page>
   </q-page-container>
 </template>
@@ -76,23 +76,30 @@ const totalByCategory = (data, categoryField, seriesField) => {
 // Se obtienen de totalByMonth, retorna array de fechas con totales
 const goalsAdd = (pagos, projection) => {
   let series = []
-  Object.entries(projection).forEach((entry) => {
-    if (entry[0] in pagos) {
-      let date = entry[0]
-      let pago = pagos[entry[0]]
-      let goal = entry[1]
-      series.push({
-        x: date,
-        y: pago,
-        goals: [{
-          name: 'Expected',
-          value: goal,
-          strokeHeight: 5,
-          strokeColor: '#775DD0'
-        }]
-      })
-
+  console.log("Entries ---------: ", Object.entries(projection))
+  console.log("Pagos ---------: ", Object.entries(pagos))
+  Object.entries(pagos).forEach((entry) => {
+    let date = entry[0]
+    let pago = entry[1]
+    let _ = {
+      x: date,
+      y: pago,
+      goals: [{
+        name: 'Proyectado',
+        value: 0,
+        strokeHeight: 5,
+        strokeColor: '#775DD0'
+      }]
     }
+    if (entry[0] in projection) {
+      let goal = projection[entry[0]]
+      _.goals[0].value = goal
+      series.push(_)
+    }
+    else {
+      series.push(_)
+    }
+
   })
   return series
 }
@@ -113,15 +120,14 @@ const totalByMonth = (data) => {
 const seriesColumnMarkers = computed(() => {
   let projectionSeries = projection(creditsFiltered.value)
   let pagosSeries = pagos(creditsFiltered.value)
-  console.log('----------->: ', projectionSeries)
-  console.log('----------->: ', pagosSeries)
   projectionSeries = totalByMonth(projectionSeries)
   pagosSeries = totalByMonth(pagosSeries)
+  console.log('-----------> Projection: ', projectionSeries)
+  console.log('-----------> Pagos: ', pagosSeries)
+  // console.log('------Goals: ', goalsAdd(pagosSeries, projectionSeries))
 
 
-
-  return [{ name: 'Actual', data: goalsAdd(pagosSeries, projectionSeries) }]
-
+  return [{ name: 'Recaudado', data: goalsAdd(pagosSeries, projectionSeries) }]
 })
 
 const createSeries = (data, key) => {
@@ -142,7 +148,7 @@ const dataBar = computed(() => {
 
   let categoryField = (advisor.value) ? 'cliente' : 'asesor'
   let [categories, series] = totalByCategory(creditsFiltered.value, categoryField, 'monto')
-  return [categories, [{ data: series }]]
+  return [categories, [{ name: 'Monto', data: series }]]
 })
 
 
@@ -187,12 +193,13 @@ onMounted(() => {
       ['campoInexistente', 'campoInexistente'],
       ['paymentFee', 'payment_fee'],
       ['paymentPlan', 'payment_plan']
+
       ]
 
       credits.value = jsonTransform(res.data.data, keysToFind)
       createFilterData(credits, advisors, 'asesor')
       // advisors.value = credits.value
-      console.log("new Json recursive: ", credits.value[0].paymentPlan)
+      console.log("new Json recursive: ", res.data.data)
     })
     .catch((err) => console.log(err.message));
 })
