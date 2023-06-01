@@ -42,21 +42,41 @@
           </router-link>
         </q-td>
       </template>
-      <template v-slot:body-cell-creditStatus="props">
+      <template v-slot:body-cell-asesor="props">
+        <q-td :props="props">
+          <router-link @click="store.updateAsesorId($event, props.row.asesorId)" :to="{ name: 'asesor' }"
+            style="text-decoration: none; color: black">{{
+              props.row.asesor }}
+          </router-link>
+        </q-td>
+      </template>
+      <template v-slot:body-cell-cliente="props">
+        <q-td :props="props">
+          <router-link @click="store.updateClienteId($event, props.row.clienteId)" :to="{ name: 'cliente' }"
+            style="text-decoration: none; color: black">{{
+              props.row.cliente }}
+          </router-link>
+        </q-td>
+      </template>
 
+      <template v-slot:body-cell-creditStatus="props">
         <q-td :props="props">
           <div>
             <q-badge :color="statusDict[props.value]" :label="props.value"></q-badge>
           </div>
-
         </q-td>
       </template>
+
     </q-table>
   </div>
 </template>
 
 <script setup>
 import { toRefs, ref, watchEffect, computed } from "vue";
+import { useIdsStore } from "src/stores/tableId";
+import { storeToRefs } from "pinia";
+const store = useIdsStore();
+
 
 const statusDict = {
   'On Time': 'green',
