@@ -173,6 +173,18 @@ const datePayDictCreate = (customers) => {
   return [planPago, pagos, mora];
 };
 
+const totalByMonth = (data) => {
+  let obj = {};
+  Object.entries(data).forEach((entry) => {
+    if (entry[0].slice(0, 7) in obj) {
+      obj[entry[0].slice(0, 7)] += entry[1];
+    } else {
+      obj[entry[0].slice(0, 7)] = entry[1];
+    }
+  });
+  return obj;
+};
+
 export {
   scoreCalculator,
   mesesPagos,
@@ -184,4 +196,5 @@ export {
   projection,
   pagosMora,
   pagos,
+  totalByMonth,
 };

@@ -27,24 +27,32 @@
 
 
 <script setup>
-const pruebaVariable = ref(false)
+
 // Imports
 import { onMounted, ref, reactive, watchEffect, computed } from 'vue';
-import { apiCliente } from 'src/boot/axios';
+import { api } from 'src/boot/axios';
 import { useQuasar } from 'quasar';
+import { useIdsStore } from 'src/stores/tableId'
+
+const store = useIdsStore();
+
+
+// Store
+// import { useIdsStore } from 'src/stores/tableId'
+// const prueba = useIdsStore()
 
 // // Components
 import FilterTable from 'src/components/FilterTable.vue';
 import ApexDonut from 'src/components/Charts/ApexDonut.vue';
 import DateTimeX from 'src/components/Charts/DateTimeX.vue';
 import ColumnMarkers from 'src/components/Charts/ColumnMarkers.vue'
-import ColumnNegative from 'src/components/Charts/ColumnNegative.vue';
 import ColumnStacked from 'src/components/Charts/ColumnStacked.vue';
 import ApexBarVue from 'src/components/Charts/ApexBar.vue';
 // // Scripts
-import { progressCalculator, mesesPagos, currentFee, creditStatus, datePaySeriesCreate, projection, pagos } from 'src/scripts/paymentInfo'
-import { formattedTotal, createFilterData, selectFilter, } from 'src/scripts/utils'
+import { datePaySeriesCreate, projection, pagos } from 'src/scripts/paymentInfo'
+import { createFilterData, selectFilter, } from 'src/scripts/utils'
 import { jsonTransform } from 'src/scripts/jsonTransforms'
+import { totalByCategory } from 'src/scripts/chartsSeries';
 
 // Esto debe settearse al iniciar sesión
 let $q = useQuasar();
@@ -59,20 +67,6 @@ const creditsFiltered = ref([])
 const advisors = ref([]);
 const advisor = ref(null);
 
-// Pasar esto a una función externa
-const totalByCategory = (data, categoryField, seriesField) => {
-  let categories = []
-  let series = []
-  data.forEach((entry) => {
-    if (!categories.includes(entry[categoryField])) {
-      categories.push(entry[categoryField])
-      series.push(parseFloat(entry[seriesField]))
-    } else {
-      series[categories.indexOf(entry[categoryField])] += parseFloat(entry[seriesField])
-    }
-  })
-  return [categories, series]
-}
 
 
 // Ingresar dos diccionarios de forma {date: }
