@@ -1,313 +1,168 @@
-<template >
-  <!-- #2fd4ad -->
-  <div v-if="clientesOriginal.length !== clientes.length" class="row justify-between items-center q-pa-md page"
-    style="padding-top: 20px; padding-bottom: 5px;  align-items: stretch;">
+<template>
+  <q-page-container>
+    <q-page>
 
-    <q-card class="my-card flex" style="flex-direction: column; justify-content: space-between;">
-      <q-card-section>
-        <div class="text-h5 text-purple-10">{{ nombre }}</div>
-      </q-card-section>
-
-      <q-card-section class="row justify-between">
-        <div>
-          <p style="margin: 0px" class="text-purple-10">
-            <strong> Créditos: </strong>
-          </p>
-          <div v-for="cliente in clientes" :key="cliente">
-            {{ cliente.nSolicitud }}
-          </div>
-
-        </div>
-
-        <img src="../../src/assets/profileIcon.png" style="width: 70px; height: 70px" />
-
-      </q-card-section>
-      <q-card-section>
-        <p style="margin: 0px" class="text-purple-10">
-          <strong> Total: </strong>
-        </p>
-        <p class="text-subtitle2">{{ formattedTotal.format(total) }}</p>
-      </q-card-section>
-      <q-card-section class="row justify-center">
-
-        <semi-circular :progress="calificacion * 100 / 5" :title="'Calificación'" :score="clientes[0].calificacion"
-          :key="clientes[0].calificacion" />
-
-      </q-card-section>
-    </q-card>
-
-
-
-
-    <div class="row justify-evenly" style="flex-grow: 1;">
-      <q-card class="my-card row justify-between column" style="max-width: 350px;">
-        <q-card>
-          <date-time-x :series="fechaPagoSeries" width="100%" :key="fechaPagoSeries" />
-        </q-card>
-        <apex-donut :clientes="clientes" width="90%" :key="clientes" />
+      <q-card class="row justify-evenly">
+        <date-time-x :series="timeSeries" :title="cliente" width="140%"></date-time-x>
+        <apex-donut :data="credits" :title="cliente" width="140%" />
+        <apex-bar width="140%" :categories="dataBar[0]" :series="dataBar[1]" :title="asesor" />
+        <column-markers v-if="paymentMonths.length !== 0" width="140%" :series="seriesColumnMarkers" :title="cliente" />
+        <column-stacked v-if="paymentMonths.length !== 0" width="140%" :series="columnStackedSeries"
+          :categories="paymentMonths" :title="cliente" />
       </q-card>
-      <solicitud-card :cliente="cliente" v-for=" cliente  in  clientes " :key="cliente" />
-    </div>
-  </div>
 
+      <div style="max-width: 100%; justify-content: center;" class="row">
+        <filter-table :data="credits" :columns="columns" />
+      </div>
 
-
-
-
-  <div class="row justify-start items-center page" style="padding-top: 5px; padding-bottom: 20px" v-if="clientes">
-    <filter-table :data="clientes" :columns="columns" :key="nombre" :tableLinks="true">
-      <template #category-selector>
-        <q-select v-model="nombre" outlined dense options-dense label="vendedor" emit-value map-options :options="nombres"
-          option-value="name" options-cover style="min-width: 120px"></q-select>
-      </template>
-    </filter-table>
-  </div>
+    </q-page>
+  </q-page-container>
 </template>
 
-<style>
-.my-card {
-  width: 100%;
-
-  max-width: 250px;
-  padding: 2px;
-  margin: 5px;
-}
-
-.page {
-  margin-left: 70px;
-
-  margin-right: 70px;
-}
-</style>
+<style></style>
 
 <script setup>
-// ---> Imports
+import { onMounted, ref, reactive, watchEffect, computed } from 'vue';
 
-// packages
-import { useRouter, useRoute } from "vue-router";
-import { api, apiCliente } from "src/boot/axios";
-import { ref, reactive, watchEffect, onMounted, computed } from "vue";
+// Scripts
+import { projection, datePaySeriesCreate, pagos, totalByMonth } from 'src/scripts/paymentInfo';
+import { totalByCategory, datesCreator, datesByMonth, goalsAdd, seriesCreator } from 'src/scripts/chartsSeries';
 
 // components
-import FilterTable from "src/components/FilterTable.vue";
-import SemiCircular from "src/components/Charts/SemiCircular.vue";
-import DateTimeX from "src/components/Charts/DateTimeX.vue";
-import ApexDonut from "src/components/Charts/ApexDonut.vue";
-import SolicitudCard from "src/components/SolicitudCard.vue"
+import FilterTable from 'src/components/FilterTable.vue';
+import ApexDonut from 'src/components/Charts/ApexDonut.vue';
+import DateTimeX from 'src/components/Charts/DateTimeX.vue';
+import ApexBar from 'src/components/Charts/ApexBar.vue';
+import ColumnMarkers from 'src/components/Charts/ColumnMarkers.vue';
+import ColumnStacked from 'src/components/Charts/ColumnStacked.vue';
 
-// utils
-import { progressCalculator, scoreCalculator, formattedTotal, datePayDictCreate, datePaySeriesCreate } from "src/scripts/utils"
+// Store
+import { useIdsStore } from 'src/stores/tableId';
+import { storeToRefs } from 'pinia';
+import { api } from 'src/boot/axios';
+import { jsonTransform } from 'src/scripts/jsonTransforms';
 
-// Constants and Variables
-const router = useRouter();
-const route = useRoute();
-const nombre = ref(route.query.nombre);
-const clientes = ref([]);
-const clientesOriginal = ref([]);
-const clientesFiltrado = ref([]);
-const nombres = ref([]);
-
+const store = useIdsStore();
+const { clienteId } = storeToRefs(store)
+// ------------------------------------------ |
 
 
-const calificacion = computed(() => {
-  if (clientes.value[0]) {
-    return clientes.value[0].calificacion;
-  }
-  return null;
-});
-
-// Llena un array target sin duplicados partiendo de
-// los atributos de un objeto data, el atributo es attr
-const createFilterData = (data, target, attr) => {
-  data.value.forEach((row) => {
-    if (target.value.indexOf(row[`${attr}`]) == -1) {
-      target.value.push(row[`${attr}`]);
-    }
-  });
-};
+const credits = ref([])
+const cliente = ref(null)
 
 
-
-// Computed properties
-
-const clientesTitle = computed(() => {
-  if (nombre.value) {
-    return nombre.value;
-  }
-  return "Solicitudes";
-});
-
-const fechaPagoSeries = computed(() => {
-
-  let [fechaDict, pagosDict, moraDict] = datePayDictCreate(clientesFiltrado.value)
-  let proyeccion = datePaySeriesCreate(fechaDict)
-  let pagos = datePaySeriesCreate(pagosDict)
-  let mora = datePaySeriesCreate(moraDict)
-
-  // let lastDate = mora[mora.length -1 ]
-  // lastDate.setMonth(new Date(lastDate))
-
-  return [{ name: "Proyección", data: proyeccion }, { name: "Pagos", data: pagos, }, { name: "Mora", data: mora }];
+const timeSeries = computed(() => {
+  let projectionSeries = projection(credits.value, 'paymentHistorical')
+  projectionSeries = datePaySeriesCreate(projectionSeries)
+  return [{ name: "Projection", type: 'area', data: projectionSeries }]
 })
 
-const total = computed(() => {
-  let total = 0
-  clientes.value.forEach((cliente) => {
-    total += parseFloat(cliente.monto)
+const dataBar = computed(() => {
+  let categoryField = (cliente.value) ? 'creditId' : 'cliente'
+  let [categories, series] = totalByCategory(credits.value, categoryField, 'monto')
+  return [categories, [{ name: 'Monto', data: series }]]
+})
+
+const seriesColumnMarkers = computed(() => {
+  let projectionSeries = projection(credits.value)
+  let pagosSeries = pagos(credits.value)
+  projectionSeries = totalByMonth(projectionSeries)
+  pagosSeries = totalByMonth(pagosSeries)
+
+  console.log("--------------: ", pagosSeries)
+  console.log("--------------: ", projectionSeries)
+  return [{ name: 'Recaudado', data: goalsAdd(pagosSeries, projectionSeries) }]
+})
+
+const paymentMonths = computed(() => {
+  let dates = datesCreator(credits.value, 'paymentHistorical')
+  dates = datesByMonth(dates)
+  return dates
+})
+
+const columnStackedSeries = computed(() => {
+  let series = []
+  let names = []
+  let category = (cliente.value) ? 'creditId' : 'cliente'
+  credits.value.forEach((credit) => {
+    if (!names.includes(credit[category])) {
+      names.push(credit[category])
+      series.push({
+        name: credit[category],
+        data: seriesCreator(credit, 'paymentHistorical', paymentMonths.value)
+      })
+    } else {
+      let idx = names.indexOf(credit[category])
+      let oldValues = series[idx].data
+      let newValues = seriesCreator(credit, 'paymentHistorical', paymentMonths.value)
+      let sum = oldValues.map((num, idx) => {
+        return num + newValues[idx]
+      })
+      series[idx].data = sum
+    }
   })
-  return total;
+  console.log("names: ", names)
+  return series
 })
 
-
-
-
-// Llena el array 'nombres' con todos los nombres disponibles
-// en la base de datos (solo lo hace una vez cuando se hace el
-// mount).
 onMounted(() => {
-  // api
-  //   .get("clientes")
-  //   .then((res) => {
-  //     clientesOriginal.value = res.data
-  //     let nameHolder = {};
-  //     nameHolder.value = res.data;
-  //     createFilterData(nameHolder, nombres, "nombre");
-  //   })
-  //   .catch((err) => console.log(err.message));
-  apiCliente
-    .get("/credits?populate=customer")
-    .then((res) => res.data.data)
-    .then((data) => {
-      let nameHolder = {}
-      nameHolder.value = jsonTransform(data)
-      clientesOriginal.value = jsonTransform(data)
-      createFilterData(nameHolder, nombres, "nombre")
+  api
+    .get(`credits?populate=businessadvisor&populate=customer&filters[customer][id][$eq]=${clienteId.value}`)
+    .then((res) => {
+      let keysToFind = [['creditId', 'credit_id'],
+      ['id', 'id'],
+      ['cliente', 'customer', 'full_name'],
+      ['clienteId', 'customer', 'id'],
+      ['monto', 'amount'],
+      ['plazo', 'term'],
+      ['fechaSolicitud', 'applicationdate'],
+      ['calificacion', 'score'],
+      ['asesor', 'businessadvisor', 'full_name'],
+      ['asesorId', 'businessadvisor', 'id'],
+      ['paymentHistorical', 'payment_historical'],
+      ['campoInexistente', 'campoInexistente'],
+      ['paymentFee', 'payment_fee'],
+      ['paymentPlan', 'payment_plan']
+      ]
+      console.log("new Json recursive: ", res.data.data)
+      credits.value = jsonTransform(res.data.data, keysToFind)
+      cliente.value = credits.value[0].cliente
+      console.log("new Json recursive: ", credits.value)
     })
-});
-
-// Watchers
-
-// Actualiza la variable clientes cuando cambia el nombre
-// escogido o cuando se actualiza el URL query
-watchEffect(() => {
-  // api
-  //   .get("clientes", {
-  //     params: {
-  //       nombre: nombre.value,
-  //     },
-  //   })
-  //   .then((res) => {
-
-  //     clientes.value = res.data;
-  //     router.replace({
-  //       path: route.path,
-  //       query: { nombre: nombre.value },
-  //     });
-  //   })
-  //   .catch((err) => {
-  //     console.log(err.message);
-  //   });
-  apiCliente
-    .get("/credits?populate=customer", {
-      params: {
-
-      }
-    })
-});
-
-watchEffect(() => {
-  console.log(route.query.nombre)
-  nombre.value = route.query.nombre
+    .catch((err) => console.log(err.message))
 })
 
-// watch changes on dropdown menu selection
-watchEffect(() => {
-  if (nombre.value && nombre.value !== "-") {
-    clientesFiltrado.value = clientes.value.filter(
-      (cliente) => cliente.nombre === nombre.value
-    );
-    if (nombres.value.indexOf("-") == -1) {
-      nombres.value.unshift("-");
-    }
-    return;
-  }
-  if (nombre.value === "-") {
-    nombres.value.shift();
-    nombre.value = null;
-  }
-  clientesFiltrado.value = clientes.value;
-});
+
+// Columns
+
+import {
+  nSolicitudColumn,
+  clienteColumn,
+  montoColumn,
+  fechaSolicitudColumn,
+  calificacionColumn,
+  asesorColumn,
+  plazoColumn,
+  mesesPagosColumns,
+  progresoColumn,
+  currentFeeColumn,
+  pagoColumn,
+  creditStatusColumn,
+} from 'src/scripts/columns'
 
 const columns = reactive([
-  {
-    name: "nombre",
-    required: true,
-    label: "Nombre",
-    align: "left",
-    field: (row) => row.nombre,
-    format: (val, row) => row.nombre,
-    sortable: true,
-  },
-  {
-    name: "nSolicitud",
-    required: true,
-    label: "N° Solicitud",
-    align: "left",
-    field: (row) => row.nSolicitud,
-    sortable: true,
-  },
-  {
-    name: "monto",
-    label: "Monto",
-    field: (row) => row.monto,
-    format: (val, row) => `${formattedTotal.format(row.monto)}`,
-    sortable: true,
-  },
-  {
-    name: "plazo",
-    label: "Plazo (m)",
-    align: "right",
-    field: (row) => row.plazo,
-    sortable: true,
-  },
-  {
-    name: "fechaSolicitud",
-    label: "Fecha solicitud",
-    align: "right",
-    field: (row) => row.fechaSolicitud,
-    // format: (val, row) => {
-    //   let fecha = row.fechaSolicitud.split("/");
-    //   return `${fecha[0]}/${fecha[1]}/${fecha[2].slice(2, 4)}`
-    // },
-    sortable: true
-  },
-  {
-    name: "progreso",
-    label: "Progreso",
-    align: "right",
-    field: (row) => row.planPago,
-    format: (val, row) => {
-      let progress = progressCalculator(val)
-      return `${progress}%`
-    }
-  },
-  {
-    name: "documento",
-    label: "Doc",
-    align: "left",
-    field: (row) => row.documento,
-    format: () => "",
-  },
-  {
-    name: "cumplimiento",
-    label: "Cumplimiento",
-    align: "left",
-    field: (row) => {
-      let calificacion = scoreCalculator(row.planPago)
-      return `${"\u2B50".repeat(calificacion)}`
-    }
+  nSolicitudColumn,
+  clienteColumn,
+  montoColumn,
+  fechaSolicitudColumn,
+  calificacionColumn,
+  asesorColumn,
+  plazoColumn,
+  mesesPagosColumns,
+  progresoColumn,
+  currentFeeColumn,
+  pagoColumn,
+  creditStatusColumn,
+])
 
-  },
-]);
 </script>
-
