@@ -48,6 +48,7 @@ const scoreCalculator = (planPago) => {
 const compactNumbers = new Intl.NumberFormat("es-US", {
   notation: "compact",
   minimumFractionDigits: 1,
+  maximumFractionDigits: 1,
 });
 
 const formattedTotal = new Intl.NumberFormat("es-US", {
