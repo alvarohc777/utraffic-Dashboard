@@ -7,8 +7,8 @@ import axios from "axios";
 // good idea to move this instance creation inside of the
 // "export default () => {}" function below (which runs individually
 // for each client)
-const api = axios.create({ baseURL: "http://localhost:3000/" });
-const apiCliente = axios.create({
+
+const api = axios.create({
   // baseURL: "http://192.168.1.5:1337/api/",
   baseURL: "http://192.168.18.15:1337/api/",
   // baseURL: "http://169.254.1.24:1337/api/",
@@ -29,7 +29,7 @@ const apiCliente = axios.create({
 export default boot(({ app }) => {
   app.config.globalProperties.$axios = axios;
   // app.config.globalProperties.$api = api;
-  app.config.globalProperties.$api = apiCliente;
+  app.config.globalProperties.$api = api;
 
   const apiInterceptor = (apiGenerico) => {
     apiGenerico.interceptors.request.use(function (config) {
@@ -42,7 +42,7 @@ export default boot(({ app }) => {
   };
 
   // apiInterceptor(api);
-  apiInterceptor(apiCliente);
+  apiInterceptor(api);
 });
 
-export { api, apiCliente };
+export { api };

@@ -228,7 +228,7 @@ const ColumnStackedSeries = computed(() => {
 })
 
 onMounted(() => {
-  apiCliente
+  api
     .get('/credits?populate=customer&populate=businessadvisor')
     .then((res) => {
 
@@ -250,6 +250,7 @@ onMounted(() => {
       ['paymentPlan', 'payment_plan']
       ]
 
+      console.log("Original: ", res.data.data)
       credits.value = jsonTransform(res.data.data, keysToFind)
       createFilterData(credits, advisors, 'asesor')
       console.log("new Json recursive: ", credits.value)
