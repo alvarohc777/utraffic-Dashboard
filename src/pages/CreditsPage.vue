@@ -20,7 +20,6 @@
           </template>
         </filter-table>
       </div>
-      <p>{{ paymentMonths }}</p>
     </q-page>
   </q-page-container>
 </template>
