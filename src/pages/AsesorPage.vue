@@ -43,13 +43,13 @@ const { asesorId } = storeToRefs(store)
 
 // Scripts and uitls
 import { jsonTransform } from 'src/scripts/jsonTransforms';
-import { createFilterData } from 'src/scripts/utils';
+import { createFilterData, selectFilter } from 'src/scripts/utils';
 import { projection, datePaySeriesCreate, pagos, totalByMonth } from 'src/scripts/paymentInfo';
 import { totalByCategory, datesCreator, datesByMonth, goalsAdd, seriesCreator } from 'src/scripts/chartsSeries';
 
 // Components
 import FilterTable from 'src/components/FilterTable.vue';
-import { selectFilter } from 'src/scripts/utils';
+
 
 // // Charts
 import ApexDonut from 'src/components/Charts/ApexDonut.vue';
