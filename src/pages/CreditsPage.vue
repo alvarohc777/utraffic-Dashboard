@@ -48,11 +48,12 @@ import DateTimeX from 'src/components/Charts/DateTimeX.vue';
 import ColumnMarkers from 'src/components/Charts/ColumnMarkers.vue'
 import ColumnStacked from 'src/components/Charts/ColumnStacked.vue';
 import ApexBarVue from 'src/components/Charts/ApexBar.vue';
-// // Scripts
-import { datePaySeriesCreate, projection, pagos } from 'src/scripts/paymentInfo'
-import { createFilterData, selectFilter, } from 'src/scripts/utils'
-import { jsonTransform } from 'src/scripts/jsonTransforms'
-import { totalByCategory } from 'src/scripts/chartsSeries';
+// Scripts and uitls
+import { jsonTransform } from 'src/scripts/jsonTransforms';
+import { createFilterData, selectFilter } from 'src/scripts/utils';
+import { projection, datePaySeriesCreate, pagos, totalByMonth } from 'src/scripts/paymentInfo';
+import { totalByCategory, datesCreator, datesByMonth, goalsAdd, seriesCreator } from 'src/scripts/chartsSeries';
+
 
 // Esto debe settearse al iniciar sesión
 let $q = useQuasar();
@@ -66,97 +67,6 @@ const credits = ref([]);
 const creditsFiltered = ref([])
 const advisors = ref([]);
 const advisor = ref(null);
-
-
-
-// Ingresar dos diccionarios de forma {date: }
-// Se obtienen de totalByMonth, retorna array de fechas con totales
-const goalsAdd = (pagos, projection) => {
-  let series = []
-  Object.entries(pagos).forEach((entry) => {
-    let date = entry[0]
-    let pago = entry[1]
-    let _ = {
-      x: date,
-      y: pago,
-      goals: [{
-        name: 'Proyectado',
-        value: 0,
-        strokeHeight: 5,
-        strokeColor: '#775DD0'
-      }]
-    }
-    if (entry[0] in projection) {
-      let goal = projection[entry[0]]
-      _.goals[0].value = goal
-      series.push(_)
-    }
-    else {
-      series.push(_)
-    }
-
-  })
-  return series
-}
-
-
-const totalByMonth = (data) => {
-  let obj = {}
-  Object.entries(data).forEach((entry) => {
-    if (entry[0].slice(0, 7) in obj) {
-      obj[entry[0].slice(0, 7)] += entry[1]
-    } else {
-      obj[entry[0].slice(0, 7)] = entry[1]
-    }
-  })
-  return obj
-}
-
-const datesCreator = (data, field) => {
-  let dates = []
-  data.forEach((entry) => {
-    entry[field].forEach((payment) => {
-      if (!dates.includes(payment.date)) {
-        dates.push(payment.date)
-      }
-    })
-  })
-
-  return dates
-}
-
-const sortArray = (unsortedArray) => {
-  let sortedArray = unsortedArray.sort((a, b) => {
-    return a[0] - b[0];
-  });
-  return sortedArray
-}
-
-const datesByMonth = (dates) => {
-  let datesByMonth = []
-  dates.forEach((date) => {
-    if (!datesByMonth.includes(date.slice(0, 7))) {
-      datesByMonth.push(date.slice(0, 7))
-    }
-  })
-  datesByMonth = sortArray(datesByMonth)
-  return datesByMonth
-}
-
-const seriesCreator = (data, field, datesByMonth) => {
-
-  let series = new Array(datesByMonth.length).fill(0);
-  data[field].forEach((entry) => {
-    let idx = datesByMonth.indexOf(entry.date.slice(0, 7))
-    if (series[idx] === 0) {
-      series[idx] = entry.amount
-    } else {
-      series[idx] += entry.amount
-    }
-  })
-  return series
-}
-
 
 // Computed Properties
 
@@ -252,8 +162,6 @@ onMounted(() => {
     .catch((err) => console.log(err.message));
 })
 
-
-
 import {
   nSolicitudColumn,
   clienteColumn,
@@ -283,118 +191,5 @@ const columns = reactive([
   pagoColumn,
   creditStatusColumn,
 ])
-
-
-
-// Todo: exportar esto como componentes
-// const columns = reactive([
-//   {
-//     name: "nSolicitud",
-//     required: true,
-//     label: "N° Solicitud",
-//     align: "right",
-//     field: (row) => row.creditId,
-//     sortable: true,
-//   },
-//   {
-//     name: "cliente",
-//     required: true,
-//     label: "Cliente",
-//     align: "left",
-//     field: (row) => row.cliente,
-//     format: (val, row) => row.cliente,
-//     sortable: true,
-//   },
-//   {
-//     name: "monto",
-//     label: "Monto",
-//     field: (row) => row.monto,
-//     sortable: true,
-//     format: (val, row) => `${formattedTotal.format(row.monto)}`
-//   },
-
-//   {
-//     name: "fechaSolicitud",
-//     label: "Fecha solicitud",
-//     align: "right",
-//     field: (row) => row.fechaSolicitud,
-//     sortable: true
-//   },
-//   {
-//     name: "calificacion",
-//     required: true,
-//     label: "Calificacion",
-//     align: "left",
-//     field: (row) => row.calificacion,
-//     sortable: true,
-//     format: (val, row) => `${"\u2B50".repeat(row.calificacion)}`,
-//   },
-//   {
-//     name: "asesor",
-//     required: true,
-//     label: "Asesor",
-//     align: "left",
-//     field: (row) => row.asesor,
-//     sortable: true,
-//   },
-//   {
-//     name: "plazo",
-//     label: "Plazo (m)",
-//     align: "right",
-//     field: (row) => row.plazo,
-//     sortable: true,
-//   },
-//   {
-//     name: "mesesPagos",
-//     label: "Meses Pagos (m)",
-//     align: "right",
-//     field: (row) => mesesPagos(row.paymentFee),
-//     sortable: true,
-//   },
-//   {
-//     name: "progreso",
-//     label: "Progreso",
-//     align: "right",
-//     sortable: true,
-//     field: (row) => progressCalculator(row.paymentFee),
-//     format: (val, row) => {
-//       return `${(val * 100).toFixed(0)}%`
-//     }
-//   },
-//   {
-//     name: "currentFee",
-//     label: "Próximo Pago",
-//     align: "right",
-//     sortable: true,
-//     field: (row) => row.paymentFee,
-//     format: (val, row) => {
-//       let [date, _] = currentFee(val)
-//       return date
-//     }
-//   },
-//   {
-//     name: "currentPayment",
-//     label: "Pago",
-//     align: "right",
-//     sortable: true,
-//     field: (row) => row.paymentFee,
-//     format: (val, row) => {
-//       let [_, pago] = currentFee(val)
-//       return formattedTotal.format(pago)
-//     }
-//   },
-//   {
-//     name: "creditStatus",
-//     label: "Estado",
-//     align: "right",
-//     sortable: true,
-//     field: (row) => creditStatus(row.paymentFee),
-
-//   },
-
-
-
-// ]);
-
 
 </script>
