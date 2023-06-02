@@ -2,18 +2,18 @@
   <q-page-container>
 
     <q-page>
-      <q-card class="row justify-evenly">
+      <q-card class="row justify-evenly center-card">
         <date-time-x :title="advisor" :series="timeSeries" width="140%" />
         <apex-donut :data="creditsFiltered" :title="advisor" width="100%" />
         <apex-bar-vue width="140%" :categories="dataBar[0]" :series="dataBar[1]" :title="advisor" />
-
         <column-markers v-if="paymentMonths.length !== 0" width="140%" :series="seriesColumnMarkers" :title="advisor" />
         <column-stacked v-if="paymentMonths.length !== 0" width="140%" :series="ColumnStackedSeries"
           :categories="paymentMonths" :title="advisor" />
-        <!-- <column-negative width="140%" /> -->
       </q-card>
-      <div style="max-width: 100%; justify-content: center;" class="row ">
-        <filter-table :data="creditsFiltered" :columns="columns">
+
+
+      <div class="row center-card">
+        <filter-table :data="creditsFiltered" :columns="columns" :asesorLinks="true" :clienteLinks="true">
           <template #category-selector>
             <q-select v-model="advisor" outlined dense options-dense label="Cuenta" emit-value map-options
               :options="advisors" option-value="name" options-cover style="min-width: 120px"></q-select>

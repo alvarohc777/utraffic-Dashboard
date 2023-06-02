@@ -1,6 +1,6 @@
 <template>
   <!-- <div class="q-pa-md" style="max-width: 785px"> -->
-  <div class="q-pa-md" style="max-width: 100%">
+  <div class="q-py-md" style="max-width: 100%">
     <q-table flat bordered dense title="Clientes" :rows="dataFiltered" :columns="columns" :loading="loadingState"
       loading-label="Cargando información" row-key="name" :filter="filter" binary-state-sort="">
 
@@ -34,15 +34,8 @@
         <slot name="category-selector"></slot>
       </template>
       <!-- Optional slot -->
-      <template v-if="tableLinks === true" v-slot:body-cell-nombre="props">
-        <q-td :props="props">
-          <router-link :to="{ name: 'cliente', query: { nombre: props.value } }"
-            style="text-decoration: none; color: black">
-            {{ props.value }}
-          </router-link>
-        </q-td>
-      </template>
-      <template v-slot:body-cell-asesor="props">
+
+      <template v-if="asesorLinks" v-slot:body-cell-asesor="props">
         <q-td :props="props">
           <router-link @click="store.updateAsesorId($event, props.row.asesorId)" :to="{ name: 'asesor' }"
             style="text-decoration: none; color: black">{{
@@ -50,7 +43,8 @@
           </router-link>
         </q-td>
       </template>
-      <template v-slot:body-cell-cliente="props">
+
+      <template v-if="clienteLinks" v-slot:body-cell-cliente="props">
         <q-td :props="props">
           <router-link @click="store.updateClienteId($event, props.row.clienteId)" :to="{ name: 'cliente' }"
             style="text-decoration: none; color: black">{{
@@ -83,8 +77,8 @@ const statusDict = {
   'Mora': 'red',
 
 }
-const props = defineProps(["data", "columns", "tableLinks"]);
-let { data, columns, tableLinks } = toRefs(props);
+const props = defineProps(["data", "columns", "asesorLinks", 'clienteLinks']);
+let { data, columns, asesorLinks, clienteLinks } = toRefs(props);
 let nombre = ref(null);
 let dataFiltered = ref([]);
 const filter = ref('')
