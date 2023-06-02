@@ -1,13 +1,13 @@
 <template>
-  <q-card class="my-card row justify-between column">
+  <q-card class=" row justify-between column">
     <div>
 
       <p class="text-h6 text-purple-10 text-center" style="margin-bottom: 0;"> Crédito</p>
-      <p class="text-subtitle2  text-center"> {{ cliente.nSolicitud }}</p>
+      <p class="text-subtitle2  text-center"> {{ cliente.creditId }}</p>
     </div>
 
-    <semi-circular :progress="progressCalculator(cliente.planPago)" title="Progreso"
-      :score="scoreCalculator(cliente.planPago)" />
+    <semi-circular :progress="progressCalculator(cliente.paymentFee)" title="Progreso"
+      :score="scoreCalculator(cliente.paymentFee)" />
 
 
     <div>
@@ -19,7 +19,7 @@
                 <p style="margin: 0px" class="text-purple-10">
                   <strong> Crédito: </strong>
                 </p>
-                <p class="text-subtitle2">{{ cliente.nSolicitud }}</p>
+                <p class="text-subtitle2">{{ cliente.creditId }}</p>
               </div>
               <div class="col">
                 <p style="margin: 0px" class="text-purple-10">
