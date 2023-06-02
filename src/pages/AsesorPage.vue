@@ -2,18 +2,56 @@
   <q-page-container>
     <q-page>
 
-      <q-card class="row justify-evenly">
-        <date-time-x :series="timeSeries" :title="asesor" width="140%"></date-time-x>
-        <apex-donut :data="creditsFiltered" :title="asesor" width="140%" />
-        <apex-bar width="140%" :categories="dataBar[0]" :series="dataBar[1]" :title="asesor" />
-        <column-markers v-if="paymentMonths.length !== 0" width="140%" :series="seriesColumnMarkers" :title="asesor" />
+      <div class="row justify-around items-center q-py-md center-card" style=" align-items: stretch;">
+
+
+        <q-card style="flex-direction: column; justify-content: space-between; width: 250px;">
+          <q-card-section>
+            <div class="text-h5 text-purple-10">{{ asesor }}</div>
+          </q-card-section>
+
+          <q-card-section class="row justify-between">
+            <div>
+              <p style="margin: 0px" class="text-purple-10">
+                <strong> Créditos: </strong>
+              </p>
+              <div v-for="credit in credits" :key="credit">
+                {{ credit.creditId }}
+              </div>
+            </div>
+            <img src="../../src/assets/profileIcon.png" style="width: 70px; height: 70px" />
+          </q-card-section>
+
+          <q-card-section>
+            <p style="margin: 0px" class="text-purple-10">
+              <strong> Total: </strong>
+            </p>
+            <p class="text-subtitle2">{{ formattedTotal.format(total) }}</p>
+            <!-- <semi-circular :progress="score * 100 / 5" :title="'Calificación'" :score="score" :key="score" /> -->
+          </q-card-section>
+
+        </q-card>
+
+        <div class="row justify-evenly" style="flex-grow: 1; " :clienteLinks="true">
+          <q-card class=" row justify-between column" style="width: 350px; align-items: center;">
+            <date-time-x :series="timeSeries" width="100%"></date-time-x>
+            <apex-donut :data="credits" width="90%" />
+          </q-card>
+        </div>
+        <solicitud-card :cliente="credit" v-for=" credit in  credits " :key="credit" />
+      </div>
+
+      <!-- <q-card class="row justify-evenly center-card">
+        <date-time-x :series="timeSeries" width="140%"></date-time-x>
+        <apex-donut :data="creditsFiltered" width="100%" />
+        <apex-bar width="140%" :categories="dataBar[0]" :series="dataBar[1]" />
+        <column-markers v-if="paymentMonths.length !== 0" width="140%" :series="seriesColumnMarkers" />
         <column-stacked v-if="paymentMonths.length !== 0" width="140%" :series="columnStackedSeries"
-          :categories="paymentMonths" :title="asesor" />
+          :categories="paymentMonths" />
+      </q-card> -->
 
-      </q-card>
-
-      <div style="max-width: 100%; justify-content: center;" class="row">
-        <filter-table :data="creditsFiltered" :columns="columns">
+      <div style="max-width: 100%; justify-content: center;" class="row center-card">
+        <filter-table :data="creditsFiltered" :columns="columns" :clienteLinks="true">
           <template #category-selector>
             <q-select v-model="cliente" outlined dense options-dense label="Cuenta" emit-value map-options
               :options="clientes" option-value="name" options-cover style="min-width: 120px"></q-select>
@@ -43,7 +81,7 @@ const { asesorId } = storeToRefs(store)
 
 // Scripts and uitls
 import { jsonTransform } from 'src/scripts/jsonTransforms';
-import { createFilterData, selectFilter } from 'src/scripts/utils';
+import { createFilterData, selectFilter, formattedTotal } from 'src/scripts/utils';
 import { projection, datePaySeriesCreate, pagos, totalByMonth } from 'src/scripts/paymentInfo';
 import { totalByCategory, datesCreator, datesByMonth, goalsAdd, seriesCreator } from 'src/scripts/chartsSeries';
 
@@ -57,6 +95,7 @@ import DateTimeX from 'src/components/Charts/DateTimeX.vue';
 import ApexBar from 'src/components/Charts/ApexBar.vue';
 import ColumnMarkers from 'src/components/Charts/ColumnMarkers.vue';
 import ColumnStacked from 'src/components/Charts/ColumnStacked.vue';
+import SolicitudCard from 'src/components/SolicitudCard.vue';
 
 
 // ------------------------------------------- |
@@ -124,6 +163,14 @@ const columnStackedSeries = computed(() => {
   })
   console.log("names: ", names)
   return series
+})
+
+const total = computed(() => {
+  let total = 0
+  credits.value.forEach((credit) => {
+    total += parseFloat(credit.monto)
+  })
+  return total
 })
 
 onMounted(() => {
