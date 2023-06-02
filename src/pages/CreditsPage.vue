@@ -37,10 +37,6 @@ import { useIdsStore } from 'src/stores/tableId'
 const store = useIdsStore();
 
 
-// Store
-// import { useIdsStore } from 'src/stores/tableId'
-// const prueba = useIdsStore()
-
 // // Components
 import FilterTable from 'src/components/FilterTable.vue';
 import ApexDonut from 'src/components/Charts/ApexDonut.vue';
