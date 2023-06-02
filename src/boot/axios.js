@@ -10,7 +10,7 @@ import axios from "axios";
 
 const api = axios.create({
   // baseURL: "http://192.168.1.5:1337/api/",
-  baseURL: "http://192.168.18.15:1337/api/",
+  baseURL: "http://192.168.18.29:1337/api/",
   // baseURL: "http://169.254.1.24:1337/api/",
 });
 
